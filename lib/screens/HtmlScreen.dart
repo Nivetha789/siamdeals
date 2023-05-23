@@ -36,6 +36,7 @@ class HtmlScreenState extends State<HtmlScreen> {
     });
   }
 
+  final staticAnchorKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +66,7 @@ class HtmlScreenState extends State<HtmlScreen> {
                     margin: EdgeInsets.only(
                         top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
                     child: Html(
+                      anchorKey: staticAnchorKey,
                       data: htmlContent,
                       // tagsList: Html.tags..addAll(["bird", "flutter"]),
                       // style: {
@@ -112,18 +114,25 @@ class HtmlScreenState extends State<HtmlScreen> {
                       //     );
                       //   },
                       // },
-                      onLinkTap: (url, _, __, ___) async {
-                        await launchUrl(
+                      // onLinkTap: (url, _, __, ___) async {
+                        // await launchUrl(
+                        //   Uri.parse(url!),
+                        //   mode: LaunchMode.externalApplication,
+                        // );
+                      //   // print("Opening $url...");
+                      // },
+                      // onImageTap: (src, _, __, ___) {
+                      //   print(src);
+                      // },
+                      // onImageError: (exception, stackTrace) {
+                      //   print(exception);
+                      // },
+                      onLinkTap: (url, _, __) async {
+                          await launchUrl(
                           Uri.parse(url!),
                           mode: LaunchMode.externalApplication,
                         );
-                        print("Opening $url...");
-                      },
-                      onImageTap: (src, _, __, ___) {
-                        print(src);
-                      },
-                      onImageError: (exception, stackTrace) {
-                        print(exception);
+                        debugPrint("Opening $url...");
                       },
                       onCssParseError: (css, messages) {
                         print("css that errored: $css");

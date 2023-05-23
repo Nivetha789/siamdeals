@@ -778,7 +778,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
       String userId = await SharedPreference().getUserId();
-
+print(userId);
       var parameters = {"n_user": userId, "n_coupon": couponId, "n_vendor": id};
 
       print(parameters.toString());

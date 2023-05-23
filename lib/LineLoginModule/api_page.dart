@@ -53,7 +53,7 @@ class _APIPageState extends State<APIPage> {
                   child: Text(
                     isError ? _error! : _result!,
                     style:
-                    TextStyle(color: isError ? Colors.red : Colors.green),
+                        TextStyle(color: isError ? Colors.red : Colors.green),
                   ),
                 ),
                 color: Color.fromARGB(30, 30, 30, 30),

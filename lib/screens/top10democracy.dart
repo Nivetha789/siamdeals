@@ -164,7 +164,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
       'n_view': nview.toString(),
       'n_distance': selectedOption.toString(),
       'n_category': selectedsubcategory.join(', ').toString(),
-      'n_district': selecteddistrict,
+      'n_district': selectedtowncategory.join(', ').toString(),
       'n_town': "",
     };
     request.headers.addAll(headers);
@@ -234,9 +234,13 @@ class _Top10DemocracyState extends State<Top10Democracy> {
 
   List selectedsubcategory = [];
 
+  List selectedtowncategory = [];
   List<Map<String, dynamic>> subcategoryList = [];
   Set<Map<String, dynamic>> seenItems = {};
   List<MultiSelectItem<Object?>> convertedList = [];
+
+  List<Map<String, dynamic>> towncategoryList = [];
+  List<MultiSelectItem<Object?>> townconvertedList = [];
   getDistancefilterList() async {
     try {
       //   ProgressDialog().showLoaderDialog(context);
@@ -249,22 +253,35 @@ class _Top10DemocracyState extends State<Top10Democracy> {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-
+        print("PAVITHRAMMMM ${map["data"]["town_list"]}");
         distancelist =
             List<Map<String, dynamic>>.from(map["data"]["distance_list"]);
+        selectedOption =
+            map["data"]["distance_list"][0]["distance_id"].toString();
         districtlist =
-            List<Map<String, dynamic>>.from(map["data"]["district_list"]);
+            List<Map<String, dynamic>>.from(map["data"]["town_list"]);
+        selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
+        print(selectedtowncategory);
+
         categoryList =
             List<Map<String, dynamic>>.from(map["data"]["category_list"]);
+        selectedsubcategory = [
+          map["data"]["category_list"][0]['sub_category'][0]["subcategory_id"]
+        ];
         Set<String> uniqueItems = {};
+        Set<String> uniquetownItems = {};
         subcategoryList = [];
-
+        towncategoryList = [];
+        print(
+            "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
         for (var category in categoryList) {
           var subCategories = category['sub_category'];
 
           // Iterate over sub_categories if it's not empty
           if (subCategories != null && subCategories.isNotEmpty) {
             for (var subCategory in subCategories) {
+              // print("dfgjdkfghkfhgdfgh${subCategory}");
+              // selectedsubcategory = subCategory[0]["subcategory_id"];
               var subCategoryString =
                   subCategory.toString(); // Convert to string
               if (!uniqueItems.contains(subCategoryString)) {
@@ -274,6 +291,8 @@ class _Top10DemocracyState extends State<Top10Democracy> {
             }
           }
         }
+        // print(
+        //     "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
 
         convertedList = subcategoryList.map((animal) {
           return MultiSelectItem<Object?>(
@@ -282,9 +301,36 @@ class _Top10DemocracyState extends State<Top10Democracy> {
           );
         }).toList();
 
-        convertedList.forEach((item) {
-          print('Subcategory ID: ${item.value}, Category: ${item.label}');
-        });
+        // convertedList.forEach((item) {
+        //   // print('Subcategory ID: ${item.value}, Category: ${item.label}');
+        // });
+
+        // Iterate over sub_categories if it's not empty
+        if (districtlist != null && districtlist.isNotEmpty) {
+          for (var distrctt in districtlist) {
+            // selectedtowncategory = distrctt[0]["district_id"];
+
+            // selectedtowncategory = distrctt[0]["district_id"];
+            var districtString = distrctt.toString(); // Convert to string
+            if (!uniquetownItems.contains(districtString)) {
+              towncategoryList.add(distrctt);
+              uniquetownItems.add(districtString);
+            }
+          }
+        }
+        print(
+            "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
+
+        townconvertedList = towncategoryList.map((town) {
+          return MultiSelectItem<Object?>(
+            town['district_id'],
+            town['c_town'],
+          );
+        }).toList();
+
+        // townconvertedList.forEach((item) {
+        //   print('Subcategory ID: ${item.value}, Category: ${item.label}');
+        // });
       } else {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
@@ -398,81 +444,6 @@ class _Top10DemocracyState extends State<Top10Democracy> {
             children: [
               const SizedBox(width: 10),
               Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    width: 1.0,
-                    // assign the color to the border color
-                    color: Colors.grey,
-                  ),
-                ),
-                // width: 100,
-                height: 40,
-
-                padding: const EdgeInsets.all(0.0),
-                child: Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    // const Icon(Icons.filter_list_sharp),
-                    Container(
-                      alignment: Alignment.topCenter,
-                      width: 70,
-                      height: 40,
-                      child: DropdownButtonFormField(
-                        isDense: true,
-                        isExpanded: true,
-                        // value: selectedOption,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(0.0),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ), // value: _chosenValue,
-                        //elevation: 5,
-                        style: const TextStyle(color: Colors.black),
-                        icon: Icon(Icons.filter_list),
-                        items: distancelist.map((Map<String, dynamic> option) {
-                          return DropdownMenuItem(
-                            value: option['distance_id'].toString(),
-                            child: SizedBox(
-                                width: 100,
-                                child: Text(
-                                  option['distance_val'],
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                )),
-                          );
-                        }).toList(),
-                        hint: const Text("Distance"),
-                        onChanged: (newValue) {
-                          print("distancelist $distancelist");
-                          print("newValue $newValue");
-                          // getLocation(2, newValue.toString());
-                          setState(() {
-                            selectedOption = newValue!;
-                          });
-                          print("selectedOption $selectedOption");
-
-                          particulardemocracywithsort(2);
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Container(
                 width: 110,
                 height: 47,
                 child: MultiSelectDialogField(
@@ -531,41 +502,71 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                   },
                 ),
               ),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                width: 110,
+                height: 47,
+                child: MultiSelectDialogField(
+                  // backgroundColor: Colors.transparent,
+                  items: townconvertedList,
+                  separateSelectedItems: false,
+                  chipDisplay: MultiSelectChipDisplay<String>(
+                    chipWidth: 70,
+                    height: 0,
+                    scroll: true,
+                    chipColor: Colors.blue,
+                    textStyle: TextStyle(color: Colors.white),
+                  ),
+                  // chipDisplay: ,
+                  buttonText:
+                      // selectedsubcategory.isEmpty ||
+                      //         selectedsubcategory == null ||
+                      //         selectedsubcategory.length == 0
+                      //     ? Text("selectText")
+                      // :
+                      Text("Town"),
 
-              // Container(
-              //   width: 70,
-              //   height: 50,
-              //   child: MultiSelectDialogField(
-              //     items: _subCategoryItems,
-              //     title: Text("Animals"),
-              //     selectedColor: Colors.blue,
-              //     decoration: BoxDecoration(
-              //       color: Colors.blue.withOpacity(0.1),
-              //       borderRadius: BorderRadius.all(Radius.circular(40)),
-              //       border: Border.all(
-              //         color: Colors.blue,
-              //         width: 2,
-              //       ),
-              //     ),
-              //     buttonIcon: Icon(
-              //       Icons.pets,
-              //       color: Colors.blue,
-              //     ),
-              //     buttonText: Text(
-              //       "Favorite Animals",
-              //       style: TextStyle(
-              //         color: Colors.blue[800],
-              //         fontSize: 16,
-              //       ),
-              //     ),
-              //     onConfirm: (results) {
-              //       //_selectedAnimals = results;
-              //     },
-              //   ),
-              // ),
+                  selectedColor: Colors.blue,
+                  decoration: BoxDecoration(
+                    // color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      width: 1.0,
+                      // assign the color to the border color
+                      color: Colors.grey,
+                    ),
+                  ),
+                  buttonIcon: const Icon(
+                    Icons.filter_list_sharp,
+                    // color: Colors.blue,
+                  ),
 
+                  onConfirm: (results) {
+                    print("Sdsfsdfsdfsdf $results");
+                    setState(() {
+                      selectedtowncategory = results;
+                    });
+                    print(selectedtowncategory.join(', ').runtimeType);
+
+                    print("selectedSubcategories $selectedtowncategory");
+                    particulardemocracywithsort(2);
+                    //_selectedAnimals = results;
+                  },
+                  onSaved: (results) {
+                    print("Sdsfsdfsdfsdf $results");
+                    setState(() {
+                      selectedtowncategory = results!;
+                    });
+                    print("selectedsubcategory $selectedtowncategory");
+                    //_selectedAnimals = results;
+                  },
+                ),
+              ),
               const SizedBox(width: 10),
               Container(
+                width: 100,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -577,21 +578,21 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                 ),
                 // width: 100,
                 height: 40,
+
                 padding: const EdgeInsets.all(0.0),
                 child: Row(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     // const Icon(Icons.filter_list_sharp),
                     Container(
-                      alignment: Alignment.center,
-                      width: 70,
+                      alignment: Alignment.topCenter,
+                      width: 80,
                       height: 40,
                       child: DropdownButtonFormField(
                         isDense: true,
                         isExpanded: true,
-                        icon: Icon(Icons.filter_list_sharp),
                         // value: selectedOption,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(0.0),
@@ -607,80 +608,39 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                         ), // value: _chosenValue,
                         //elevation: 5,
                         style: const TextStyle(color: Colors.black),
-
-                        items: districtlist.map((Map<String, dynamic> option) {
+                        icon: Icon(Icons.filter_list),
+                        items: distancelist.map((Map<String, dynamic> option) {
                           return DropdownMenuItem(
-                            value: option['district_id'].toString(),
+                            value: option['distance_id'].toString(),
                             child: SizedBox(
                                 width: 100,
                                 child: Text(
-                                  option['c_district'],
+                                  option['distance_val'],
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
                                 )),
                           );
                         }).toList(),
-                        hint: const Text("District"),
+                        hint: const Text("Distance"),
                         onChanged: (newValue) {
                           print("distancelist $distancelist");
                           print("newValue $newValue");
-                          getLocation(2, newValue.toString());
+                          // getLocation(2, newValue.toString());
                           setState(() {
-                            selecteddistrict = newValue!;
+                            selectedOption = newValue!;
                           });
+                          print("selectedOption $selectedOption");
+
+                          particulardemocracywithsort(2);
                         },
                       ),
                     )
                   ],
                 ),
               ),
-
-              // InkWell(
-              //   onTap: () {
-              //     getLocation(2, "1");
-              //   },
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(10),
-              //       border: Border.all(
-              //         width: 1.0,
-              //         // assign the color to the border color
-              //         color: Colors.grey,
-              //       ),
-              //     ),
-              //     width: 100,
-              //     height: 40,
-              //     alignment: Alignment.center,
-              //     padding: const EdgeInsets.all(0.0),
-              //     child: const Text(
-              //       "Walk to - 1Km.",
-              //       textAlign: TextAlign.center,
-              //     ),
-              //   ),
-              // ),
-              // InkWell(
-              //   onTap: () {
-              //     getLocation(2, "2");
-              //   },
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(10),
-              //       border: Border.all(
-              //         width: 1.0,
-              //         // assign the color to the border color
-              //         color: Colors.grey,
-              //       ),
-              //     ),
-              //     width: 80,
-              //     height: 40,
-              //     alignment: Alignment.center,
-              //     padding: const EdgeInsets.all(0.0),
-              //     child: const Text(
-              //       "1 - 3Kms.",
-              //       textAlign: TextAlign.center,
-              //     ),
-              //   ),
-              // ),
+              const SizedBox(
+                width: 10,
+              ),
             ],
           ),
           Container(
