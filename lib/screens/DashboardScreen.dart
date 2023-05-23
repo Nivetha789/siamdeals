@@ -1184,7 +1184,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                         id: demographicJResultList[
                                                                 postion]
                                                             .nId!,
-                                                            cityid:cityId,
+                                                        cityid: cityId,
                                                         name: demographicJResultList[
                                                                 postion]
                                                             .cDemographic!)));
@@ -1681,7 +1681,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
                       box.remove('cityid');
                       box.remove("popuphomeid");
-                      
+
                       box.remove("popupcityid");
                       box.remove('cityname');
                       await SharedPreference().clearSharep().then((v) {
