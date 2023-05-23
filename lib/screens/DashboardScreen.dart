@@ -6,10 +6,9 @@ import 'dart:io';
 
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dialogs/dialogs/message_dialog.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:siamdealz/ResponseModule/BannerModel.dart';
@@ -168,14 +167,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     // });
   }
 
-  Future<void> checkpopupdata(id, name) async {
+  Future<void> checkpopupdata(id, name, type, description) async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       return await showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               content: Container(
-                height: 250,
+                height: type == "2" ? 150 : 250,
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
@@ -200,73 +199,86 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                       ],
                     ),
                     popupJResultList.isNotEmpty
-                        ? Container(
-                            // margin: const EdgeInsets.only(top: 15.0),
-                            child: CarouselSlider.builder(
-                              itemCount: popupJResultList.length,
-                              itemBuilder: (BuildContext context, int index,
-                                  int realIdx) {
-                                return Card(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: SizedBox(
-                                    width: 300.0,
-                                    height: 150.0,
-                                    child: SizedBox(
+                        ? CarouselSlider.builder(
+                            itemCount: popupJResultList.length,
+                            itemBuilder:
+                                (BuildContext context, int index, int realIdx) {
+                              return popupJResultList[index].npopuptype ==
+                                          "2" ||
+                                      popupJResultList[index].npopuptype == 2
+                                  ? SizedBox(
+                                      width: 300.0,
+                                      height: 100.0,
+                                      child: SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        child: Image.network(
-                                          popupJResultList[index].cBannerImage!,
-                                          fit: BoxFit.fitWidth,
-                                        )
-                                        // : InkWell(
-                                        //     onTap: () async {
-                                        //       // print(
-                                        //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                        //       // String
-                                        //       //     url =
-                                        //       //     bannerJResultList[index]
-                                        //       //         .cBannerLink;
-                                        //       // var url =
-                                        //       //     bannerJResultList[index]
-                                        //       //         .cBannerLink!;
-                                        //       // if (await canLaunch(
-                                        //       //     url)) {
-                                        //       //   await launch(
-                                        //       //       url);
-                                        //       // } else {
-                                        //       //   throw 'Could not launch $url';
-                                        //       // }
-                                        //       openbannerlaunchurl(
-                                        //           bannerJResultList[index]
-                                        //               .cBannerLink!);
-                                        //     },
-                                        //     child: Image.network(
-                                        //       bannerJResultList[index]
-                                        //           .cBannerImage!,
-                                        //       fit: BoxFit.fitWidth,
-                                        //     ),
-                                        //   ),
+                                        child: HtmlWidget(
+                                          popupJResultList[index].cdescription!,
                                         ),
-                                  ),
-                                );
-                              },
-                              options: CarouselOptions(
-                                  autoPlay: popupJResultList.isNotEmpty
-                                      ? true
-                                      : false,
-                                  viewportFraction: 1.0,
-                                  height: 150,
-                                  enlargeCenterPage: false,
-                                  enableInfiniteScroll: false,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      pageIndex = index;
-                                      // _current = index;
-                                    });
-                                  }),
-                            ),
+                                      ),
+                                    )
+                                  : Card(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: SizedBox(
+                                        width: 300.0,
+                                        height: 150.0,
+                                        child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Image.network(
+                                              popupJResultList[index]
+                                                  .cBannerImage!,
+                                              fit: BoxFit.fitWidth,
+                                            )
+                                            // : InkWell(
+                                            //     onTap: () async {
+                                            //       // print(
+                                            //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                            //       // String
+                                            //       //     url =
+                                            //       //     bannerJResultList[index]
+                                            //       //         .cBannerLink;
+                                            //       // var url =
+                                            //       //     bannerJResultList[index]
+                                            //       //         .cBannerLink!;
+                                            //       // if (await canLaunch(
+                                            //       //     url)) {
+                                            //       //   await launch(
+                                            //       //       url);
+                                            //       // } else {
+                                            //       //   throw 'Could not launch $url';
+                                            //       // }
+                                            //       openbannerlaunchurl(
+                                            //           bannerJResultList[index]
+                                            //               .cBannerLink!);
+                                            //     },
+                                            //     child: Image.network(
+                                            //       bannerJResultList[index]
+                                            //           .cBannerImage!,
+                                            //       fit: BoxFit.fitWidth,
+                                            //     ),
+                                            //   ),
+                                            ),
+                                      ),
+                                    );
+                            },
+                            options: CarouselOptions(
+                                autoPlay:
+                                    popupJResultList.isNotEmpty ? true : false,
+                                viewportFraction: 1.0,
+                                height: type == "2" ? 50 : 150,
+                                enlargeCenterPage: false,
+                                enableInfiniteScroll: false,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    pageIndex = index;
+                                    // _current = index;
+                                  });
+                                }),
                           )
                         : Container(),
                     popupJResultList.isNotEmpty
@@ -734,12 +746,13 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     });
   }
 
-  updatePopupList(List<PopupJResult> popupJResultList1, id, name) {
+  updatePopupList(
+      List<PopupJResult> popupJResultList1, id, name, type, description) {
     print("PAvithramanoharan ${popupJResultList1.toString()}");
     for (int i = 0; i < popupJResultList1.length; i++) {
       print("PAVITHRAMANOHARAN ${popupJResultList1[i]}");
     }
-    checkpopupdata(id, name);
+    checkpopupdata(id, name, type, description);
     popupJResultList.clear();
     setState(() {
       popupJResultList.addAll(popupJResultList1);
@@ -1994,8 +2007,12 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         print("PAvithramanoharan123444 ${popupModel.jResult}");
         if (popuphomeid != map["j_result"][0]["n_id"]) {
           if (popupModel.nStatus == 1) {
-            updatePopupList(popupModel.jResult!, map["j_result"][0]["n_id"],
-                map["j_result"][0]["c_title"]);
+            updatePopupList(
+                popupModel.jResult!,
+                map["j_result"][0]["n_id"],
+                map["j_result"][0]["c_title"],
+                map["j_result"][0]["n_popup_type"],
+                map["j_result"][0]["c_description"]);
           }
         }
         // if (popupModel.nStatus == 1) {
@@ -2033,8 +2050,12 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         print("PAvithramanoharan123444 ${popupModel.jResult}");
         if (popupcityid != map["j_result"][0]["n_id"]) {
           if (popupModel.nStatus == 1) {
-            updatePopupList(popupModel.jResult!, map["j_result"][0]["n_id"],
-                map["j_result"][0]["c_title"]);
+            updatePopupList(
+                popupModel.jResult!,
+                map["j_result"][0]["n_id"],
+                map["j_result"][0]["c_title"],
+                map["j_result"][0]["n_popup_type"],
+                map["j_result"][0]["c_description"]);
           }
         }
       } else {
