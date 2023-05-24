@@ -66,8 +66,8 @@ class _Top10DemocracyState extends State<Top10Democracy> {
   getLocation(int value, distance) async {
     _currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print(_currentPosition.longitude); //Output: 80.24599079
-    print(_currentPosition.latitude); //Output: 29.6593457
+    debugPrint(_currentPosition.longitude.toString()); //Output: 80.24599079
+    debugPrint(_currentPosition.latitude.toString()); //Output: 29.6593457
 
     long = _currentPosition.longitude.toString();
     lat = _currentPosition.latitude.toString();
@@ -85,8 +85,8 @@ class _Top10DemocracyState extends State<Top10Democracy> {
     StreamSubscription<Position> positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) {
-      print(position.longitude); //Output: 80.24599079
-      print(position.latitude); //Output: 29.6593457
+      debugPrint(position.longitude.toString()); //Output: 80.24599079
+      debugPrint(position.latitude.toString()); //Output: 29.6593457
 
       long = position.longitude.toString();
       lat = position.latitude.toString();
@@ -96,8 +96,8 @@ class _Top10DemocracyState extends State<Top10Democracy> {
       });
     });
 
-    print("latitude " + lat);
-    print("longitute " + long);
+    debugPrint("latitude " + lat);
+    debugPrint("longitute " + long);
 
     _getAddressFromLatLng(_currentPosition);
   }
@@ -136,17 +136,17 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         ProgressDialog().dismissDialog(context);
       });
 
-      // print("pavithra ${await response.stream.bytesToString()}");
+      // debugPrint("pavithra ${await response.stream.bytesToString()}");
     } else {
       setState(() {
         ProgressDialog().dismissDialog(context);
       });
-      print(" ${response.reasonPhrase}");
+      debugPrint(" ${response.reasonPhrase}");
     }
   }
 
   Future<dynamic> particulardemocracywithsort(nview) async {
-    print("DFSDFSDFSDFSD");
+    debugPrint("DFSDFSDFSDFSD");
     ProgressDialog().showLoaderDialog(context);
     var headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -185,12 +185,12 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         ProgressDialog().dismissDialog(context);
       });
 
-      // print("pavithra ${await response.stream.bytesToString()}");
+      // debugPrint("pavithra ${await response.stream.bytesToString()}");
     } else {
       setState(() {
         ProgressDialog().dismissDialog(context);
       });
-      print(" ${response.reasonPhrase}");
+      debugPrint(" ${response.reasonPhrase}");
     }
   }
 
@@ -208,7 +208,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         options: Options(contentType: Headers.formUrlEncodedContentType),
       );
 
-      print("PAVITHRAM2132434234 ${response.toString()}");
+      debugPrint("PAVITHRAM2132434234 ${response.toString()}");
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         distancelist = List<Map<String, dynamic>>.from(map["data"]);
@@ -218,10 +218,10 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       //  ProgressDialog().dismissDialog(context);
-      print("Response22: $e");
+      debugPrint("Response22: $e");
     }
   }
 
@@ -253,7 +253,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-        print("PAVITHRAMMMM ${map["data"]["town_list"]}");
+        debugPrint("PAVITHRAMMMM ${map["data"]["town_list"]}");
         distancelist =
             List<Map<String, dynamic>>.from(map["data"]["distance_list"]);
         selectedOption =
@@ -261,7 +261,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         districtlist =
             List<Map<String, dynamic>>.from(map["data"]["town_list"]);
         selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
-        print(selectedtowncategory);
+        debugPrint(selectedtowncategory.toString());
 
         categoryList =
             List<Map<String, dynamic>>.from(map["data"]["category_list"]);
@@ -272,7 +272,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         Set<String> uniquetownItems = {};
         subcategoryList = [];
         towncategoryList = [];
-        print(
+        debugPrint(
             "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
         for (var category in categoryList) {
           var subCategories = category['sub_category'];
@@ -280,7 +280,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
           // Iterate over sub_categories if it's not empty
           if (subCategories != null && subCategories.isNotEmpty) {
             for (var subCategory in subCategories) {
-              // print("dfgjdkfghkfhgdfgh${subCategory}");
+              // debugPrint("dfgjdkfghkfhgdfgh${subCategory}");
               // selectedsubcategory = subCategory[0]["subcategory_id"];
               var subCategoryString =
                   subCategory.toString(); // Convert to string
@@ -291,7 +291,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
             }
           }
         }
-        // print(
+        // debugPrint(
         //     "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
 
         convertedList = subcategoryList.map((animal) {
@@ -302,7 +302,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         }).toList();
 
         // convertedList.forEach((item) {
-        //   // print('Subcategory ID: ${item.value}, Category: ${item.label}');
+        //   // debugPrint('Subcategory ID: ${item.value}, Category: ${item.label}');
         // });
 
         // Iterate over sub_categories if it's not empty
@@ -318,7 +318,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
             }
           }
         }
-        print(
+        debugPrint(
             "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
 
         townconvertedList = towncategoryList.map((town) {
@@ -329,16 +329,16 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         }).toList();
 
         // townconvertedList.forEach((item) {
-        //   print('Subcategory ID: ${item.value}, Category: ${item.label}');
+        //   debugPrint('Subcategory ID: ${item.value}, Category: ${item.label}');
         // });
       } else {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       //  ProgressDialog().dismissDialog(context);
-      print("Response22: $e");
+      debugPrint("Response22: $e");
     }
   }
 
@@ -353,7 +353,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         _currentAddress =
             '${place.street}, ${place.subLocality},${place.locality}, ${place.subAdministrativeArea} - ${place.postalCode}';
 
-        print("_currentAddress " + _currentAddress);
+        debugPrint("_currentAddress " + _currentAddress);
       });
     }).catchError((e) {
       debugPrint(e);
@@ -482,22 +482,22 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                   ),
 
                   onConfirm: (results) {
-                    print("Sdsfsdfsdfsdf $results");
+                    debugPrint("Sdsfsdfsdfsdf $results");
                     setState(() {
                       selectedsubcategory = results;
                     });
-                    print(selectedsubcategory.join(', ').runtimeType);
+                    debugPrint(selectedsubcategory.join(', '));
 
-                    print("selectedSubcategories $selectedsubcategory");
+                    debugPrint("selectedSubcategories $selectedsubcategory");
                     particulardemocracywithsort(2);
                     //_selectedAnimals = results;
                   },
                   onSaved: (results) {
-                    print("Sdsfsdfsdfsdf $results");
+                    debugPrint("Sdsfsdfsdfsdf $results");
                     setState(() {
                       selectedsubcategory = results!;
                     });
-                    print("selectedsubcategory $selectedsubcategory");
+                    debugPrint("selectedsubcategory $selectedsubcategory");
                     //_selectedAnimals = results;
                   },
                 ),
@@ -544,22 +544,22 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                   ),
 
                   onConfirm: (results) {
-                    print("Sdsfsdfsdfsdf $results");
+                    debugPrint("Sdsfsdfsdfsdf $results");
                     setState(() {
                       selectedtowncategory = results;
                     });
-                    print(selectedtowncategory.join(', ').runtimeType);
+                    debugPrint(selectedtowncategory.join(', '));
 
-                    print("selectedSubcategories $selectedtowncategory");
+                    debugPrint("selectedSubcategories $selectedtowncategory");
                     particulardemocracywithsort(2);
                     //_selectedAnimals = results;
                   },
                   onSaved: (results) {
-                    print("Sdsfsdfsdfsdf $results");
+                    debugPrint("Sdsfsdfsdfsdf $results");
                     setState(() {
                       selectedtowncategory = results!;
                     });
-                    print("selectedsubcategory $selectedtowncategory");
+                    debugPrint("selectedsubcategory $selectedtowncategory");
                     //_selectedAnimals = results;
                   },
                 ),
@@ -623,13 +623,13 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                         }).toList(),
                         hint: const Text("Distance"),
                         onChanged: (newValue) {
-                          print("distancelist $distancelist");
-                          print("newValue $newValue");
+                          debugPrint("distancelist $distancelist");
+                          debugPrint("newValue $newValue");
                           // getLocation(2, newValue.toString());
                           setState(() {
                             selectedOption = newValue!;
                           });
-                          print("selectedOption $selectedOption");
+                          debugPrint("selectedOption $selectedOption");
 
                           particulardemocracywithsort(2);
                         },

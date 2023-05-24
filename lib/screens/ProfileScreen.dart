@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             backgroundColor: Color(0xffF5C120),
             timeInSecForIosWeb: 1);
       }
-      print("sssss");
+      debugPrint("sssss");
       // No-Internet Case
     });
   }
@@ -386,7 +386,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
@@ -414,9 +414,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
-      print("Exception " + e.toString());
+      debugPrint("Exception " + e.toString());
       ProgressDialog().dismissDialog(context);
       ToastHandler.showToast(message: "Bad Network Connection try again..");
     }

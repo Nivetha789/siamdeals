@@ -462,7 +462,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                     // CountryListPick(
                                     //     pickerBuilder: (context, CountryCode countryCode1) {
                                     //       countryCode=countryCode1;
-                                    //       print("countryyy "+countryCode.toString());
+                                    //       debugPrint("countryyy "+countryCode.toString());
                                     InkWell(
                                   onTap: () {
                                     setState(() {
@@ -526,10 +526,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 // // or
                                 // // initialSelection: 'US'
                                 // onChanged: (countryCode) {
-                                //   print(countryCode.name);
-                                //   print(countryCode.code);
-                                //   print(countryCode.dialCode);
-                                //   print(countryCode.flagUri);
+                                //   debugPrint(countryCode.name);
+                                //   debugPrint(countryCode.code);
+                                //   debugPrint(countryCode.dialCode);
+                                //   debugPrint(countryCode.flagUri);
                                 //
                                 //   // _dialCode = code.dialCode.substring(1);
                                 // },
@@ -1029,7 +1029,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           textFieldAlignment: MainAxisAlignment.spaceAround,
                           onCompleted: (pin) {
                             otp = pin.toString();
-                            print("Completed: " + pin + otp);
+                            debugPrint("Completed: " + pin + otp);
                           },
                           otpFieldStyle: OtpFieldStyle(
                             borderColor: Colors.black,
@@ -1211,9 +1211,9 @@ class RegisterScreenState extends State<RegisterScreen> {
               validateStatus: (_) => true,
               contentType: Headers.formUrlEncodedContentType));
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
       if (response.statusCode == 200) {
-        print("PAVITHRAMANOJAaharan ${response.data["status"]}");
+        debugPrint("PAVITHRAMANOJAaharan ${response.data["status"]}");
 
         //   Map<String, dynamic> map = jsonDecode(response.toString());
         //   RegisterModel registerModel = RegisterModel.fromJson(map);
@@ -1231,7 +1231,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         //     // await SharedPreference().setSubcribeTokenKey(subcription_tokenKey);
         //     // await SharedPreference().setAuthTokenKey(auth_tokenKey);
 
-        //     // print("dcmsetStatus "+dcmStatus.toString());
+        //     // debugPrint("dcmsetStatus "+dcmStatus.toString());
 
         //     await SharedPreference().setLogin("1");
         //     await SharedPreference()
@@ -1262,12 +1262,12 @@ class RegisterScreenState extends State<RegisterScreen> {
         //   ProgressDialog().dismissDialog(context);
         // }
 
-        // print(response);
+        // debugPrint(response);
       }
     } catch (e) {
       // _progressHUD.state.dismiss();
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: " + e.toString());
     }
   }
 
@@ -1292,9 +1292,9 @@ class RegisterScreenState extends State<RegisterScreen> {
               validateStatus: (_) => true,
               contentType: Headers.formUrlEncodedContentType));
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
       if (response.statusCode == 200) {
-        print("PAVITHRAMANOJAaharan ${response.data["n_status"]}");
+        debugPrint("PAVITHRAMANOJAaharan ${response.data["n_status"]}");
 
         //   Map<String, dynamic> map = jsonDecode(response.toString());
         //   RegisterModel registerModel = RegisterModel.fromJson(map);
@@ -1311,7 +1311,7 @@ class RegisterScreenState extends State<RegisterScreen> {
     } catch (e) {
       // _progressHUD.state.dismiss();
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: " + e.toString());
     }
   }
 
@@ -1344,7 +1344,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               validateStatus: (_) => true,
               contentType: Headers.formUrlEncodedContentType));
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         RegisterModel registerModel = RegisterModel.fromJson(map);
@@ -1359,7 +1359,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           // await SharedPreference().setSubcribeTokenKey(subcription_tokenKey);
           // await SharedPreference().setAuthTokenKey(auth_tokenKey);
 
-          // print("dcmsetStatus "+dcmStatus.toString());
+          // debugPrint("dcmsetStatus "+dcmStatus.toString());
 
           await SharedPreference().setLogin("1");
           await SharedPreference()
@@ -1395,14 +1395,14 @@ class RegisterScreenState extends State<RegisterScreen> {
         ProgressDialog().dismissDialog(context);
       }
 
-      print(response);
+      debugPrint(response.toString());
     } catch (e) {
       setState(() {
         sendotp = true;
       });
       // _progressHUD.state.dismiss();
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: " + e.toString());
     }
   }
 
@@ -1435,15 +1435,15 @@ class RegisterScreenState extends State<RegisterScreen> {
       } else {
         ProgressDialog().dismissDialog(context);
         // bannerJResultList.clear();
-        print("Response: " + "Bad Network Connection try again..");
+        debugPrint("Response: " + "Bad Network Connection try again..");
         // ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: " + e.toString());
     }
   }
 }

@@ -119,13 +119,13 @@ class HtmlScreenState extends State<HtmlScreen> {
                         //   Uri.parse(url!),
                         //   mode: LaunchMode.externalApplication,
                         // );
-                      //   // print("Opening $url...");
+                      //   // debugPrint("Opening $url...");
                       // },
                       // onImageTap: (src, _, __, ___) {
-                      //   print(src);
+                      //   debugPrint(src);
                       // },
                       // onImageError: (exception, stackTrace) {
-                      //   print(exception);
+                      //   debugPrint(exception);
                       // },
                       onLinkTap: (url, _, __) async {
                           await launchUrl(
@@ -135,10 +135,10 @@ class HtmlScreenState extends State<HtmlScreen> {
                         debugPrint("Opening $url...");
                       },
                       onCssParseError: (css, messages) {
-                        print("css that errored: $css");
-                        print("error messages:");
+                        debugPrint("css that errored: $css");
+                        debugPrint("error messages:");
                         messages.forEach((element) {
-                          print(element);
+                          debugPrint(element.toString());
                         });
                       },
                     ),
@@ -157,7 +157,7 @@ class HtmlScreenState extends State<HtmlScreen> {
 
     // dio.options.contentType = Headers.formUrlEncodedContentType;
 
-    print('response ' + ApiProvider.getHtmlContentApi + widget.htmlId);
+    debugPrint('response ' + ApiProvider.getHtmlContentApi + widget.htmlId);
 
     final response = await dio.get(
       ApiProvider.getHtmlContentApi + widget.htmlId,

@@ -250,7 +250,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                     top: index == 0 ? 12.sp : 8.sp),
                                 child: GestureDetector(
                                   onTap: () {
-                                    print(
+                                    debugPrint(
                                         "asdfghjkl {categoryJResultList[index].nId!}");
                                     Navigator.push(
                                         context,
@@ -400,7 +400,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
         });
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       ProgressDialog().dismissDialog(context);
       setState(() {
@@ -468,18 +468,18 @@ class CategoryListScreenState extends State<CategoryListScreen> {
           checkBanner = false;
         });
         // bannerJResultList.clear();
-        print("Response: " + "Bad Network Connection try again..");
+        debugPrint("Response: " + "Bad Network Connection try again..");
         // ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();
       setState(() {
         checkBanner = false;
       });
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: " + e.toString());
     }
   }
 }

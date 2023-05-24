@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../ResponseModule/BannerModel.dart';
 import '../ResponseModule/CategoryModel.dart';
+import '../ResponseModule/DemographicModel/DemographicModel.dart';
 import '../ResponseModule/SearchVendorModule/SearchVendorModel.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLocalizations.dart';
@@ -23,6 +24,8 @@ import '../utils/check_internet.dart';
 import '../utils/fab_menu_package.dart';
 import '../utils/handler/toast_handler.dart';
 import '../utils/style.dart';
+import 'CategoryScreen.dart';
+import 'top10democracy.dart';
 
 class SearchStoreListScreen extends StatefulWidget {
   int categoryId = 0;
@@ -312,7 +315,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                 return InkWell(
                                   onTap: () {
                                     setState(() {
-                                      print("PAVITHRAMANOHARAN");
+                                      debugPrint("PAVITHRAMANOHARAN");
                                       searchCategoryController.text = "";
                                       updateSubCategoryText(
                                           searchSubCategoryList[postion].nId!,
@@ -437,7 +440,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                           fontFamily: Style.montserrat),
                     )
                   : Text(
-                      categoryName + "(" + subCategoryName + ")",
+                      "$categoryName($subCategoryName)",
                       style: TextStyle(
                           color: Style.colors.logoRed,
                           fontSize: 17.0,
@@ -445,7 +448,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                     )),
           iconTheme: IconThemeData(color: Style.colors.logoRed),
           backgroundColor: Colors.white,
-      //    brightness: Brightness.light,
+          //    brightness: Brightness.light,
         ),
         body: HawkFabMenu(
           icon: Image.asset("images/help.png", color: const Color(0xffFB595D)),
@@ -474,319 +477,75 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
             //   labelBackgroundColor: Colors.blue,
             // ),
           ],
-          body: SizedBox(
+          body: Container(
             height: MediaQuery.of(context).size.height,
-            child: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              stateSetter = setState;
-              return Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 16.0, right: 16.0),
-                      alignment: Alignment.center,
-                      height: 70,
-                      child: Container(
-                        height: 50.0,
-                        alignment: Alignment.topLeft,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(6)),
-                            border: Border.all(
-                                width: 1,
-                                color:
-                                    const Color(0xffC0C0C0).withOpacity(0.7))),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Stack(
-                                  alignment: Alignment.centerRight,
-                                  children: [
-                                    TextFormField(
-                                      autofocus: false,
-                                      textInputAction: TextInputAction.search,
-                                      keyboardType: TextInputType.text,
-                                      controller: searchController,
-                                      textAlign: TextAlign.start,
-                                      // inputFormatters: <TextInputFormatter>[
-                                      //   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")),
-                                      // ],
-                                      decoration: InputDecoration(
-                                        // labelText: "Search",
-                                        // labelStyle: TextStyle(
-                                        //   fontSize: 14.0,
-                                        //   color: Color(0xff495271),
-                                        // ),
-                                        hintText: searchHint,
-                                        hintStyle: TextStyle(
-                                            fontSize: 14.0,
-                                            fontFamily: Style.montserrat,
-                                            fontWeight: FontWeight.w500),
-                                        border: InputBorder.none,
-                                      ),
-                                      style: const TextStyle(
-                                          color: Color(0xff495271),
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w500),
-                                      onChanged: (String text) {
-                                        setState(() {
-                                          searchTxt = text;
-                                          if (searchTxt.isEmpty) {
-                                            searchClearImg = false;
-                                            offset = 0;
-                                            limit = 10;
-
-                                            check().then((intenet) {
-                                              if (intenet) {
-                                                searchVendorListApi(
-                                                    searchTxt, "Search");
-                                              } else {
-                                                ToastHandler.showToast(
-                                                    message:
-                                                        "Please check your internet connection");
-                                              }
-                                            });
-                                          } else {
-                                            searchClearImg = true;
-                                          }
-                                        });
-                                      },
-                                    ),
-                                    Visibility(
-                                      visible: searchClearImg,
-                                      child: InkWell(
-                                        onTap: () {
-                                          searchController.text = "";
-                                          searchTxt = "";
-                                          searchClearImg = false;
-
-                                          searchClearImg = false;
-                                          offset = 0;
-                                          limit = 10;
-
-                                          check().then((intenet) {
-                                            if (intenet) {
-                                              searchVendorListApi(
-                                                  searchTxt, "Search");
-                                            } else {
-                                              ToastHandler.showToast(
-                                                  message:
-                                                      "Please check your internet connection");
-                                            }
-                                          });
-
-                                          FocusScopeNode currentFocus =
-                                              FocusScope.of(context);
-                                          if (!currentFocus.hasPrimaryFocus &&
-                                              currentFocus.focusedChild !=
-                                                  null) {
-                                            currentFocus.focusedChild!
-                                                .unfocus();
-                                          }
-                                        },
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          width: 30.0,
-                                          height: 30.0,
-                                          margin: const EdgeInsets.only(
-                                              right: 10.0),
-                                          child: Icon(
-                                            Icons.cancel_outlined,
-                                            color: Style.colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            VerticalDivider(
-                                width: 1,
-                                color:
-                                    const Color(0xffC0C0C0).withOpacity(0.7)),
-                            Expanded(
-                                flex: 1,
-                                child: InkWell(
-                                  onTap: () {
-                                    // searchController.text = "";
-                                    // searchTxt = "";
-
-                                    if (searchTxt.isNotEmpty) {
-                                      offset = 0;
-                                      limit = 10;
-
-                                      check().then((intenet) {
-                                        if (intenet) {
-                                          searchVendorListApi(
-                                              searchTxt, "Search");
-                                        } else {
-                                          ToastHandler.showToast(
-                                              message:
-                                                  "Please check your internet connection");
-                                        }
-                                      });
-                                    }
-                                  },
-                                  child: Container(
-                                      alignment: Alignment.center,
-                                      child: searchTxt.isEmpty
-                                          ? Icon(
-                                              Icons.search_rounded,
-                                              color: const Color(0xffC0C0C0)
-                                                  .withOpacity(0.7),
-                                            )
-                                          : Icon(
-                                              Icons.search_rounded,
-                                              color: Style.colors.logoRed,
-                                            )),
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: checkBanner,
-                    child: bannerJResultList.isNotEmpty
-                        ? Expanded(
-                            flex: 4,
-                            child: Container(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Text(
-                                        AppLocalizations.of(context)!
-                                            .city_spotLight!,
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: Style.josefinsans)),
-                                    margin: const EdgeInsets.only(
-                                        top: 15.0, left: 16.0),
-                                    alignment: Alignment.centerLeft,
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 15.0),
-                                    child: CarouselSlider.builder(
-                                      itemCount: bannerJResultList.length,
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIdx) {
-                                        return Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          child: SizedBox(
-                                            width: 330.0,
-                                            height: 200.0,
-                                            child: SizedBox(
-                                              child: Image.network(
-                                                bannerJResultList[index]
-                                                    .cBannerImage!,
-                                                fit: BoxFit.fitWidth,
-                                              ),
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                            ),
-                                          ),
-                                          clipBehavior: Clip.antiAlias,
-                                        );
-                                      },
-                                      options: new CarouselOptions(
-                                          autoPlay: bannerJResultList.length > 0
-                                              ? true
-                                              : false,
-                                          viewportFraction: 1.0,
-                                          height: 200,
-                                          enlargeCenterPage: false,
-                                          enableInfiniteScroll: false,
-                                          onPageChanged: (index, reason) {
-                                            setState(() {
-                                              pageIndex = index;
-                                              // _current = index;
-                                            });
-                                          }),
-                                    ),
-                                  ),
-                                  Container(
-                                    child: CarouselIndicator(
-                                      count: bannerJResultList.length,
-                                      index: pageIndex,
-                                      color: Style.colors.grey.withOpacity(0.3),
-                                      activeColor: Style.colors.logoRed,
-                                      width: 10.0,
-                                    ),
-                                    margin: const EdgeInsets.only(top: 5.0),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        : Container(),
-                  ),
-                  subCategoryDataList.isNotEmpty
-                      ? Expanded(
-                          flex: 1,
+            child: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                  stateSetter = setState;
+                  return Column(
+                    children: [
+                      Container(
+                        // flex: 1,
+                        child: Container(
+                          margin:
+                              const EdgeInsets.only(left: 16.0, right: 16.0),
+                          alignment: Alignment.center,
+                          height: 70,
                           child: Container(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.only(
-                                  left: 11.0, right: 11.0),
-                              child: Container(
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: [
-                                    Container(
-                                      child: ListView.builder(
-                                          itemCount:
-                                              subCategoryDataList.length > 4
-                                                  ? 3
-                                                  : 0,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder:
-                                              (BuildContext context, index) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  if (subCategoryDataList[index]
-                                                      .addRemove!) {
-                                                    searchVendorJResultList
-                                                        .clear();
-                                                    categoryId =
-                                                        widget.categoryId;
-                                                    subCategoryDataList[index]
-                                                            .addRemove =
-                                                        !subCategoryDataList[
-                                                                index]
-                                                            .addRemove!;
-                                                  } else {
-                                                    for (int i = 0;
-                                                        i <
-                                                            subCategoryDataList
-                                                                .length;
-                                                        i++) {
-                                                      if (subCategoryDataList[i]
-                                                          .addRemove!) {
-                                                        subCategoryDataList[i]
-                                                            .addRemove = false;
-                                                      }
-                                                    }
-                                                    subCategoryDataList[index]
-                                                        .addRemove = true;
-
-                                                    categoryId = int.parse(
-                                                        subCategoryDataList[
-                                                                index]
-                                                            .nId!);
-                                                  }
-                                                });
-
+                            height: 50.0,
+                            alignment: Alignment.topLeft,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(6)),
+                                border: Border.all(
+                                    width: 1,
+                                    color: const Color(0xffC0C0C0)
+                                        .withOpacity(0.7))),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  // width: 100,
+                                  flex: 5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Stack(
+                                      alignment: Alignment.centerRight,
+                                      children: [
+                                        TextFormField(
+                                          autofocus: false,
+                                          textInputAction:
+                                              TextInputAction.search,
+                                          keyboardType: TextInputType.text,
+                                          controller: searchController,
+                                          textAlign: TextAlign.start,
+                                          // inputFormatters: <TextInputFormatter>[
+                                          //   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")),
+                                          // ],
+                                          decoration: InputDecoration(
+                                            // labelText: "Search",
+                                            // labelStyle: TextStyle(
+                                            //   fontSize: 14.0,
+                                            //   color: Color(0xff495271),
+                                            // ),
+                                            hintText: searchHint,
+                                            hintStyle: TextStyle(
+                                                fontSize: 14.0,
+                                                fontFamily: Style.montserrat,
+                                                fontWeight: FontWeight.w500),
+                                            border: InputBorder.none,
+                                          ),
+                                          style: const TextStyle(
+                                              color: Color(0xff495271),
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500),
+                                          onChanged: (String text) {
+                                            setState(() {
+                                              searchTxt = text;
+                                              if (searchTxt.isEmpty) {
+                                                searchClearImg = false;
                                                 offset = 0;
                                                 limit = 10;
 
@@ -800,363 +559,795 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                             "Please check your internet connection");
                                                   }
                                                 });
-                                              },
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 5.0,
-                                                    right: 5.0,
-                                                    top: 10.0,
-                                                    bottom: 10.0),
-                                                decoration: BoxDecoration(
-                                                    border:
-                                                        subCategoryDataList[index]
-                                                                .addRemove!
-                                                            ? Border.all(
-                                                                color:
-                                                                    Style.colors
-                                                                        .logoRed)
-                                                            : Border.all(
-                                                                color: Style
-                                                                    .colors
-                                                                    .app_black),
-                                                    color: subCategoryDataList[
-                                                                index]
-                                                            .addRemove!
-                                                        ? Style.colors.logoRed
-                                                            .withOpacity(0.2)
-                                                        : Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.0)),
-                                                child: Container(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 15.0,
-                                                                right: 15.0),
-                                                        child: Text(
-                                                          subCategoryDataList[
-                                                                  index]
-                                                              .cCategory!,
-                                                          style: TextStyle(
-                                                              color: Style
-                                                                  .colors
-                                                                  .app_black,
-                                                              fontSize: 12.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily: Style
-                                                                  .montserrat),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                              } else {
+                                                searchClearImg = true;
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        Visibility(
+                                          visible: searchClearImg,
+                                          child: InkWell(
+                                            onTap: () {
+                                              searchController.text = "";
+                                              searchTxt = "";
+                                              searchClearImg = false;
+
+                                              searchClearImg = false;
+                                              offset = 0;
+                                              limit = 10;
+
+                                              check().then((intenet) {
+                                                if (intenet) {
+                                                  searchVendorListApi(
+                                                      searchTxt, "Search");
+                                                } else {
+                                                  ToastHandler.showToast(
+                                                      message:
+                                                          "Please check your internet connection");
+                                                }
+                                              });
+
+                                              FocusScopeNode currentFocus =
+                                                  FocusScope.of(context);
+                                              if (!currentFocus
+                                                      .hasPrimaryFocus &&
+                                                  currentFocus.focusedChild !=
+                                                      null) {
+                                                currentFocus.focusedChild!
+                                                    .unfocus();
+                                              }
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 30.0,
+                                              height: 30.0,
+                                              margin: const EdgeInsets.only(
+                                                  right: 10.0),
+                                              child: Icon(
+                                                Icons.cancel_outlined,
+                                                color: Style.colors.grey,
                                               ),
-                                            );
-                                          }),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    InkWell(
+                                  ),
+                                ),
+                                VerticalDivider(
+                                    width: 1,
+                                    color: const Color(0xffC0C0C0)
+                                        .withOpacity(0.7)),
+                                Expanded(
+                                    flex: 1,
+                                    child: InkWell(
                                       onTap: () {
-                                        searchSubCategoryList.clear();
-                                        setState(() {
-                                          searchSubCategoryList
-                                              .addAll(subCategoryDataList);
-                                        });
-                                        SubCategoryBottomList(context);
+                                        // searchController.text = "";
+                                        // searchTxt = "";
+
+                                        if (searchTxt.isNotEmpty) {
+                                          offset = 0;
+                                          limit = 10;
+
+                                          check().then((intenet) {
+                                            if (intenet) {
+                                              searchVendorListApi(
+                                                  searchTxt, "Search");
+                                            } else {
+                                              ToastHandler.showToast(
+                                                  message:
+                                                      "Please check your internet connection");
+                                            }
+                                          });
+                                        }
                                       },
                                       child: Container(
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .view_all!,
-                                          style: TextStyle(
-                                              color: Style.colors.logoRed,
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: Style.montserrat),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        alignment: Alignment.center,
-                                        margin:
-                                            const EdgeInsets.only(left: 10.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                          alignment: Alignment.center,
+                                          child: searchTxt.isEmpty
+                                              ? Icon(
+                                                  Icons.search_rounded,
+                                                  color: const Color(0xffC0C0C0)
+                                                      .withOpacity(0.7),
+                                                )
+                                              : Icon(
+                                                  Icons.search_rounded,
+                                                  color: Style.colors.logoRed,
+                                                )),
+                                    )),
+                              ],
                             ),
                           ),
-                        )
-                      : Container(),
-                  Expanded(
-                    flex: 5,
-                    child: Stack(
-                      children: [
-                        Visibility(
-                          visible: checkInbox,
-                          child: Container(
-                            child: LoadMore(
-                              isFinish: searchVendorJResultList.length >= total,
-                              onLoadMore: _loadMore,
-                              whenEmptyLoad: false,
-                              delegate: const DefaultLoadMoreDelegate(),
-                              textBuilder: DefaultLoadMoreTextBuilder.english,
-                              child: ListView(
+                        ),
+                      ),
+                      // Visibility(
+                      //   visible: checkBanner,
+                      //   child: bannerJResultList.isNotEmpty
+                      //       ? Expanded(
+                      //           flex: 4,
+                      //           child: Container(
+                      //             child: Column(
+                      //               children: [
+                      //                 Container(
+                      //                   child: Text(
+                      //                       AppLocalizations.of(context)!
+                      //                           .city_spotLight!,
+                      //                       style: TextStyle(
+                      //                           fontSize: 16.0,
+                      //                           fontWeight: FontWeight.w600,
+                      //                           fontFamily: Style.josefinsans)),
+                      //                   margin: const EdgeInsets.only(
+                      //                       top: 15.0, left: 16.0),
+                      //                   alignment: Alignment.centerLeft,
+                      //                 ),
+                      //                 Container(
+                      //                   margin: const EdgeInsets.only(top: 15.0),
+                      //                   child: CarouselSlider.builder(
+                      //                     itemCount: bannerJResultList.length,
+                      //                     itemBuilder: (BuildContext context,
+                      //                         int index, int realIdx) {
+                      //                       return Card(
+                      //                         shape: RoundedRectangleBorder(
+                      //                             borderRadius:
+                      //                                 BorderRadius.circular(20)),
+                      //                         child: SizedBox(
+                      //                           width: 330.0,
+                      //                           height: 200.0,
+                      //                           child: SizedBox(
+                      //                             child: Image.network(
+                      //                               bannerJResultList[index]
+                      //                                   .cBannerImage!,
+                      //                               fit: BoxFit.fitWidth,
+                      //                             ),
+                      //                             width: MediaQuery.of(context)
+                      //                                 .size
+                      //                                 .width,
+                      //                           ),
+                      //                         ),
+                      //                         clipBehavior: Clip.antiAlias,
+                      //                       );
+                      //                     },
+                      //                     options: new CarouselOptions(
+                      //                         autoPlay:
+                      //                             bannerJResultList.length > 0
+                      //                                 ? true
+                      //                                 : false,
+                      //                         viewportFraction: 1.0,
+                      //                         height: 200,
+                      //                         enlargeCenterPage: false,
+                      //                         enableInfiniteScroll: false,
+                      //                         onPageChanged: (index, reason) {
+                      //                           setState(() {
+                      //                             pageIndex = index;
+                      //                             // _current = index;
+                      //                           });
+                      //                         }),
+                      //                   ),
+                      //                 ),
+                      //                 Container(
+                      //                   child: CarouselIndicator(
+                      //                     count: bannerJResultList.length,
+                      //                     index: pageIndex,
+                      //                     color:
+                      //                         Style.colors.grey.withOpacity(0.3),
+                      //                     activeColor: Style.colors.logoRed,
+                      //                     width: 10.0,
+                      //                   ),
+                      //                   margin: const EdgeInsets.only(top: 5.0),
+                      //                 )
+                      //               ],
+                      //             ),
+                      //           ),
+                      //         )
+                      //       : Container(),
+                      // ),
+
+                      Container(
+                        color: Colors.grey.withOpacity(0.3),
+                        width: MediaQuery.of(context).size.width,
+                        height: 1.0,
+                        margin: const EdgeInsets.only(top: 10.0),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10.0),
+                        height: 90.0,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(
+                                  left: 16.0, right: 16.0, top: 10.0),
+                              child: ListView.builder(
+                                  itemCount: demographicJResultList.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, postion) {
+                                    return Card(
+                                      elevation: 2,
+                                      color: Style.colors.logoRed,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.sp),
+                                      ),
+                                      margin: const EdgeInsets.only(
+                                          right: 10.0, bottom: 10.0),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => Top10Democracy(
+                                                      id: demographicJResultList[
+                                                              postion]
+                                                          .nId!,
+                                                      cityid: widget.cityid,
+                                                      name:
+                                                          demographicJResultList[
+                                                                  postion]
+                                                              .cDemographic!)));
+
+                                          setState(() {});
+                                        },
+                                        child: Container(
+                                          width: 120.0,
+                                          margin:
+                                              const EdgeInsets.only(left: 10.0),
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                  topRight:
+                                                      Radius.circular(5.0),
+                                                  bottomRight:
+                                                      Radius.circular(5.0))),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 10.0,
+                                                          right: 10.0),
+                                                  child: Text(
+                                                      demographicJResultList[
+                                                              postion]
+                                                          .cDemographic!,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          fontSize: 13.0,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.black,
+                                                          fontFamily: Style
+                                                              .montserrat)),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
+                      categoryJResultList.isNotEmpty
+                          ? Container(
+                              margin: const EdgeInsets.only(
+                                  top: 20.0, left: 16.0, right: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: searchVendorJResultList.length,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        String openTime = "";
-                                        String closeTime = "";
-                                        bool checkLeave = false;
-
-                                        if (searchVendorJResultList[index]
-                                                .jCurrentDay!
-                                                .open!
-                                                .isEmpty &&
-                                            searchVendorJResultList[index]
-                                                .jCurrentDay!
-                                                .close!
-                                                .isEmpty) {
-                                          openTime = " (Leave)";
-                                          closeTime = "";
-                                          checkLeave = true;
-                                        } else if (searchVendorJResultList[
-                                                    index]
-                                                .jCurrentDay!
-                                                .open!
-                                                .isNotEmpty &&
-                                            searchVendorJResultList[index]
-                                                .jCurrentDay!
-                                                .close!
-                                                .isEmpty) {
-                                          openTime = " (Open - 24 Hours)";
-                                          closeTime = "";
-                                          checkLeave = false;
-                                        } else {
-                                          openTime = "(Open - " +
-                                              searchVendorJResultList[index]
-                                                  .jCurrentDay!
-                                                  .open!;
-                                          closeTime = " - Close - " +
-                                              searchVendorJResultList[index]
-                                                  .jCurrentDay!
-                                                  .close! +
-                                              ")";
-                                          checkLeave = false;
-                                        }
-
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 12.0, right: 8, top: 8),
-                                          child: GestureDetector(
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .category!,
+                                              style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily:
+                                                      Style.josefinsans)),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: InkWell(
                                             onTap: () {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          StoreDetailsScreen(
-                                                              searchVendorJResultList[
-                                                                      index]
-                                                                  .nId!,
-                                                              searchVendorJResultList[
-                                                                      index]
-                                                                  .cName!)));
+                                                          CategoryListScreen(
+                                                              widget.cityid)));
                                             },
-                                            child: Card(
-                                              elevation: 3,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.sp)),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 20.5.h,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10.sp),
-                                                                topRight:
-                                                                    Radius.circular(
-                                                                        10.sp)),
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image: NetworkImage(searchVendorJResultList[index]
-                                                                    .jImages!
-                                                                    .isNotEmpty
-                                                                ? searchVendorJResultList[
+                                            child: Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                  AppLocalizations.of(context)!
+                                                      .view_all!,
+                                                  style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color:
+                                                          Style.colors.logoRed,
+                                                      fontFamily:
+                                                          Style.josefinsans)),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 25.h,
+                                    margin: const EdgeInsets.only(top: 15.0),
+                                    child: GridView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: .0.sp,
+                                          mainAxisSpacing: 0.sp,
+                                          childAspectRatio: .60.sp,
+                                        ),
+                                        itemCount: categoryJResultList.length,
+                                        physics: const ClampingScrollPhysics(),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Padding(
+                                            padding: EdgeInsets.only(
+                                                right: 7.sp, bottom: 7.sp),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            SearchStoreListScreen(
+                                                                int.parse(
+                                                                    categoryJResultList[
+                                                                            index]
+                                                                        .nId!),
+                                                                widget.cityid,
+                                                                categoryJResultList[
                                                                         index]
-                                                                    .jImages![0]
-                                                                    .cListingImg!
-                                                                : ''))),
+                                                                    .cCategory!,
+                                                                true)));
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            7.sp),
+                                                    color: Colors.white,
+                                                    border: Border.all(
+                                                        color: Style.colors.grey
+                                                            .withOpacity(.2))),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      height: 5.5.h,
+                                                      width: 13.w,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      30.sp)),
+                                                          image: DecorationImage(
+                                                              fit: BoxFit.cover,
+                                                              image: NetworkImage(
+                                                                  categoryJResultList[
+                                                                          index]
+                                                                      .cCategoryImage!))),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 1.h,
+                                                    ),
+                                                    Text(
+                                                        categoryJResultList[
+                                                                index]
+                                                            .cCategory!,
+                                                        style: TextStyle(
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontFamily: Style
+                                                                .montserrat)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  ),
+
+                                  // Visibility(
+                                  //   visible: checkBanner,
+                                  //   child: Column(
+                                  //     children: [
+                                  //       bannerJResultList.isNotEmpty
+                                  //           ? Container(
+                                  //               margin: const EdgeInsets.only(
+                                  //                   top: 15.0),
+                                  //               alignment: Alignment.centerLeft,
+                                  //               child: Text(
+                                  //                   AppLocalizations.of(context)!
+                                  //                       .city_spotLight!,
+                                  //                   style: TextStyle(
+                                  //                       fontSize: 16.0,
+                                  //                       fontWeight: FontWeight.w600,
+                                  //                       fontFamily:
+                                  //                           Style.josefinsans)),
+                                  //             )
+                                  //           : Container(),
+                                  //       bannerJResultList.isNotEmpty
+                                  //           ? Container(
+                                  //               margin: const EdgeInsets.only(
+                                  //                   top: 15.0),
+                                  //               child: CarouselSlider.builder(
+                                  //                 itemCount:
+                                  //                     bannerJResultList.length,
+                                  //                 itemBuilder:
+                                  //                     (BuildContext context,
+                                  //                         int index, int realIdx) {
+                                  //                   return Card(
+                                  //                     shape: RoundedRectangleBorder(
+                                  //                         borderRadius:
+                                  //                             BorderRadius.circular(
+                                  //                                 20)),
+                                  //                     clipBehavior: Clip.antiAlias,
+                                  //                     child: SizedBox(
+                                  //                       width: 300.0,
+                                  //                       height: 200.0,
+                                  //                       child: SizedBox(
+                                  //                         width:
+                                  //                             MediaQuery.of(context)
+                                  //                                 .size
+                                  //                                 .width,
+                                  //                         child: bannerJResultList[
+                                  //                                         index]
+                                  //                                     .cBannerLink ==
+                                  //                                 null
+                                  //                             ? Image.network(
+                                  //                                 bannerJResultList[
+                                  //                                         index]
+                                  //                                     .cBannerImage!,
+                                  //                                 fit: BoxFit
+                                  //                                     .fitWidth,
+                                  //                               )
+                                  //                             : InkWell(
+                                  //                                 onTap: () async {
+                                  //                                   // debugPrint(
+                                  //                                   //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                  //                                   // String
+                                  //                                   //     url =
+                                  //                                   //     bannerJResultList[index]
+                                  //                                   //         .cBannerLink;
+                                  //                                   // var url =
+                                  //                                   //     bannerJResultList[index]
+                                  //                                   //         .cBannerLink!;
+                                  //                                   // if (await canLaunch(
+                                  //                                   //     url)) {
+                                  //                                   //   await launch(
+                                  //                                   //       url);
+                                  //                                   // } else {
+                                  //                                   //   throw 'Could not launch $url';
+                                  //                                   // }
+                                  //                                   // openbannerlaunchurl(
+                                  //                                   //     bannerJResultList[index]
+                                  //                                   //         .cBannerLink!);
+                                  //                                 },
+                                  //                                 child:
+                                  //                                     Image.network(
+                                  //                                   bannerJResultList[
+                                  //                                           index]
+                                  //                                       .cBannerImage!,
+                                  //                                   fit: BoxFit
+                                  //                                       .fitWidth,
+                                  //                                 ),
+                                  //                               ),
+                                  //                       ),
+                                  //                     ),
+                                  //                   );
+                                  //                 },
+                                  //                 options: CarouselOptions(
+                                  //                     autoPlay: bannerJResultList
+                                  //                             .isNotEmpty
+                                  //                         ? true
+                                  //                         : false,
+                                  //                     viewportFraction: 1.0,
+                                  //                     height: 200,
+                                  //                     enlargeCenterPage: false,
+                                  //                     enableInfiniteScroll: false,
+                                  //                     onPageChanged:
+                                  //                         (index, reason) {
+                                  //                       setState(() {
+                                  //                         pageIndex = index;
+                                  //                         // _current = index;
+                                  //                       });
+                                  //                     }),
+                                  //               ),
+                                  //             )
+                                  //           : Container(),
+                                  //       bannerJResultList.isNotEmpty
+                                  //           ? Container(
+                                  //               margin:
+                                  //                   const EdgeInsets.only(top: 5.0),
+                                  //               child: CarouselIndicator(
+                                  //                 count: bannerJResultList.length,
+                                  //                 index: pageIndex,
+                                  //                 color: Style.colors.grey
+                                  //                     .withOpacity(0.3),
+                                  //                 activeColor: Style.colors.logoRed,
+                                  //                 width: 10.0,
+                                  //               ),
+                                  //             )
+                                  //           : Container(),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   height: 10.sp,
+                                  // ),
+                                  SizedBox(
+                                    height: 15.sp,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      particularDemocracylist.isEmpty
+                          ? Container()
+                          : Container(
+                            height: 300,
+                            // flex: 1,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                // physics: const NeverScrollableScrollPhysics(),
+                                itemCount: particularDemocracylist.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  String openTime = "";
+                                  String closeTime = "";
+                                  bool checkLeave = false;
+                          
+                                  if (particularDemocracylist[index]
+                                              .jCurrentDay!
+                                              .open ==
+                                          null &&
+                                      particularDemocracylist[index]
+                                              .jCurrentDay!
+                                              .close ==
+                                          null) {
+                                    openTime = " (Leave)";
+                                    closeTime = "";
+                                    checkLeave = true;
+                                  } else if (particularDemocracylist[index]
+                                              .jCurrentDay!
+                                              .open !=
+                                          null &&
+                                      particularDemocracylist[index]
+                                              .jCurrentDay!
+                                              .close ==
+                                          null) {
+                                    openTime = " (Open - 24 Hours)";
+                                    closeTime = "";
+                                    checkLeave = false;
+                                  } else {
+                                    openTime =
+                                        "(Open - ${particularDemocracylist[index].jCurrentDay!.open}";
+                                    closeTime =
+                                        " - Close - ${particularDemocracylist[index].jCurrentDay!.close})";
+                                    checkLeave = false;
+                                  }
+                          
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12.0, right: 8, top: 8),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                StoreDetailsScreen(
+                                              particularDemocracylist[index].nId!,
+                                              particularDemocracylist[index]
+                                                  .cName!,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Card(
+                                        elevation: 3,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.sp)),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 20.5.h,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10.sp),
+                                                      topRight:
+                                                          Radius.circular(10.sp)),
+                                                  image: DecorationImage(
+                                                      fit: BoxFit.cover,
+                                                      image: NetworkImage(
+                                                          particularDemocracylist[
+                                                                      index]
+                                                                  .jImages!
+                                                                  .isNotEmpty
+                                                              ? particularDemocracylist[
+                                                                      index]
+                                                                  .jImages![0]
+                                                                  .cListingImg!
+                                                              : ''))),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 12.0,
+                                                  right: 8,
+                                                  top: 0,
+                                                  bottom: 13),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        margin:
+                                                            const EdgeInsets.only(
+                                                                top: 15.0),
+                                                        child: Text(
+                                                          particularDemocracylist[
+                                                                  index]
+                                                              .cName!,
+                                                          style: TextStyle(
+                                                              fontSize: 15.0,
+                                                              color: Style.colors
+                                                                  .app_black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                      ),
+                                                      // Container(
+                                                      //   margin:
+                                                      //       const EdgeInsets
+                                                      //               .only(
+                                                      //           top:
+                                                      //               15.0),
+                                                      //   child: Text(
+                                                      //     "${particularDemocracylist[index].nkilometre}KM",
+                                                      //     style: TextStyle(
+                                                      //         fontSize:
+                                                      //             15.0,
+                                                      //         color: Style
+                                                      //             .colors
+                                                      //             .app_black,
+                                                      //         fontWeight:
+                                                      //             FontWeight
+                                                      //                 .w500),
+                                                      //   ),
+                                                      // ),
+                                                    ],
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 12.0,
-                                                            right: 8,
-                                                            top: 0,
-                                                            bottom: 13),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                  Container(
+                                                    margin: const EdgeInsets.only(
+                                                        top: 5.0),
+                                                    child: Row(
                                                       children: [
+                                                        Text(
+                                                          "${AppLocalizations.of(context)!.category!} : ",
+                                                          style: TextStyle(
+                                                              fontSize: 13.0,
+                                                              color: Style.colors
+                                                                  .app_black,
+                                                              fontFamily: Style
+                                                                  .montserrat,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        ),
+                                                        Text(
+                                                          particularDemocracylist[
+                                                                      index]
+                                                                  .cCategory!
+                                                                  .isNotEmpty
+                                                              ? particularDemocracylist[
+                                                                      index]
+                                                                  .cCategory!
+                                                              : " - ",
+                                                          style: TextStyle(
+                                                              fontSize: 13.0,
+                                                              color: Style.colors
+                                                                  .app_black,
+                                                              fontFamily: Style
+                                                                  .montserrat,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: const EdgeInsets.only(
+                                                        top: 5.0),
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.access_time,
+                                                          color: checkLeave
+                                                              ? Colors.red
+                                                              : Style
+                                                                  .colors.green,
+                                                          size: 18.0,
+                                                        ),
                                                         Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 2.0),
                                                           child: Text(
-                                                            searchVendorJResultList[
-                                                                    index]
-                                                                .cName!,
+                                                            particularDemocracylist[
+                                                                        index]
+                                                                    .jCurrentDay!
+                                                                    .days! +
+                                                                openTime,
                                                             style: TextStyle(
-                                                                fontSize: 15.0,
-                                                                color: Style
-                                                                    .colors
-                                                                    .app_black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                          ),
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 15.0),
-                                                        ),
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 5.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                AppLocalizations.of(
-                                                                            context)!
-                                                                        .category! +
-                                                                    " : ",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        13.0,
-                                                                    color: Style
-                                                                        .colors
-                                                                        .app_black,
-                                                                    fontFamily:
-                                                                        Style
-                                                                            .montserrat,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400),
-                                                              ),
-                                                              Text(
-                                                                searchVendorJResultList[
-                                                                            index]
-                                                                        .cCategory!
-                                                                        .isNotEmpty
-                                                                    ? searchVendorJResultList[
-                                                                            index]
-                                                                        .cCategory!
-                                                                    : " - ",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        13.0,
-                                                                    color: Style
-                                                                        .colors
-                                                                        .app_black,
-                                                                    fontFamily:
-                                                                        Style
-                                                                            .montserrat,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 5.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .access_time,
+                                                                fontSize: 13.0,
                                                                 color: checkLeave
                                                                     ? Colors.red
-                                                                    : Style
-                                                                        .colors
+                                                                    : Style.colors
                                                                         .green,
-                                                                size: 18.0,
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            2.0),
-                                                                child: Text(
-                                                                  searchVendorJResultList[
-                                                                              index]
-                                                                          .jCurrentDay!
-                                                                          .days! +
-                                                                      openTime,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          13.0,
-                                                                      color: checkLeave
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Style
-                                                                              .colors
-                                                                              .green,
-                                                                      fontFamily:
-                                                                          Style
-                                                                              .montserrat,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            2.0),
-                                                                child: Text(
-                                                                  closeTime,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          13.0,
-                                                                      color: checkLeave
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Style
-                                                                              .colors
-                                                                              .green,
-                                                                      fontFamily:
-                                                                          Style
-                                                                              .montserrat,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ),
-                                                            ],
+                                                                fontFamily: Style
+                                                                    .montserrat,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: 100,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  left: 2.0),
+                                                          child: Text(
+                                                            closeTime,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            style: TextStyle(
+                                                                fontSize: 13.0,
+                                                                color: checkLeave
+                                                                    ? Colors.red
+                                                                    : Style.colors
+                                                                        .green,
+                                                                fontFamily: Style
+                                                                    .montserrat,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
                                                           ),
                                                         ),
                                                       ],
@@ -1165,50 +1356,488 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                 ],
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      }),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
+
+                      // subCategoryDataList.isNotEmpty
+                      //     ? Expanded(
+                      //         flex: 1,
+                      //         child: Container(
+                      //           child: Container(
+                      //             width: MediaQuery.of(context).size.width,
+                      //             margin: const EdgeInsets.only(
+                      //                 left: 11.0, right: 11.0),
+                      //             child: Container(
+                      //               child: ListView(
+                      //                 scrollDirection: Axis.horizontal,
+                      //                 children: [
+                      //                   Container(
+                      //                     child: ListView.builder(
+                      //                         itemCount:
+                      //                             subCategoryDataList.length > 4
+                      //                                 ? 3
+                      //                                 : 0,
+                      //                         shrinkWrap: true,
+                      //                         scrollDirection: Axis.horizontal,
+                      //                         itemBuilder:
+                      //                             (BuildContext context, index) {
+                      //                           return GestureDetector(
+                      //                             onTap: () {
+                      //                               setState(() {
+                      //                                 if (subCategoryDataList[index]
+                      //                                     .addRemove!) {
+                      //                                   searchVendorJResultList
+                      //                                       .clear();
+                      //                                   categoryId =
+                      //                                       widget.categoryId;
+                      //                                   subCategoryDataList[index]
+                      //                                           .addRemove =
+                      //                                       !subCategoryDataList[
+                      //                                               index]
+                      //                                           .addRemove!;
+                      //                                 } else {
+                      //                                   for (int i = 0;
+                      //                                       i <
+                      //                                           subCategoryDataList
+                      //                                               .length;
+                      //                                       i++) {
+                      //                                     if (subCategoryDataList[i]
+                      //                                         .addRemove!) {
+                      //                                       subCategoryDataList[i]
+                      //                                           .addRemove = false;
+                      //                                     }
+                      //                                   }
+                      //                                   subCategoryDataList[index]
+                      //                                       .addRemove = true;
+
+                      //                                   categoryId = int.parse(
+                      //                                       subCategoryDataList[
+                      //                                               index]
+                      //                                           .nId!);
+                      //                                 }
+                      //                               });
+
+                      //                               offset = 0;
+                      //                               limit = 10;
+
+                      //                               check().then((intenet) {
+                      //                                 if (intenet) {
+                      //                                   searchVendorListApi(
+                      //                                       searchTxt, "Search");
+                      //                                 } else {
+                      //                                   ToastHandler.showToast(
+                      //                                       message:
+                      //                                           "Please check your internet connection");
+                      //                                 }
+                      //                               });
+                      //                             },
+                      //                             child: Container(
+                      //                               margin: const EdgeInsets.only(
+                      //                                   left: 5.0,
+                      //                                   right: 5.0,
+                      //                                   top: 10.0,
+                      //                                   bottom: 10.0),
+                      //                               decoration: BoxDecoration(
+                      //                                   border:
+                      //                                       subCategoryDataList[index]
+                      //                                               .addRemove!
+                      //                                           ? Border.all(
+                      //                                               color:
+                      //                                                   Style.colors
+                      //                                                       .logoRed)
+                      //                                           : Border.all(
+                      //                                               color: Style
+                      //                                                   .colors
+                      //                                                   .app_black),
+                      //                                   color: subCategoryDataList[
+                      //                                               index]
+                      //                                           .addRemove!
+                      //                                       ? Style.colors.logoRed
+                      //                                           .withOpacity(0.2)
+                      //                                       : Colors.white,
+                      //                                   borderRadius:
+                      //                                       BorderRadius.circular(
+                      //                                           30.0)),
+                      //                               child: Container(
+                      //                                 child: Column(
+                      //                                   mainAxisAlignment:
+                      //                                       MainAxisAlignment
+                      //                                           .spaceEvenly,
+                      //                                   children: [
+                      //                                     Padding(
+                      //                                       padding:
+                      //                                           const EdgeInsets
+                      //                                                   .only(
+                      //                                               left: 15.0,
+                      //                                               right: 15.0),
+                      //                                       child: Text(
+                      //                                         subCategoryDataList[
+                      //                                                 index]
+                      //                                             .cCategory!,
+                      //                                         style: TextStyle(
+                      //                                             color: Style
+                      //                                                 .colors
+                      //                                                 .app_black,
+                      //                                             fontSize: 12.0,
+                      //                                             fontWeight:
+                      //                                                 FontWeight
+                      //                                                     .w500,
+                      //                                             fontFamily: Style
+                      //                                                 .montserrat),
+                      //                                       ),
+                      //                                     ),
+                      //                                   ],
+                      //                                 ),
+                      //                               ),
+                      //                             ),
+                      //                           );
+                      //                         }),
+                      //                   ),
+                      //                   InkWell(
+                      //                     onTap: () {
+                      //                       searchSubCategoryList.clear();
+                      //                       setState(() {
+                      //                         searchSubCategoryList
+                      //                             .addAll(subCategoryDataList);
+                      //                       });
+                      //                       SubCategoryBottomList(context);
+                      //                     },
+                      //                     child: Container(
+                      //                       child: Text(
+                      //                         AppLocalizations.of(context)!
+                      //                             .view_all!,
+                      //                         style: TextStyle(
+                      //                             color: Style.colors.logoRed,
+                      //                             fontSize: 12.0,
+                      //                             fontWeight: FontWeight.w500,
+                      //                             fontFamily: Style.montserrat),
+                      //                         textAlign: TextAlign.center,
+                      //                       ),
+                      //                       alignment: Alignment.center,
+                      //                       margin:
+                      //                           const EdgeInsets.only(left: 10.0),
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : Container(),
+                      Expanded(
+                        flex: 5,
+                        child: Stack(
+                          children: [
+                            // Visibility(
+                            //   visible: checkInbox,
+                            //   child: Container(
+                            //     child: LoadMore(
+                            //       isFinish: searchVendorJResultList.length >= total,
+                            //       onLoadMore: _loadMore,
+                            //       whenEmptyLoad: false,
+                            //       delegate: const DefaultLoadMoreDelegate(),
+                            //       textBuilder: DefaultLoadMoreTextBuilder.english,
+                            //       child: ListView(
+                            //         children: [
+                            //           ListView.builder(
+                            //               shrinkWrap: true,
+                            //               physics:
+                            //                   const NeverScrollableScrollPhysics(),
+                            //               itemCount: searchVendorJResultList.length,
+                            //               itemBuilder:
+                            //                   (BuildContext context, index) {
+                            //                 String openTime = "";
+                            //                 String closeTime = "";
+                            //                 bool checkLeave = false;
+
+                            //                 if (searchVendorJResultList[index]
+                            //                         .jCurrentDay!
+                            //                         .open!
+                            //                         .isEmpty &&
+                            //                     searchVendorJResultList[index]
+                            //                         .jCurrentDay!
+                            //                         .close!
+                            //                         .isEmpty) {
+                            //                   openTime = " (Leave)";
+                            //                   closeTime = "";
+                            //                   checkLeave = true;
+                            //                 } else if (searchVendorJResultList[
+                            //                             index]
+                            //                         .jCurrentDay!
+                            //                         .open!
+                            //                         .isNotEmpty &&
+                            //                     searchVendorJResultList[index]
+                            //                         .jCurrentDay!
+                            //                         .close!
+                            //                         .isEmpty) {
+                            //                   openTime = " (Open - 24 Hours)";
+                            //                   closeTime = "";
+                            //                   checkLeave = false;
+                            //                 } else {
+                            //                   openTime =
+                            //                       "(Open - ${searchVendorJResultList[index].jCurrentDay!.open!}";
+                            //                   closeTime =
+                            //                       " - Close - ${searchVendorJResultList[index].jCurrentDay!.close!})";
+                            //                   checkLeave = false;
+                            //                 }
+
+                            //                 return Padding(
+                            //                   padding: const EdgeInsets.only(
+                            //                       left: 12.0, right: 8, top: 8),
+                            //                   child: GestureDetector(
+                            //                     onTap: () {
+                            //                       Navigator.push(
+                            //                           context,
+                            //                           MaterialPageRoute(
+                            //                               builder: (context) =>
+                            //                                   StoreDetailsScreen(
+                            //                                       searchVendorJResultList[
+                            //                                               index]
+                            //                                           .nId!,
+                            //                                       searchVendorJResultList[
+                            //                                               index]
+                            //                                           .cName!)));
+                            //                     },
+                            //                     child: Card(
+                            //                       elevation: 3,
+                            //                       shape: RoundedRectangleBorder(
+                            //                           borderRadius:
+                            //                               BorderRadius.circular(
+                            //                                   10.sp)),
+                            //                       child: Column(
+                            //                         children: [
+                            //                           Container(
+                            //                             height: 20.5.h,
+                            //                             decoration: BoxDecoration(
+                            //                                 borderRadius:
+                            //                                     BorderRadius.only(
+                            //                                         topLeft: Radius
+                            //                                             .circular(
+                            //                                                 10.sp),
+                            //                                         topRight:
+                            //                                             Radius.circular(
+                            //                                                 10.sp)),
+                            //                                 image: DecorationImage(
+                            //                                     fit: BoxFit.cover,
+                            //                                     image: NetworkImage(searchVendorJResultList[index]
+                            //                                             .jImages!
+                            //                                             .isNotEmpty
+                            //                                         ? searchVendorJResultList[
+                            //                                                 index]
+                            //                                             .jImages![0]
+                            //                                             .cListingImg!
+                            //                                         : ''))),
+                            //                           ),
+                            //                           Padding(
+                            //                             padding:
+                            //                                 const EdgeInsets.only(
+                            //                                     left: 12.0,
+                            //                                     right: 8,
+                            //                                     top: 0,
+                            //                                     bottom: 13),
+                            //                             child: Column(
+                            //                               crossAxisAlignment:
+                            //                                   CrossAxisAlignment
+                            //                                       .start,
+                            //                               children: [
+                            //                                 Container(
+                            //                                   child: Text(
+                            //                                     searchVendorJResultList[
+                            //                                             index]
+                            //                                         .cName!,
+                            //                                     style: TextStyle(
+                            //                                         fontSize: 15.0,
+                            //                                         color: Style
+                            //                                             .colors
+                            //                                             .app_black,
+                            //                                         fontWeight:
+                            //                                             FontWeight
+                            //                                                 .w500),
+                            //                                   ),
+                            //                                   margin:
+                            //                                       const EdgeInsets
+                            //                                               .only(
+                            //                                           top: 15.0),
+                            //                                 ),
+                            //                                 Container(
+                            //                                   margin:
+                            //                                       const EdgeInsets
+                            //                                               .only(
+                            //                                           top: 5.0),
+                            //                                   child: Row(
+                            //                                     children: [
+                            //                                       Text(
+                            //                                         "${AppLocalizations.of(context)!.category!} : ",
+                            //                                         style: TextStyle(
+                            //                                             fontSize:
+                            //                                                 13.0,
+                            //                                             color: Style
+                            //                                                 .colors
+                            //                                                 .app_black,
+                            //                                             fontFamily:
+                            //                                                 Style
+                            //                                                     .montserrat,
+                            //                                             fontWeight:
+                            //                                                 FontWeight
+                            //                                                     .w400),
+                            //                                       ),
+                            //                                       Text(
+                            //                                         searchVendorJResultList[
+                            //                                                     index]
+                            //                                                 .cCategory!
+                            //                                                 .isNotEmpty
+                            //                                             ? searchVendorJResultList[
+                            //                                                     index]
+                            //                                                 .cCategory!
+                            //                                             : " - ",
+                            //                                         style: TextStyle(
+                            //                                             fontSize:
+                            //                                                 13.0,
+                            //                                             color: Style
+                            //                                                 .colors
+                            //                                                 .app_black,
+                            //                                             fontFamily:
+                            //                                                 Style
+                            //                                                     .montserrat,
+                            //                                             fontWeight:
+                            //                                                 FontWeight
+                            //                                                     .w400),
+                            //                                       ),
+                            //                                     ],
+                            //                                   ),
+                            //                                 ),
+                            //                                 Container(
+                            //                                   margin:
+                            //                                       const EdgeInsets
+                            //                                               .only(
+                            //                                           top: 5.0),
+                            //                                   child: Row(
+                            //                                     children: [
+                            //                                       Icon(
+                            //                                         Icons
+                            //                                             .access_time,
+                            //                                         color: checkLeave
+                            //                                             ? Colors.red
+                            //                                             : Style
+                            //                                                 .colors
+                            //                                                 .green,
+                            //                                         size: 18.0,
+                            //                                       ),
+                            //                                       Padding(
+                            //                                         padding:
+                            //                                             const EdgeInsets
+                            //                                                     .only(
+                            //                                                 left:
+                            //                                                     2.0),
+                            //                                         child: Text(
+                            //                                           searchVendorJResultList[
+                            //                                                       index]
+                            //                                                   .jCurrentDay!
+                            //                                                   .days! +
+                            //                                               openTime,
+                            //                                           style: TextStyle(
+                            //                                               fontSize:
+                            //                                                   13.0,
+                            //                                               color: checkLeave
+                            //                                                   ? Colors
+                            //                                                       .red
+                            //                                                   : Style
+                            //                                                       .colors
+                            //                                                       .green,
+                            //                                               fontFamily:
+                            //                                                   Style
+                            //                                                       .montserrat,
+                            //                                               fontWeight:
+                            //                                                   FontWeight
+                            //                                                       .w400),
+                            //                                         ),
+                            //                                       ),
+                            //                                       Padding(
+                            //                                         padding:
+                            //                                             const EdgeInsets
+                            //                                                     .only(
+                            //                                                 left:
+                            //                                                     2.0),
+                            //                                         child: Text(
+                            //                                           closeTime,
+                            //                                           style: TextStyle(
+                            //                                               fontSize:
+                            //                                                   13.0,
+                            //                                               color: checkLeave
+                            //                                                   ? Colors
+                            //                                                       .red
+                            //                                                   : Style
+                            //                                                       .colors
+                            //                                                       .green,
+                            //                                               fontFamily:
+                            //                                                   Style
+                            //                                                       .montserrat,
+                            //                                               fontWeight:
+                            //                                                   FontWeight
+                            //                                                       .w400),
+                            //                                         ),
+                            //                                       ),
+                            //                                     ],
+                            //                                   ),
+                            //                                 ),
+                            //                               ],
+                            //                             ),
+                            //                           ),
+                            //                         ],
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                 );
+                            //               }),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            Visibility(
+                              visible: inboxNoData,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Container(
+                                  //   child: Text(
+                                  //     'No Data Found',
+                                  //     style: TextStyle(
+                                  //         letterSpacing: 1.0,
+                                  //         fontSize: 15.0,
+                                  //         fontWeight: FontWeight.w600,
+                                  //         color: MyColor().theme_dark_purple),
+                                  //   ),
+                                  // ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.only(
+                                        left: 20.0, right: 20.0),
+                                    child: Text(
+                                      noDataText,
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: Style.colors.grey),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Visibility(
-                          visible: inboxNoData,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Container(
-                              //   child: Text(
-                              //     'No Data Found',
-                              //     style: TextStyle(
-                              //         letterSpacing: 1.0,
-                              //         fontSize: 15.0,
-                              //         fontWeight: FontWeight.w600,
-                              //         color: MyColor().theme_dark_purple),
-                              //   ),
-                              // ),
-                              Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(
-                                    left: 20.0, right: 20.0),
-                                child: Text(
-                                  noDataText,
-                                  style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Style.colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              );
-            }),
+                      )
+                    ],
+                  );
+                }),
+              ),
+            ),
           ),
         ));
   }
@@ -1233,7 +1862,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
           data: parameters);
 
       if (response.statusCode == 200) {
-        print("asdfghjkl ${response.data}");
+        debugPrint("asdfghjkl ${response.data}");
         Map<String, dynamic> map = jsonDecode(response.toString());
         CategoryModel categoryModel = CategoryModel.fromJson(map);
 
@@ -1262,7 +1891,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
         });
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       ProgressDialog().dismissDialog(context);
       setState(() {
@@ -1307,20 +1936,25 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
           checkBanner = false;
         });
         // bannerJResultList.clear();
-        print("Response: " + "Bad Network Connection try again..");
+        debugPrint("Response: " + "Bad Network Connection try again..");
         // ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();
       setState(() {
         checkBanner = false;
       });
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: $e");
     }
   }
+
+  List<SearchVendorJResult> particularDemocracylist = [];
+
+  List<CategoryJResult> categoryJResultList = [];
+  List<DemographicJResult> demographicJResultList = [];
 
   searchVendorListApi(String searchTxt, String loadmore) async {
     if (progressbar) {
@@ -1339,52 +1973,98 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
     // dio.options.receiveTimeout = 3000;
 
     var parameters = {
-      "n_limit": limit,
+      // "n_limit": limit,
       "c_search": searchTxt,
-      "n_category_id": categoryId
+      // "n_category_id": categoryId
     };
-    print("request : " + parameters.toString());
+    debugPrint("request : $parameters");
 
-    final response = await dio.post(ApiProvider.getSearchVendor,
+    final response = await dio.post(ApiProvider.getSearchlist,
         options: Options(
           validateStatus: (_) => true,
           contentType: Headers.formUrlEncodedContentType,
         ),
         data: parameters);
-
-    print("response : " + response.toString());
+    particularDemocracylist = [];
+    categoryJResultList = [];
+    demographicJResultList = [];
+    debugPrint("response : $response");
     if (response.statusCode == 200) {
       Map<String, dynamic> map = jsonDecode(response.toString());
-      SearchVendorModel searchVendorModel = SearchVendorModel.fromJson(map);
+      ProgressDialog().dismissDialog(context);
+      print("Pavithra ${map["j_result"]["vendor_list"]}");
 
-      if (searchVendorModel.nStatus == 1) {
-        ProgressDialog().dismissDialog(context);
+      if (map["n_status"] == 1) {
         setState(() {
+          // ProgressDialog().dismissDialog(context);
           checkInbox = true;
           inboxNoData = false;
-          if (searchVendorModel.jResult!.length > 0) {
-            offset = offset + limit;
-            limit = limit;
-            total = searchVendorModel.nTotalRecords!;
-          } else {
+        });
+        print("Pavithra ${map["j_result"]["vendor_list"]}");
+        print("Pavithrad ${map["j_result"]["category_list"]}");
+
+        print("Pavithrad ${map["j_result"]["demographic_list"]}");
+
+        for (var i = 0; i < map["j_result"]["vendor_list"].length; i++) {
+          particularDemocracylist.add(
+              SearchVendorJResult.fromJson(map["j_result"]["vendor_list"][i]));
+        }
+        for (var i = 0; i < map["j_result"]["category_list"].length; i++) {
+          categoryJResultList.add(
+              CategoryJResult.fromJson(map["j_result"]["category_list"][i]));
+        }
+        for (var i = 0; i < map["j_result"]["demographic_list"].length; i++) {
+          demographicJResultList.add(DemographicJResult.fromJson(
+              map["j_result"]["demographic_list"][i]));
+        }
+        if (demographicJResultList.isEmpty &&
+            particularDemocracylist.isEmpty &&
+            categoryJResultList.isEmpty) {
+          setState(() {
             checkInbox = false;
             inboxNoData = true;
             noDataText = "Record Not Found";
-          }
-        });
-        if (loadmore == "Search") {
-          searchVendorJResultList.clear();
+          });
         }
-
-        updateVendorList(searchVendorModel.jResult!);
       } else {
-        ProgressDialog().dismissDialog(context);
+        // ProgressDialog().dismissDialog(context);
         setState(() {
           checkInbox = false;
           inboxNoData = true;
-          noDataText = searchVendorModel.cMessage!;
+          noDataText = "Please fill the details to search";
         });
       }
+      debugPrint("response12 : $map");
+      // SearchVendorModel searchVendorModel = SearchVendorModel.fromJson(map);
+
+      // if (searchVendorModel.nStatus == 1) {
+      //   ProgressDialog().dismissDialog(context);
+      //   setState(() {
+      // checkInbox = true;
+      // inboxNoData = false;
+      //     if (searchVendorModel.jResult!.length > 0) {
+      //       offset = offset + limit;
+      //       limit = limit;
+      //       total = searchVendorModel.nTotalRecords!;
+      //     } else {
+      //       checkInbox = false;
+      //       inboxNoData = true;
+      //       noDataText = "Record Not Found";
+      //     }
+      //   });
+      //   if (loadmore == "Search") {
+      //     searchVendorJResultList.clear();
+      //   }
+
+      //   updateVendorList(searchVendorModel.jResult!);
+      // } else {
+      // ProgressDialog().dismissDialog(context);
+      // setState(() {
+      //   checkInbox = false;
+      //   inboxNoData = true;
+      //   noDataText = searchVendorModel.cMessage!;
+      // });
+      // }
     } else {
       ProgressDialog().dismissDialog(context);
       setState(() {
@@ -1396,7 +2076,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
   }
 
   Future<bool> _loadMore() async {
-    print("onLoadMore");
+    debugPrint("onLoadMore");
     await Future.delayed(const Duration(seconds: 0, milliseconds: 100));
     // setState(() {
     //   progressbar = false;
@@ -1408,7 +2088,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only

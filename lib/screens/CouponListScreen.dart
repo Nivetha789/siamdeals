@@ -758,10 +758,10 @@ class _CouponListScreenState extends State<CouponListScreen> {
 //       ToastHandler.showToast(message: "Bad Network Connection try again..");
 //     }
 //
-//     // print(response);
+//     // debugPrint(response);
 //   } catch (e) {
 //     ProgressDialog().dismissDialog(context);
-//     print("Response: " + e.toString());
+//     debugPrint("Response: " + e.toString());
 //   }
 // }
 
@@ -778,16 +778,16 @@ class _CouponListScreenState extends State<CouponListScreen> {
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
       String userId = await SharedPreference().getUserId();
-print(userId);
+debugPrint(userId);
       var parameters = {"n_user": userId, "n_coupon": couponId, "n_vendor": id};
 
-      print(parameters.toString());
+      debugPrint(parameters.toString());
 
       final response = await dio.post(ApiProvider.downloadCoupon,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
@@ -807,9 +807,9 @@ print(userId);
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
-      print("Exception " + e.toString());
+      debugPrint("Exception " + e.toString());
       ProgressDialog().dismissDialog(context);
       ToastHandler.showToast(message: "Bad Network Connection try again..");
     }

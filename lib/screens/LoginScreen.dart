@@ -393,7 +393,7 @@ class LoginScreenState extends State<LoginScreen> {
               validateStatus: (_) => true,
               contentType: Headers.formUrlEncodedContentType));
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         LoginModel loginModel = LoginModel.fromJson(map);
@@ -408,7 +408,7 @@ class LoginScreenState extends State<LoginScreen> {
           // await SharedPreference().setSubcribeTokenKey(subcription_tokenKey);
           // await SharedPreference().setAuthTokenKey(auth_tokenKey);
 
-          // print("dcmsetStatus "+dcmStatus.toString());
+          // debugPrint("dcmsetStatus "+dcmStatus.toString());
 
           await SharedPreference().setLogin("1");
 
@@ -436,11 +436,11 @@ class LoginScreenState extends State<LoginScreen> {
         ProgressDialog().dismissDialog(context);
       }
 
-      print(response);
+      debugPrint(response.toString());
     } catch (e) {
       // _progressHUD.state.dismiss();
       ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      debugPrint("Response: " + e.toString());
     }
   }
 }

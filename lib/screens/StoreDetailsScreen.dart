@@ -1253,12 +1253,12 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
           ApiProvider.getVendorDetails + widget.storeId,
           options: Options(contentType: Headers.formUrlEncodedContentType));
 
-      print("response ${widget.storeId}" + response.toString());
+      debugPrint("response ${widget.storeId}" + response.toString());
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         StoreDetailsModel storeDetailsModel = StoreDetailsModel.fromJson(map);
-        print(
+        debugPrint(
             "storedetailsmodel ${storeDetailsModel.jResult!.jAlbums.toString()}");
         if (storeDetailsModel.nStatus == 1) {
           setState(() {
@@ -1330,9 +1330,9 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
         });
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
-      print("Exception " + e.toString());
+      debugPrint("Exception " + e.toString());
       ProgressDialog().dismissDialog(context);
       setState(() {
         checkEmpty = true;
@@ -1769,11 +1769,11 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
         // user avatar -> result.userProfile?.pictureUrl
         // etc...
 
-        print('displayNamedisplayName ' + _userProfile.displayName);
+        debugPrint('displayNamedisplayName ' + _userProfile.displayName);
       });
     } on PlatformException catch (e) {
       // Error handling.
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -1781,7 +1781,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
     try {
       await LineSDK.instance.logout();
     } on PlatformException catch (e) {
-      print(e.message);
+      debugPrint(e.message);
     }
   }
 
@@ -1801,13 +1801,13 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
       var parameters = {"n_user": userId, "n_coupon": couponId, "n_vendor": id};
 
-      print(parameters.toString());
+      debugPrint(parameters.toString());
 
       final response = await dio.post(ApiProvider.downloadCoupon,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
-      print("response " + response.toString());
+      debugPrint("response " + response.toString());
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
@@ -1827,9 +1827,9 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
-      print("Exception " + e.toString());
+      debugPrint("Exception " + e.toString());
       ProgressDialog().dismissDialog(context);
       ToastHandler.showToast(message: "Bad Network Connection try again..");
     }

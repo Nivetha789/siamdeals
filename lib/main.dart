@@ -19,7 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   LineSDK.instance.setup('1657848533').then((_) {
-    print('LineSDK Prepared');
+    debugPrint('LineSDK Prepared');
   });
   AppLanguage appLanguage = AppLanguage();
   // await appLanguage.fetchLocale();
@@ -194,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (await SharedPreference().getLogin() == "1") {
       // var userId = await SharedPreference().getUserId();
       // await SharedPreferenceToken().setToken(android_fcm_token);
-      // print("Main User iddd " + userId);
+      // debugPrint("Main User iddd " + userId);
 
       Timer(
           Duration(seconds: 3),

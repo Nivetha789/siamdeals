@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously, avoid_print
+// ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously, avoid_print, unused_local_variable, unnecessary_null_comparison
 
 import 'dart:async';
 import 'dart:convert';
@@ -32,7 +32,6 @@ import '../ResponseModule/DemographicModel/DemographicModel.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLanguage.dart';
 import '../helper/AppLocalizations.dart';
-import '../utils/ProgressDialog.dart';
 import '../utils/SharedPreference.dart';
 import '../utils/check_internet.dart';
 import '../utils/fab_menu_package.dart';
@@ -44,6 +43,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 
 class DashBoardScreen extends StatefulWidget {
+  const DashBoardScreen({super.key});
+
   _DashBoardScreenState createState() => _DashBoardScreenState();
 }
 
@@ -130,8 +131,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   Future<void> checkcitydata() async {
     var citydata = await box.read('cityid');
     var cityname = await box.read('cityname');
-    print("citydata $citydata");
-    print("cityname $cityname");
+    debugPrint("citydata $citydata");
+    debugPrint("cityname $cityname");
     if (citydata == "" || citydata == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         return await showDialog(
@@ -236,7 +237,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             )
                                             // : InkWell(
                                             //     onTap: () async {
-                                            //       // print(
+                                            //       // debugPrint(
                                             //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
                                             //       // String
                                             //       //     url =
@@ -357,9 +358,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          print('Location permissions are denied');
+          debugPrint('Location permissions are denied');
         } else if (permission == LocationPermission.deniedForever) {
-          print("'Location permissions are permanently denied");
+          debugPrint("'Location permissions are permanently denied");
         } else {
           haspermission = true;
         }
@@ -375,7 +376,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         getLocation();
       }
     } else {
-      print("GPS Service is not enabled, turn on GPS location");
+      debugPrint("GPS Service is not enabled, turn on GPS location");
     }
 
     setState(() {
@@ -386,8 +387,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   getLocation() async {
     _currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    print(_currentPosition.longitude); //Output: 80.24599079
-    print(_currentPosition.latitude); //Output: 29.6593457
+    debugPrint(_currentPosition.longitude.toString()); //Output: 80.24599079
+    debugPrint(_currentPosition.latitude.toString()); //Output: 29.6593457
 
     long = _currentPosition.longitude.toString();
     lat = _currentPosition.latitude.toString();
@@ -405,8 +406,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     StreamSubscription<Position> positionStream =
         Geolocator.getPositionStream(locationSettings: locationSettings)
             .listen((Position position) {
-      print(position.longitude); //Output: 80.24599079
-      print(position.latitude); //Output: 29.6593457
+      debugPrint(position.longitude.toString()); //Output: 80.24599079
+      debugPrint(position.latitude.toString()); //Output: 29.6593457
 
       long = position.longitude.toString();
       lat = position.latitude.toString();
@@ -416,8 +417,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       });
     });
 
-    print("latitude $lat");
-    print("longitute $long");
+    debugPrint("latitude $lat");
+    debugPrint("longitute $long");
 
     _getAddressFromLatLng(_currentPosition);
   }
@@ -431,7 +432,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         _currentAddress =
             '${place.street}, ${place.subLocality},${place.locality}, ${place.subAdministrativeArea} - ${place.postalCode}';
 
-        print("_currentAddress $_currentAddress");
+        debugPrint("_currentAddress $_currentAddress");
       });
     }).catchError((e) {
       debugPrint(e);
@@ -463,7 +464,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       cityName = text;
       box.write('cityid', id);
       box.write('cityname', text);
-      print("asdfghjkl $id");
+      debugPrint("asdfghjkl $id");
 
       // checkBanner = true;
       getBannerList("city", cityId);
@@ -575,7 +576,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   color: const Color(0xff495271),
                                   fontFamily: Style.sfproddisplay),
                               onChanged: (text) {
-                                print("text $text");
+                                debugPrint("text $text");
                                 setState(() {
                                   cityListener(text);
                                 });
@@ -736,9 +737,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   }
 
   updateBannerList(List<BannerJResult> bannerJResultList1) {
-    print("PAvithramanoharan ${bannerJResultList1.toString()}");
+    debugPrint("PAvithramanoharan ${bannerJResultList1.toString()}");
     for (int i = 0; i < bannerJResultList1.length; i++) {
-      print("PAVITHRAMANOHARAN ${bannerJResultList1[i]}");
+      debugPrint("PAVITHRAMANOHARAN ${bannerJResultList1[i]}");
     }
     bannerJResultList.clear();
     setState(() {
@@ -748,9 +749,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
   updatePopupList(
       List<PopupJResult> popupJResultList1, id, name, type, description) {
-    print("PAvithramanoharan ${popupJResultList1.toString()}");
+    debugPrint("PAvithramanoharan ${popupJResultList1.toString()}");
     for (int i = 0; i < popupJResultList1.length; i++) {
-      print("PAVITHRAMANOHARAN ${popupJResultList1[i]}");
+      debugPrint("PAVITHRAMANOHARAN ${popupJResultList1[i]}");
     }
     checkpopupdata(id, name, type, description);
     popupJResultList.clear();
@@ -1011,7 +1012,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                     onChanged: (value) {
                                       setState(() async {
                                         _selectedLanguage = value!;
-                                        print(
+                                        debugPrint(
                                             "_selectedLanguage $_selectedLanguage");
                                         switch (_selectedLanguage) {
                                           case "English":
@@ -1460,7 +1461,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                                 : InkWell(
                                                                     onTap:
                                                                         () async {
-                                                                      // print(
+                                                                      // debugPrint(
                                                                       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
                                                                       // String
                                                                       //     url =
@@ -1684,6 +1685,51 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                       );
                     }),
               ),
+              GestureDetector(
+                onTap: () async {
+                  Navigator.pop(context);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Top10Democracy(
+                              id: demographicJResultList[0].nId!,
+                              cityid: cityId,
+                              name: demographicJResultList[0].cDemographic!)));
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, top: 10.0, bottom: 5.0),
+                          child: Text(
+                            "DealZ Near Me",
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: Style.sfproddisplay),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
+                        child: Divider(
+                          thickness: 0.5,
+                          height: 1.0,
+                          color: const Color(0xff818EA7).withOpacity(0.3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               InkWell(
                 onTap: () {
                   var dialog = CustomAlertDialog(
@@ -1823,10 +1869,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       //  ProgressDialog().dismissDialog(context);
-      print("Response11: $e");
+      debugPrint("Response11: $e");
     }
   }
 
@@ -1867,15 +1913,15 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       //  ProgressDialog().dismissDialog(context);
-      print("Response22: $e");
+      debugPrint("Response22: $e");
     }
   }
 
   getCategoryList(id) async {
-    print("Id $id");
+    debugPrint("Id $id");
     try {
       Dio dio = Dio();
       // dio.options.connectTimeout = 5000; //5s
@@ -1894,7 +1940,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           data: parameters);
 
       if (response.statusCode == 200) {
-        print("pavithraManoharan123456789 ${response.data}");
+        debugPrint("pavithraManoharan123456789 ${response.data}");
         Map<String, dynamic> map = jsonDecode(response.toString());
         CategoryModel categoryModel = CategoryModel.fromJson(map);
 
@@ -1905,10 +1951,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       //ProgressDialog().dismissDialog(context);
-      print("Response33: $e");
+      debugPrint("Response33: $e");
     }
   }
 
@@ -1941,10 +1987,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       //  ProgressDialog().dismissDialog(context);
-      print("Response44: $e");
+      debugPrint("Response44: $e");
     }
   }
 
@@ -1960,7 +2006,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       //     ApiProvider.getCity,
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
-      print("vsfdsfsdfdsf ${type}  actionid${actionId}");
+      debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
       var parameters = {"c_type": type, "n_actionid": actionId};
 
       final response = await dio.post(ApiProvider.getBanner,
@@ -1969,9 +2015,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-        print("vsfdsfsdsf ${response.toString()}");
+        debugPrint("vsfdsfsdsf ${response.toString()}");
         BannerModel bannerModel = BannerModel.fromJson(map);
-        print("PAvithramanoharan ${bannerModel.jResult}");
+        debugPrint("PAvithramanoharan ${bannerModel.jResult}");
         if (bannerModel.nStatus == 1) {
           updateBannerList(bannerModel.jResult!);
         }
@@ -1980,31 +2026,31 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();
       //  ProgressDialog().dismissDialog(context);
-      print("Response55: $e");
+      debugPrint("Response55: $e");
     }
   }
 
   getpopupList(String type, String actionId) async {
     try {
       Dio dio = Dio();
-      print("vsfdsfsdfdsf ${type}  actionid${actionId}");
+      debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
       var parameters = {"c_type": type, "n_actionid": actionId};
 
       final response = await dio.post(ApiProvider.getPopup,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
-      print("vsfdsfsdsf12333 ${response.data["j_result"][0]["n_id"]}");
+      debugPrint("vsfdsfsdsf12333 ${response.data["j_result"][0]["n_id"]}");
       var popuphomeid = await box.read('popuphomeid');
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-        print("vsfdsfsdsf12333 ${map["j_result"][0]}");
+        debugPrint("vsfdsfsdsf12333 ${map["j_result"][0]}");
         PopupModel popupModel = PopupModel.fromJson(map);
-        print("PAvithramanoharan123444 ${popupModel.jResult}");
+        debugPrint("PAvithramanoharan123444 ${popupModel.jResult}");
         if (popuphomeid != map["j_result"][0]["n_id"]) {
           if (popupModel.nStatus == 1) {
             updatePopupList(
@@ -2023,31 +2069,31 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();
       //  ProgressDialog().dismissDialog(context);
-      print("Response55: $e");
+      debugPrint("Response55: $e");
     }
   }
 
   getcityList(String type, String actionId) async {
     try {
       Dio dio = Dio();
-      print("vsfdsfsdfdsf ${type}  actionid${actionId}");
+      debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
       var parameters = {"c_type": type, "n_actionid": actionId};
 
       final response = await dio.post(ApiProvider.getPopup,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
-      print("vsfdsfsdsf12333 ${response.data["j_result"][0]["n_id"]}");
+      debugPrint("vsfdsfsdsf12333 ${response.data["j_result"][0]["n_id"]}");
       var popupcityid = await box.read('popupcityid');
-      print("popupcityid $popupcityid");
+      debugPrint("popupcityid $popupcityid");
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-        print("vsfdsfsdsf12333 ${map["j_result"][0]["c_banner_image"]}");
+        debugPrint("vsfdsfsdsf12333 ${map["j_result"][0]["c_banner_image"]}");
         PopupModel popupModel = PopupModel.fromJson(map);
-        print("PAvithramanoharan123444 ${popupModel.jResult}");
+        debugPrint("PAvithramanoharan123444 ${popupModel.jResult}");
         if (popupcityid != map["j_result"][0]["n_id"]) {
           if (popupModel.nStatus == 1) {
             updatePopupList(
@@ -2063,11 +2109,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();
       //  ProgressDialog().dismissDialog(context);
-      print("Response55: $e");
+      debugPrint("Response55: $e");
     }
   }
 
@@ -2102,13 +2148,13 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           checkScrollText = false;
         });
         // bannerJResultList.clear();
-        print("Response666: " + "Bad Network Connection try again..");
+        debugPrint("Response666: " + "Bad Network Connection try again..");
         // ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
-      // print(response);
+      // debugPrint(response);
     } catch (e) {
       // bannerJResultList.clear();.
-      print("Response66: $e");
+      debugPrint("Response66: $e");
     }
   }
 
@@ -2117,7 +2163,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 //       "<#> 56456151 is your OTP to Sign-In to Your app name. It's valid for 30 mins. Don't share it with anyone. xyZaBcD2EFg";
 //   if (otp.isNotEmpty || otp != null) {
 //     String otp1 = otp.split(" ")[1];
-//     print("otp1 " + otp1);
+//     debugPrint("otp1 " + otp1);
 //   }
 // }
 }

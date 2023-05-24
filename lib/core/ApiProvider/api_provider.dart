@@ -22,6 +22,8 @@ class ApiProvider {
   static const String gettownList = '${BASE_URL}demographic/getTownList';
 
   static const String getSearchVendor = '${BASE_URL}vendor/getVendors';
+
+  static const String getSearchlist = '${BASE_URL}search/getSearchResult';
   static const String getVendorDetails = '${BASE_URL}vendor/getVendor/';
   static const String getMenuPages = '${BASE_URL}pages/getPages';
   static const String register = '${BASE_URL}customers/register';
