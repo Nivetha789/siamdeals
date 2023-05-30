@@ -776,8 +776,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                                                   top: 15.0),
                                               child: Text(
                                                 particularDemocracylist[index]
-                                                        .nkilometre! +
-                                                    "KM",
+                                                    .nkilometre!,
                                                 style: TextStyle(
                                                     fontSize: 15.0,
                                                     color:

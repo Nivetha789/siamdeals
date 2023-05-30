@@ -50,6 +50,4 @@ class ProgressDialog {
   dismissDialog(BuildContext context) {
     Navigator.pop(context);
   }
-
 }
-
