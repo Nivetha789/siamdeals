@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loadmore/loadmore.dart';
 import 'package:siamdealz/screens/StoreDetailsScreen.dart';
+import 'package:siamdealz/screens/categorylist.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -98,6 +99,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
 
     check().then((intenet) {
       if (intenet) {
+        print("Sdfsdfskdjfhskdfjh ${widget.checkCategory}");
         if (widget.checkCategory) {
           getSubCategoryList();
 
@@ -741,101 +743,114 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                       //         )
                       //       : Container(),
                       // ),
+                      demographicJResultList.isEmpty
+                          ? const SizedBox(height: 0)
+                          : Container(
+                              color: Colors.grey.withOpacity(0.3),
+                              width: MediaQuery.of(context).size.width,
+                              height: 1.0,
+                              margin: const EdgeInsets.only(top: 10.0),
+                            ),
+                      demographicJResultList.isEmpty
+                          ? const SizedBox(height: 0)
+                          : Container(
+                              margin: const EdgeInsets.only(top: 10.0),
+                              height: 90.0,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                        left: 16.0, right: 16.0, top: 10.0),
+                                    child: ListView.builder(
+                                        itemCount:
+                                            demographicJResultList.length,
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, postion) {
+                                          return Card(
+                                            elevation: 2,
+                                            color: Style.colors.logoRed,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.sp),
+                                            ),
+                                            margin: const EdgeInsets.only(
+                                                right: 10.0, bottom: 10.0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Top10Democracy(
+                                                                id: demographicJResultList[
+                                                                        postion]
+                                                                    .nId!,
+                                                                cityid: widget
+                                                                    .cityid,
+                                                                name: demographicJResultList[
+                                                                        postion]
+                                                                    .cDemographic!)));
 
-                      Container(
-                        color: Colors.grey.withOpacity(0.3),
-                        width: MediaQuery.of(context).size.width,
-                        height: 1.0,
-                        margin: const EdgeInsets.only(top: 10.0),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10.0),
-                        height: 90.0,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(
-                                  left: 16.0, right: 16.0, top: 10.0),
-                              child: ListView.builder(
-                                  itemCount: demographicJResultList.length,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, postion) {
-                                    return Card(
-                                      elevation: 2,
-                                      color: Style.colors.logoRed,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.sp),
-                                      ),
-                                      margin: const EdgeInsets.only(
-                                          right: 10.0, bottom: 10.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Top10Democracy(
-                                                      id: demographicJResultList[
-                                                              postion]
-                                                          .nId!,
-                                                      cityid: widget.cityid,
-                                                      name:
-                                                          demographicJResultList[
-                                                                  postion]
-                                                              .cDemographic!)));
-
-                                          setState(() {});
-                                        },
-                                        child: Container(
-                                          width: 120.0,
-                                          margin:
-                                              const EdgeInsets.only(left: 10.0),
-                                          decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.only(
-                                                  topRight:
-                                                      Radius.circular(5.0),
-                                                  bottomRight:
-                                                      Radius.circular(5.0))),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.center,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 10.0,
-                                                          right: 10.0),
-                                                  child: Text(
-                                                      demographicJResultList[
-                                                              postion]
-                                                          .cDemographic!,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontSize: 13.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: Colors.black,
-                                                          fontFamily: Style
-                                                              .montserrat)),
+                                                setState(() {});
+                                              },
+                                              child: Container(
+                                                width: 120.0,
+                                                margin: const EdgeInsets.only(
+                                                    left: 10.0),
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius
+                                                        .only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    5.0),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    5.0))),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 10.0,
+                                                                right: 10.0),
+                                                        child: Text(
+                                                            demographicJResultList[
+                                                                    postion]
+                                                                .cDemographic!,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontSize: 13.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontFamily: Style
+                                                                    .montserrat)),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }),
+                                            ),
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
                       categoryJResultList.isNotEmpty
                           ? Container(
                               margin: const EdgeInsets.only(
@@ -914,7 +929,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            SearchStoreListScreen(
+                                                            CategoryStoreListScreen(
                                                                 int.parse(
                                                                     categoryJResultList[
                                                                             index]
@@ -1112,257 +1127,273 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                       particularDemocracylist.isEmpty
                           ? Container()
                           : Container(
-                            height: 300,
-                            // flex: 1,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                // physics: const NeverScrollableScrollPhysics(),
-                                itemCount: particularDemocracylist.length,
-                                itemBuilder: (BuildContext context, index) {
-                                  String openTime = "";
-                                  String closeTime = "";
-                                  bool checkLeave = false;
-                          
-                                  if (particularDemocracylist[index]
-                                              .jCurrentDay!
-                                              .open ==
-                                          null &&
-                                      particularDemocracylist[index]
-                                              .jCurrentDay!
-                                              .close ==
-                                          null) {
-                                    openTime = " (Leave)";
-                                    closeTime = "";
-                                    checkLeave = true;
-                                  } else if (particularDemocracylist[index]
-                                              .jCurrentDay!
-                                              .open !=
-                                          null &&
-                                      particularDemocracylist[index]
-                                              .jCurrentDay!
-                                              .close ==
-                                          null) {
-                                    openTime = " (Open - 24 Hours)";
-                                    closeTime = "";
-                                    checkLeave = false;
-                                  } else {
-                                    openTime =
-                                        "(Open - ${particularDemocracylist[index].jCurrentDay!.open}";
-                                    closeTime =
-                                        " - Close - ${particularDemocracylist[index].jCurrentDay!.close})";
-                                    checkLeave = false;
-                                  }
-                          
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 12.0, right: 8, top: 8),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                StoreDetailsScreen(
-                                              particularDemocracylist[index].nId!,
-                                              particularDemocracylist[index]
-                                                  .cName!,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Card(
-                                        elevation: 3,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.sp)),
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 20.5.h,
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10.sp),
-                                                      topRight:
-                                                          Radius.circular(10.sp)),
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: NetworkImage(
-                                                          particularDemocracylist[
-                                                                      index]
-                                                                  .jImages!
-                                                                  .isNotEmpty
-                                                              ? particularDemocracylist[
-                                                                      index]
-                                                                  .jImages![0]
-                                                                  .cListingImg!
-                                                              : ''))),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 12.0,
-                                                  right: 8,
-                                                  top: 0,
-                                                  bottom: 13),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        margin:
-                                                            const EdgeInsets.only(
-                                                                top: 15.0),
-                                                        child: Text(
-                                                          particularDemocracylist[
-                                                                  index]
-                                                              .cName!,
-                                                          style: TextStyle(
-                                                              fontSize: 15.0,
-                                                              color: Style.colors
-                                                                  .app_black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                        ),
-                                                      ),
-                                                      // Container(
-                                                      //   margin:
-                                                      //       const EdgeInsets
-                                                      //               .only(
-                                                      //           top:
-                                                      //               15.0),
-                                                      //   child: Text(
-                                                      //     "${particularDemocracylist[index].nkilometre}KM",
-                                                      //     style: TextStyle(
-                                                      //         fontSize:
-                                                      //             15.0,
-                                                      //         color: Style
-                                                      //             .colors
-                                                      //             .app_black,
-                                                      //         fontWeight:
-                                                      //             FontWeight
-                                                      //                 .w500),
-                                                      //   ),
-                                                      // ),
-                                                    ],
-                                                  ),
-                                                  Container(
-                                                    margin: const EdgeInsets.only(
-                                                        top: 5.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          "${AppLocalizations.of(context)!.category!} : ",
-                                                          style: TextStyle(
-                                                              fontSize: 13.0,
-                                                              color: Style.colors
-                                                                  .app_black,
-                                                              fontFamily: Style
-                                                                  .montserrat,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                        ),
-                                                        Text(
-                                                          particularDemocracylist[
-                                                                      index]
-                                                                  .cCategory!
-                                                                  .isNotEmpty
-                                                              ? particularDemocracylist[
-                                                                      index]
-                                                                  .cCategory!
-                                                              : " - ",
-                                                          style: TextStyle(
-                                                              fontSize: 13.0,
-                                                              color: Style.colors
-                                                                  .app_black,
-                                                              fontFamily: Style
-                                                                  .montserrat,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    margin: const EdgeInsets.only(
-                                                        top: 5.0),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.access_time,
-                                                          color: checkLeave
-                                                              ? Colors.red
-                                                              : Style
-                                                                  .colors.green,
-                                                          size: 18.0,
-                                                        ),
-                                                        Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 2.0),
-                                                          child: Text(
-                                                            particularDemocracylist[
-                                                                        index]
-                                                                    .jCurrentDay!
-                                                                    .days! +
-                                                                openTime,
-                                                            style: TextStyle(
-                                                                fontSize: 13.0,
-                                                                color: checkLeave
-                                                                    ? Colors.red
-                                                                    : Style.colors
-                                                                        .green,
-                                                                fontFamily: Style
-                                                                    .montserrat,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          width: 100,
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 2.0),
-                                                          child: Text(
-                                                            closeTime,
-                                                            overflow: TextOverflow
-                                                                .ellipsis,
-                                                            style: TextStyle(
-                                                                fontSize: 13.0,
-                                                                color: checkLeave
-                                                                    ? Colors.red
-                                                                    : Style.colors
-                                                                        .green,
-                                                                fontFamily: Style
-                                                                    .montserrat,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
+                              height: 300,
+                              // flex: 1,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: particularDemocracylist.length,
+                                  itemBuilder: (BuildContext context, index) {
+                                    String openTime = "";
+                                    String closeTime = "";
+                                    bool checkLeave = false;
+
+                                    if (particularDemocracylist[index]
+                                                .jCurrentDay!
+                                                .open ==
+                                            null &&
+                                        particularDemocracylist[index]
+                                                .jCurrentDay!
+                                                .close ==
+                                            null) {
+                                      openTime = " (Leave)";
+                                      closeTime = "";
+                                      checkLeave = true;
+                                    } else if (particularDemocracylist[index]
+                                                .jCurrentDay!
+                                                .open !=
+                                            null &&
+                                        particularDemocracylist[index]
+                                                .jCurrentDay!
+                                                .close ==
+                                            null) {
+                                      openTime = " (Open - 24 Hours)";
+                                      closeTime = "";
+                                      checkLeave = false;
+                                    } else {
+                                      openTime =
+                                          "(Open - ${particularDemocracylist[index].jCurrentDay!.open}";
+                                      closeTime =
+                                          " - Close - ${particularDemocracylist[index].jCurrentDay!.close})";
+                                      checkLeave = false;
+                                    }
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 12.0, right: 8, top: 8),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  StoreDetailsScreen(
+                                                particularDemocracylist[index]
+                                                    .nId!,
+                                                particularDemocracylist[index]
+                                                    .cName!,
                                               ),
                                             ),
-                                          ],
+                                          );
+                                        },
+                                        child: Card(
+                                          elevation: 3,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.sp)),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                height: 20.5.h,
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                10.sp),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                10.sp)),
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: NetworkImage(
+                                                            particularDemocracylist[
+                                                                        index]
+                                                                    .jImages!
+                                                                    .isNotEmpty
+                                                                ? particularDemocracylist[
+                                                                        index]
+                                                                    .jImages![0]
+                                                                    .cListingImg!
+                                                                : ''))),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 12.0,
+                                                    right: 8,
+                                                    top: 0,
+                                                    bottom: 13),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 15.0),
+                                                          child: Text(
+                                                            particularDemocracylist[
+                                                                    index]
+                                                                .cName!,
+                                                            style: TextStyle(
+                                                                fontSize: 15.0,
+                                                                color: Style
+                                                                    .colors
+                                                                    .app_black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                          ),
+                                                        ),
+                                                        // Container(
+                                                        //   margin:
+                                                        //       const EdgeInsets
+                                                        //               .only(
+                                                        //           top:
+                                                        //               15.0),
+                                                        //   child: Text(
+                                                        //     "${particularDemocracylist[index].nkilometre}KM",
+                                                        //     style: TextStyle(
+                                                        //         fontSize:
+                                                        //             15.0,
+                                                        //         color: Style
+                                                        //             .colors
+                                                        //             .app_black,
+                                                        //         fontWeight:
+                                                        //             FontWeight
+                                                        //                 .w500),
+                                                        //   ),
+                                                        // ),
+                                                      ],
+                                                    ),
+                                                    Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 5.0),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            "${AppLocalizations.of(context)!.category!} : ",
+                                                            style: TextStyle(
+                                                                fontSize: 13.0,
+                                                                color: Style
+                                                                    .colors
+                                                                    .app_black,
+                                                                fontFamily: Style
+                                                                    .montserrat,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                          ),
+                                                          Text(
+                                                            particularDemocracylist[
+                                                                        index]
+                                                                    .cCategory!
+                                                                    .isNotEmpty
+                                                                ? particularDemocracylist[
+                                                                        index]
+                                                                    .cCategory!
+                                                                : " - ",
+                                                            style: TextStyle(
+                                                                fontSize: 13.0,
+                                                                color: Style
+                                                                    .colors
+                                                                    .app_black,
+                                                                fontFamily: Style
+                                                                    .montserrat,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 5.0),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.access_time,
+                                                            color: checkLeave
+                                                                ? Colors.red
+                                                                : Style.colors
+                                                                    .green,
+                                                            size: 18.0,
+                                                          ),
+                                                          Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text(
+                                                              particularDemocracylist[
+                                                                          index]
+                                                                      .jCurrentDay!
+                                                                      .days! +
+                                                                  openTime,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      13.0,
+                                                                  color: checkLeave
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Style
+                                                                          .colors
+                                                                          .green,
+                                                                  fontFamily: Style
+                                                                      .montserrat,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            width: 100,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 2.0),
+                                                            child: Text(
+                                                              closeTime,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      13.0,
+                                                                  color: checkLeave
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Style
+                                                                          .colors
+                                                                          .green,
+                                                                  fontFamily: Style
+                                                                      .montserrat,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                }),
-                          ),
+                                    );
+                                  }),
+                            ),
 
                       // subCategoryDataList.isNotEmpty
                       //     ? Expanded(
@@ -1530,6 +1561,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                       //         ),
                       //       )
                       //     : Container(),
+
                       Expanded(
                         flex: 5,
                         child: Stack(

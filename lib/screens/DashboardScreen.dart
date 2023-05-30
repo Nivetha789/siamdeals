@@ -20,6 +20,7 @@ import 'package:siamdealz/screens/HtmlScreen.dart';
 import 'package:siamdealz/screens/LoginScreen.dart';
 import 'package:siamdealz/screens/ProfileScreen.dart';
 import 'package:siamdealz/screens/SearchStoreListScreen.dart';
+import 'package:siamdealz/screens/categorylist.dart';
 import 'package:siamdealz/screens/top10democracy.dart';
 import 'package:siamdealz/utils/CustomAlertDialog.dart';
 import 'package:sizer/sizer.dart';
@@ -175,7 +176,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           builder: (context) {
             return AlertDialog(
               content: Container(
-                height: type == "2" ? 150 : 250,
+                // height: type == "2" ? 150 : 250,
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
@@ -209,7 +210,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       popupJResultList[index].npopuptype == 2
                                   ? SizedBox(
                                       width: 300.0,
-                                      height: 100.0,
+                                      // height: 100.0,
                                       child: SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width,
@@ -271,7 +272,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                 autoPlay:
                                     popupJResultList.isNotEmpty ? true : false,
                                 viewportFraction: 1.0,
-                                height: type == "2" ? 50 : 150,
+                                // height: type == "2" ? 50 : 150,
                                 enlargeCenterPage: false,
                                 enableInfiniteScroll: false,
                                 onPageChanged: (index, reason) {
@@ -468,8 +469,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
       // checkBanner = true;
       getBannerList("city", cityId);
-      getcityList("city", cityId);
       getCategoryList(id);
+      getcityList("city", cityId);
     });
   }
 
@@ -631,7 +632,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       updateCityText(
                                           searchCityDataList[postion].nId!,
                                           searchCityDataList[postion].cCity!);
-
+                                      getCategoryList(
+                                          searchCityDataList[postion].nId!);
+                                      // getcityList("city",
+                                      //     searchCityDataList[postion].nId!);
                                       Navigator.pop(context);
                                       // searchCategoryDataList[postion].addremove =
                                       // !searchCategoryDataList[postion]
@@ -713,7 +717,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   }
 
   updateCategoryList(List<CategoryJResult> categoryJResultList1) {
+    print("fddfkjsfjhsdf $categoryJResultList");
     categoryJResultList.clear();
+    categoryJResultList = [];
     setState(() {
       categoryJResultList.addAll(categoryJResultList1);
     });
@@ -782,7 +788,16 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         elevation: 0.0,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Container(
+          child: InkWell(
+            onTap: () {
+              box.remove('cityid');
+              box.remove("popuphomeid");
+
+              box.remove("popupcityid");
+              box.remove('cityname');
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => this.widget));
+            },
             child: Image.asset(
               Resources.assets.logo,
             ),
@@ -1045,6 +1060,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       if (checkCityListFirst) {
                                         check().then((intenet) {
                                           if (intenet != null && intenet) {
+                                            // CityTypeBottomList(context);
                                             getCityList();
                                           } else {
                                             ToastHandler.showToast(
@@ -1333,7 +1349,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              SearchStoreListScreen(
+                                                              CategoryStoreListScreen(
                                                                   int.parse(
                                                                       categoryJResultList[
                                                                               index]
@@ -1544,7 +1560,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   ],
                                 ),
                               )
-                            : Container(),
+                            : Container(
+                                padding: EdgeInsets.all(30),
+                                alignment: Alignment.center,
+                                child:
+                                    Text("No Categories are found this city")),
                       ],
                     );
                   },
@@ -1565,12 +1585,23 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      width: 80.0,
-                      height: 80.0,
-                      child: Image.asset(
-                        'images/logo.png',
-                        alignment: Alignment.center,
+                    InkWell(
+                      onTap: () {
+                        box.remove('cityid');
+                        box.remove("popuphomeid");
+
+                        box.remove("popupcityid");
+                        box.remove('cityname');
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) => this.widget));
+                      },
+                      child: SizedBox(
+                        width: 80.0,
+                        height: 80.0,
+                        child: Image.asset(
+                          'images/logo.png',
+                          alignment: Alignment.center,
+                        ),
                       ),
                     ),
                     Container(
@@ -1594,9 +1625,56 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                   color: Style.colors.logoRed.withOpacity(0.1).withOpacity(0.3),
                 ),
               ),
+              GestureDetector(
+                onTap: () async {
+                  Navigator.pop(context);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Top10Democracy(
+                              id: dealzid, cityid: cityId, name: dealzname)));
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20.0,
+                            top: 10.0,
+                          ),
+                          child: Text(
+                            "DealZ Near Me",
+                            style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: Style.sfproddisplay),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 10.0,
+                        ),
+                        child: Divider(
+                          thickness: 0.5,
+                          height: 1.0,
+                          color: const Color(0xff818EA7).withOpacity(0.3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               Container(
                 margin:
-                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
+                    const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                 child: ListView.builder(
                     itemCount: menuJResultList.length,
                     shrinkWrap: true,
@@ -1684,51 +1762,6 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                         ),
                       );
                     }),
-              ),
-              GestureDetector(
-                onTap: () async {
-                  Navigator.pop(context);
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Top10Democracy(
-                              id: demographicJResultList[0].nId!,
-                              cityid: cityId,
-                              name: demographicJResultList[0].cDemographic!)));
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20.0, right: 10.0),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, top: 10.0, bottom: 5.0),
-                          child: Text(
-                            "DealZ Near Me",
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: Style.sfproddisplay),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
-                        child: Divider(
-                          thickness: 0.5,
-                          height: 1.0,
-                          color: const Color(0xff818EA7).withOpacity(0.3),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
               InkWell(
                 onTap: () {
@@ -1876,6 +1909,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     }
   }
 
+  var dealzid;
+  var dealzname;
   getDemoGraphicList() async {
     try {
       //   ProgressDialog().showLoaderDialog(context);
@@ -1902,7 +1937,18 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
         if (demographicModel.nStatus == 1) {
           //   ProgressDialog().dismissDialog(context);
+          for (var i = 0; i < demographicModel.jResult!.length; i++) {
+            if (demographicModel.jResult![i].cDemographic ==
+                "DealZ Near Me     коло меня") {
+              print(
+                  "pamuishra   ${demographicModel.jResult![i].cDemographic}            ");
 
+              setState(() {
+                dealzid = demographicModel.jResult![i].nId;
+                dealzname = demographicModel.jResult![i].cDemographic;
+              });
+            }
+          }
           updateDemoGraphicList(demographicModel.jResult!);
         } else {
           //  ProgressDialog().dismissDialog(context);
@@ -1940,10 +1986,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           data: parameters);
 
       if (response.statusCode == 200) {
-        debugPrint("pavithraManoharan123456789 ${response.data}");
+        debugPrint(
+            "pavithraManoharan12345678913hgjhdgsfjfsdjfhg ${response.data}");
         Map<String, dynamic> map = jsonDecode(response.toString());
         CategoryModel categoryModel = CategoryModel.fromJson(map);
-
+        // print("fddfkjsfjhsdf122 ${categoryModel.nStatus}");
+        setState(() {
+          categoryJResultList = [];
+        });
         if (categoryModel.nStatus == 1) {
           updateCategoryList(categoryModel.jResult!);
         }

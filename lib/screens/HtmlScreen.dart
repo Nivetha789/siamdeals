@@ -115,10 +115,10 @@ class HtmlScreenState extends State<HtmlScreen> {
                       //   },
                       // },
                       // onLinkTap: (url, _, __, ___) async {
-                        // await launchUrl(
-                        //   Uri.parse(url!),
-                        //   mode: LaunchMode.externalApplication,
-                        // );
+                      // await launchUrl(
+                      //   Uri.parse(url!),
+                      //   mode: LaunchMode.externalApplication,
+                      // );
                       //   // debugPrint("Opening $url...");
                       // },
                       // onImageTap: (src, _, __, ___) {
@@ -128,19 +128,19 @@ class HtmlScreenState extends State<HtmlScreen> {
                       //   debugPrint(exception);
                       // },
                       onLinkTap: (url, _, __) async {
-                          await launchUrl(
+                        await launchUrl(
                           Uri.parse(url!),
                           mode: LaunchMode.externalApplication,
                         );
                         debugPrint("Opening $url...");
                       },
-                      onCssParseError: (css, messages) {
-                        debugPrint("css that errored: $css");
-                        debugPrint("error messages:");
-                        messages.forEach((element) {
-                          debugPrint(element.toString());
-                        });
-                      },
+                      // onCssParseError: (css, messages) {
+                      //   debugPrint("css that errored: $css");
+                      //   debugPrint("error messages:");
+                      //   messages.forEach((element) {
+                      //     debugPrint(element.toString());
+                      //   });
+                      // },
                     ),
                   )
                 ],
