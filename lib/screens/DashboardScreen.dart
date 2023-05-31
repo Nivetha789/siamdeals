@@ -175,8 +175,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           context: context,
           builder: (context) {
             return AlertDialog(
-              content: Container(
-                // height: type == "2" ? 150 : 250,
+              content: SingleChildScrollView(
+                // height: MediaQuery.of(context).size.height / 2,
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
@@ -210,10 +210,17 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       popupJResultList[index].npopuptype == 2
                                   ? SizedBox(
                                       width: 300.0,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              3,
+
                                       // height: 100.0,
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                      child: SingleChildScrollView(
+                                        // width:
+                                        //     MediaQuery.of(context).size.width,
+                                        // height:
+                                        //     MediaQuery.of(context).size.height /
+                                        //         2,
                                         child: HtmlWidget(
                                           popupJResultList[index].cdescription!,
                                         ),
@@ -226,7 +233,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       clipBehavior: Clip.antiAlias,
                                       child: SizedBox(
                                         width: 300.0,
-                                        height: 150.0,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                3,
                                         child: SizedBox(
                                             width: MediaQuery.of(context)
                                                 .size
@@ -315,18 +324,18 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Cancel"),
+      child: const Text("Cancel"),
       onPressed: () {},
     );
     Widget continueButton = TextButton(
-      child: Text("Continue"),
+      child: const Text("Continue"),
       onPressed: () {},
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("AlertDialog"),
-      content: Text(
+      title: const Text("AlertDialog"),
+      content: const Text(
           "Would you like to continue learning how to use Flutter alerts?"),
       actions: [
         cancelButton,
@@ -492,11 +501,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                   height: MediaQuery.of(context).size.height * 0.75,
                   color: Colors.transparent,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(10.0),
-                            topRight: const Radius.circular(10.0))),
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0))),
                     child: ListView(
                       shrinkWrap: true,
                       children: [
@@ -805,18 +814,27 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         ),
         centerTitle: false,
         title: checkScrollText
-            ? TextScroll(
-                scrollText,
-                mode: TextScrollMode.endless,
-                velocity: const Velocity(pixelsPerSecond: Offset(100, 0)),
-                delayBefore: const Duration(milliseconds: 2000),
-                pauseBetween: const Duration(milliseconds: 1000),
-                style: TextStyle(
-                  color: Style.colors.logoOrange,
-                  height: 1.5,
+            ? InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Top10Democracy(
+                              id: dealzid, cityid: cityId, name: dealzname)));
+                },
+                child: TextScroll(
+                  scrollText,
+                  mode: TextScrollMode.endless,
+                  velocity: const Velocity(pixelsPerSecond: Offset(100, 0)),
+                  delayBefore: const Duration(milliseconds: 2000),
+                  pauseBetween: const Duration(milliseconds: 1000),
+                  style: TextStyle(
+                    color: Style.colors.logoOrange,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.right,
+                  selectable: true,
                 ),
-                textAlign: TextAlign.right,
-                selectable: true,
               )
             : Container(
                 child: Text(
@@ -966,152 +984,145 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                     stateCitySetter = setState;
                     return ListView(
                       children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: DropdownButton(
-                                    underline: DropdownButtonHideUnderline(
-                                        child: const SizedBox()),
-                                    iconSize: 0.0,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(5.0)),
-                                    items: languageList.map((String location) {
-                                      return DropdownMenuItem(
-                                        value: location,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                            location,
-                                            style: TextStyle(
-                                                color: Style.colors.app_black,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w400),
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    hint: Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 20.0, left: 16.0, right: 16.0),
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 5.0),
-                                              child: Text(
-                                                _selectedLanguage!,
-                                                style: TextStyle(
-                                                    color:
-                                                        Style.colors.app_black,
-                                                    fontSize: 15.0,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                            Container(
-                                              child: Icon(
-                                                Icons.language_sharp,
-                                                size: 20.0,
-                                                color: Style.colors.logoRed,
-                                              ),
-                                            ),
-                                          ],
+                        Row(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: DropdownButton(
+                                  underline: const DropdownButtonHideUnderline(
+                                      child: SizedBox()),
+                                  iconSize: 0.0,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5.0)),
+                                  items: languageList.map((String location) {
+                                    return DropdownMenuItem(
+                                      value: location,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          location,
+                                          style: TextStyle(
+                                              color: Style.colors.app_black,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w400),
                                         ),
                                       ),
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() async {
-                                        _selectedLanguage = value!;
-                                        debugPrint(
-                                            "_selectedLanguage $_selectedLanguage");
-                                        switch (_selectedLanguage) {
-                                          case "English":
-                                            appLanguage.changeLanguage(
-                                                const Locale("en"));
-                                            break;
-                                          case "Thai":
-                                            appLanguage.changeLanguage(
-                                                const Locale("th"));
-                                            break;
-                                          default:
-                                            appLanguage.changeLanguage(
-                                                const Locale("en"));
-                                            break;
-                                        }
-                                        await SharedPreference()
-                                            .setLanguage(_selectedLanguage!);
-                                      });
-                                    },
-                                  )),
-                              Expanded(
-                                  flex: 1,
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        searchCityDataList.clear();
-                                        searchCityDataList.addAll(cityDataList);
-                                      });
-
-                                      if (checkCityListFirst) {
-                                        check().then((intenet) {
-                                          if (intenet != null && intenet) {
-                                            // CityTypeBottomList(context);
-                                            getCityList();
-                                          } else {
-                                            ToastHandler.showToast(
-                                                message:
-                                                    "Please check your internet connection");
-                                          }
-                                        });
-                                      } else {
-                                        CityTypeBottomList(context);
-                                      }
-                                    },
+                                    );
+                                  }).toList(),
+                                  hint: Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, left: 16.0, right: 16.0),
                                     child: Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 20.0, left: 16.0, right: 16.0),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
                                         children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 5.0),
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                cityName,
-                                                style: TextStyle(
-                                                    color:
-                                                        Style.colors.app_black,
-                                                    fontSize: 15.0,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
+                                          Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 5.0),
+                                            child: Text(
+                                              _selectedLanguage!,
+                                              style: TextStyle(
+                                                  color: Style.colors.app_black,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
                                           ),
-                                          Expanded(
-                                            flex: 0,
-                                            child: Container(
-                                              child: Icon(
-                                                Icons.location_city_sharp,
-                                                size: 20.0,
-                                                color: Style.colors.logoRed,
-                                              ),
+                                          Container(
+                                            child: Icon(
+                                              Icons.language_sharp,
+                                              size: 20.0,
+                                              color: Style.colors.logoRed,
                                             ),
-                                          )
+                                          ),
                                         ],
                                       ),
                                     ),
-                                  )),
-                            ],
-                          ),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() async {
+                                      _selectedLanguage = value!;
+                                      debugPrint(
+                                          "_selectedLanguage $_selectedLanguage");
+                                      switch (_selectedLanguage) {
+                                        case "English":
+                                          appLanguage.changeLanguage(
+                                              const Locale("en"));
+                                          break;
+                                        case "Thai":
+                                          appLanguage.changeLanguage(
+                                              const Locale("th"));
+                                          break;
+                                        default:
+                                          appLanguage.changeLanguage(
+                                              const Locale("en"));
+                                          break;
+                                      }
+                                      await SharedPreference()
+                                          .setLanguage(_selectedLanguage!);
+                                    });
+                                  },
+                                )),
+                            Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      searchCityDataList.clear();
+                                      searchCityDataList.addAll(cityDataList);
+                                    });
+
+                                    if (checkCityListFirst) {
+                                      check().then((intenet) {
+                                        if (intenet != null && intenet) {
+                                          // CityTypeBottomList(context);
+                                          getCityList();
+                                        } else {
+                                          ToastHandler.showToast(
+                                              message:
+                                                  "Please check your internet connection");
+                                        }
+                                      });
+                                    } else {
+                                      CityTypeBottomList(context);
+                                    }
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20.0, left: 16.0, right: 16.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 5.0),
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              cityName,
+                                              style: TextStyle(
+                                                  color: Style.colors.app_black,
+                                                  fontSize: 15.0,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 0,
+                                          child: Container(
+                                            child: Icon(
+                                              Icons.location_city_sharp,
+                                              size: 20.0,
+                                              color: Style.colors.logoRed,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )),
+                          ],
                         ),
                         Container(
                           color: Colors.grey.withOpacity(0.3),
@@ -1413,144 +1424,6 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             );
                                           }),
                                     ),
-                                    Visibility(
-                                      visible: checkBanner,
-                                      child: Column(
-                                        children: [
-                                          bannerJResultList.isNotEmpty
-                                              ? Container(
-                                                  margin: const EdgeInsets.only(
-                                                      top: 15.0),
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .city_spotLight!,
-                                                      style: TextStyle(
-                                                          fontSize: 16.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontFamily: Style
-                                                              .josefinsans)),
-                                                )
-                                              : Container(),
-                                          bannerJResultList.isNotEmpty
-                                              ? Container(
-                                                  margin: const EdgeInsets.only(
-                                                      top: 15.0),
-                                                  child: CarouselSlider.builder(
-                                                    itemCount: bannerJResultList
-                                                        .length,
-                                                    itemBuilder:
-                                                        (BuildContext context,
-                                                            int index,
-                                                            int realIdx) {
-                                                      return Card(
-                                                        shape: RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        20)),
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        child: SizedBox(
-                                                          width: 300.0,
-                                                          height: 200.0,
-                                                          child: SizedBox(
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            child: bannerJResultList[
-                                                                            index]
-                                                                        .cBannerLink ==
-                                                                    null
-                                                                ? Image.network(
-                                                                    bannerJResultList[
-                                                                            index]
-                                                                        .cBannerImage!,
-                                                                    fit: BoxFit
-                                                                        .fitWidth,
-                                                                  )
-                                                                : InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      // debugPrint(
-                                                                      //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                                                      // String
-                                                                      //     url =
-                                                                      //     bannerJResultList[index]
-                                                                      //         .cBannerLink;
-                                                                      // var url =
-                                                                      //     bannerJResultList[index]
-                                                                      //         .cBannerLink!;
-                                                                      // if (await canLaunch(
-                                                                      //     url)) {
-                                                                      //   await launch(
-                                                                      //       url);
-                                                                      // } else {
-                                                                      //   throw 'Could not launch $url';
-                                                                      // }
-                                                                      openbannerlaunchurl(
-                                                                          bannerJResultList[index]
-                                                                              .cBannerLink!);
-                                                                    },
-                                                                    child: Image
-                                                                        .network(
-                                                                      bannerJResultList[
-                                                                              index]
-                                                                          .cBannerImage!,
-                                                                      fit: BoxFit
-                                                                          .fitWidth,
-                                                                    ),
-                                                                  ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                    options: CarouselOptions(
-                                                        autoPlay:
-                                                            bannerJResultList
-                                                                    .isNotEmpty
-                                                                ? true
-                                                                : false,
-                                                        viewportFraction: 1.0,
-                                                        height: 200,
-                                                        enlargeCenterPage:
-                                                            false,
-                                                        enableInfiniteScroll:
-                                                            false,
-                                                        onPageChanged:
-                                                            (index, reason) {
-                                                          setState(() {
-                                                            pageIndex = index;
-                                                            // _current = index;
-                                                          });
-                                                        }),
-                                                  ),
-                                                )
-                                              : Container(),
-                                          bannerJResultList.isNotEmpty
-                                              ? Container(
-                                                  margin: const EdgeInsets.only(
-                                                      top: 5.0),
-                                                  child: CarouselIndicator(
-                                                    count: bannerJResultList
-                                                        .length,
-                                                    index: pageIndex,
-                                                    color: Style.colors.grey
-                                                        .withOpacity(0.3),
-                                                    activeColor:
-                                                        Style.colors.logoRed,
-                                                    width: 10.0,
-                                                  ),
-                                                )
-                                              : Container(),
-                                        ],
-                                      ),
-                                    ),
                                     SizedBox(
                                       height: 10.sp,
                                     ),
@@ -1560,11 +1433,119 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   ],
                                 ),
                               )
-                            : Container(
-                                padding: EdgeInsets.all(30),
-                                alignment: Alignment.center,
-                                child:
-                                    Text("No Categories are found this city")),
+                            : Container(),
+                        Visibility(
+                          visible: checkBanner,
+                          child: Column(
+                            children: [
+                              bannerJResultList.isNotEmpty
+                                  ? Container(
+                                      margin: const EdgeInsets.only(top: 15.0),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          AppLocalizations.of(context)!
+                                              .city_spotLight!,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: Style.josefinsans)),
+                                    )
+                                  : Container(),
+                              bannerJResultList.isNotEmpty
+                                  ? Container(
+                                      margin: const EdgeInsets.only(top: 15.0),
+                                      child: CarouselSlider.builder(
+                                        itemCount: bannerJResultList.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index, int realIdx) {
+                                          return Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: SizedBox(
+                                              width: 300.0,
+                                              height: 200.0,
+                                              child: SizedBox(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: bannerJResultList[index]
+                                                            .cBannerLink ==
+                                                        null
+                                                    ? Image.network(
+                                                        bannerJResultList[index]
+                                                            .cBannerImage!,
+                                                        fit: BoxFit.fitWidth,
+                                                      )
+                                                    : InkWell(
+                                                        onTap: () async {
+                                                          // debugPrint(
+                                                          //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                                          // String
+                                                          //     url =
+                                                          //     bannerJResultList[index]
+                                                          //         .cBannerLink;
+                                                          // var url =
+                                                          //     bannerJResultList[index]
+                                                          //         .cBannerLink!;
+                                                          // if (await canLaunch(
+                                                          //     url)) {
+                                                          //   await launch(
+                                                          //       url);
+                                                          // } else {
+                                                          //   throw 'Could not launch $url';
+                                                          // }
+                                                          openbannerlaunchurl(
+                                                              bannerJResultList[
+                                                                      index]
+                                                                  .cBannerLink!);
+                                                        },
+                                                        child: Image.network(
+                                                          bannerJResultList[
+                                                                  index]
+                                                              .cBannerImage!,
+                                                          fit: BoxFit.fitWidth,
+                                                        ),
+                                                      ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        options: CarouselOptions(
+                                            autoPlay:
+                                                bannerJResultList.isNotEmpty
+                                                    ? true
+                                                    : false,
+                                            viewportFraction: 1.0,
+                                            height: 200,
+                                            enlargeCenterPage: false,
+                                            enableInfiniteScroll: false,
+                                            onPageChanged: (index, reason) {
+                                              setState(() {
+                                                pageIndex = index;
+                                                // _current = index;
+                                              });
+                                            }),
+                                      ),
+                                    )
+                                  : Container(),
+                              bannerJResultList.isNotEmpty
+                                  ? Container(
+                                      margin: const EdgeInsets.only(top: 5.0),
+                                      child: CarouselIndicator(
+                                        count: bannerJResultList.length,
+                                        index: pageIndex,
+                                        color:
+                                            Style.colors.grey.withOpacity(0.3),
+                                        activeColor: Style.colors.logoRed,
+                                        width: 10.0,
+                                      ),
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
                       ],
                     );
                   },
@@ -1625,53 +1606,54 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                   color: Style.colors.logoRed.withOpacity(0.1).withOpacity(0.3),
                 ),
               ),
-              GestureDetector(
-                onTap: () async {
-                  Navigator.pop(context);
+              // GestureDetector(
+              //   onTap: () async {
+              //     Navigator.pop(context);
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Top10Democracy(
-                              id: dealzid, cityid: cityId, name: dealzname)));
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20.0, right: 10.0),
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20.0,
-                            top: 10.0,
-                          ),
-                          child: Text(
-                            "DealZ Near Me",
-                            style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: Style.sfproddisplay),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                          top: 10.0,
-                        ),
-                        child: Divider(
-                          thickness: 0.5,
-                          height: 1.0,
-                          color: const Color(0xff818EA7).withOpacity(0.3),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => Top10Democracy(
+              //                 id: dealzid, cityid: cityId, name: dealzname)));
+              //   },
+              //   child: Container(
+              //     margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+              //     width: MediaQuery.of(context).size.width,
+              //     child: Column(
+              //       children: [
+              //         Container(
+              //           alignment: Alignment.centerLeft,
+              //           width: MediaQuery.of(context).size.width,
+              //           child: Padding(
+              //             padding: const EdgeInsets.only(
+              //               left: 20.0,
+              //               top: 10.0,
+              //             ),
+              //             child: Text(
+              //               "DealZ Near Me",
+              //               style: TextStyle(
+              //                   color: Colors.black87,
+              //                   fontSize: 14.0,
+              //                   fontWeight: FontWeight.w400,
+              //                   fontFamily: Style.sfproddisplay),
+              //             ),
+              //           ),
+              //         ),
+              //         Container(
+              //           margin: const EdgeInsets.only(
+              //             top: 10.0,
+              //           ),
+              //           child: Divider(
+              //             thickness: 0.5,
+              //             height: 1.0,
+              //             color: const Color(0xff818EA7).withOpacity(0.3),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+
               Container(
                 margin:
                     const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
@@ -1833,8 +1815,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("whatsapp no installed")));
       }
     } else {
       // android , web
