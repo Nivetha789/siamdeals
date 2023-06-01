@@ -175,6 +175,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
     if (response.statusCode == 200) {
       Map<String, dynamic> map =
           jsonDecode(await response.stream.bytesToString());
+      print("dfsdfkjdfhsdkf ${map}");
       setState(() {
         ProgressDialog().dismissDialog(context);
       });
@@ -258,8 +259,11 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         setState(() {
           distancelist = distancelist;
         });
-        selectedOption =
-            map["data"]["distance_list"][0]["distance_id"].toString();
+        for (var i = 0; i < map["data"]["distance_list"].length; i++) {
+          selectedOption =
+              map["data"]["distance_list"][i]["distance_id"].toString();
+        }
+        print("selectedOption $selectedOption");
       } else {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
@@ -283,7 +287,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         Map<String, dynamic> map = jsonDecode(response.toString());
         districtlist =
             List<Map<String, dynamic>>.from(map["data"]["town_list"]);
-        selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
+        // selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
         debugPrint(selectedtowncategory.toString());
 
         Set<String> uniquetownItems = {};
@@ -333,9 +337,9 @@ class _Top10DemocracyState extends State<Top10Democracy> {
 
         categoryList =
             List<Map<String, dynamic>>.from(map["data"]["category_list"]);
-        selectedsubcategory = [
-          map["data"]["category_list"][0]['sub_category'][0]["subcategory_id"]
-        ];
+        // selectedsubcategory = [
+        //   map["data"]["category_list"][0]['sub_category'][0]["subcategory_id"]
+        // ];
         Set<String> uniqueItems = {};
         subcategoryList = [];
         for (var category in categoryList) {

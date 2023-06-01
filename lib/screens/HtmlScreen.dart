@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, avoid_print, non_constant_identifier_names
 
 import 'dart:convert';
 
@@ -74,11 +74,18 @@ class HtmlScreenState extends State<HtmlScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              height: MediaQuery.of(context).size.height,
+              // height: MediaQuery.of(context).size.height,
               margin: EdgeInsets.only(
                   top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
-              child: HtmlWidget(
-                htmlContent,
+              child: Html(
+                data: htmlContent,
+                // ignore: avoid_types_as_parameter_names
+                // onLinkTap: (Url, _, __, ___) async {
+                //   await launchUrl(
+                //     Uri.parse(Url!),
+                //     mode: LaunchMode.externalApplication,
+                //   );
+                // },
                 // tagsList: Html.tags..addAll(["bird", "flutter"]),
                 // style: {
                 //   Style()
@@ -115,27 +122,48 @@ class HtmlScreenState extends State<HtmlScreen> {
                 //     );
                 //   },
                 // },
-                // onLinkTap: (url, _, __, ___) async {
-                // await launchUrl(
-                //   Uri.parse(url!),
-                //   mode: LaunchMode.externalApplication,
-                // );
-                //   // debugPrint("Opening $url...");
-                // },
+                onLinkTap: (url, _, __) async {
+                  print(url);
+                  if (url == "www.siamdealz.com") {
+                    await launchUrl(
+                      Uri.parse("http://$url"),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    await launchUrl(
+                      Uri.parse(url!),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
+                  // if (!url!.startsWith("http://") &&
+                  //     !url.startsWith("https://")) {
+
+                  // } else {
+
+                  // }
+
+                  // debugPrint("Opening $url...");
+                },
                 // onImageTap: (src, _, __, ___) {
                 //   debugPrint(src);
                 // },
                 // onImageError: (exception, stackTrace) {
                 //   debugPrint(exception);
                 // },
-                onTapUrl: (){
-                  url
-                },
-                // onTapUrl: (url) async {
-                //   await launchUrl(
-                //     Uri.parse(url),
+                // onTapUrl: (Url) async {
+                //  await launchUrl(
+                //     Uri.parse(Url),
                 //     mode: LaunchMode.externalApplication,
                 //   );
+                // },
+                // onTapUrl: (){
+                //   url
+                // },
+                // onTapUrl: (url) async {
+                // await launchUrl(
+                //   Uri.parse(url),
+                //   mode: LaunchMode.externalApplication,
+                // );
                 //   debugPrint("Opening $url...");
                 // },
                 // onCssParseError: (css, messages) {
@@ -158,7 +186,7 @@ class HtmlScreenState extends State<HtmlScreen> {
 
     // dio.options.contentType = Headers.formUrlEncodedContentType;
 
-    debugPrint('response ' + ApiProvider.getHtmlContentApi + widget.htmlId);
+    debugPrint('response ${ApiProvider.getHtmlContentApi}${widget.htmlId}');
 
     final response = await dio.get(
       ApiProvider.getHtmlContentApi + widget.htmlId,
@@ -175,7 +203,6 @@ class HtmlScreenState extends State<HtmlScreen> {
         setState(() {
           title = aboutUsModel.jResult![0].cPages!;
           htmlContent = aboutUsModel.jResult![0].cDescription!;
-          print("htmlcontent $htmlContent");
         });
       } else {
         ProgressDialog().dismissDialog(context);

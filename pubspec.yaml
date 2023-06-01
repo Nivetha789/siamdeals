@@ -85,7 +85,7 @@ dependencies:
   flutter_launcher_icons:
   
   flutter_multiselect:
- 
+          
   multi_select_flutter: ^4.0.0
   multiselect_formfield: ^0.1.7
   multiselect:
