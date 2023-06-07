@@ -128,9 +128,9 @@ class HtmlScreenState extends State<HtmlScreen> {
                 // onImageError: (exception, stackTrace) {
                 //   debugPrint(exception);
                 // },
-                onTapUrl: (){
-                  url
-                },
+                // onTapUrl: (){
+                //   url
+                // },
                 // onTapUrl: (url) async {
                 //   await launchUrl(
                 //     Uri.parse(url),
