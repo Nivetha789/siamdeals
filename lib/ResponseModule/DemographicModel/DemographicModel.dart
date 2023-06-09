@@ -45,3 +45,57 @@ class DemographicJResult {
     return data;
   }
 }
+
+class Category {
+  final String categoryId;
+  final String cCategory;
+  final List<SubCategory> subCategory;
+
+  Category(
+      {required this.categoryId,
+      required this.cCategory,
+      required this.subCategory});
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      categoryId: json['category_id'],
+      cCategory: json['c_category'],
+      subCategory: List<SubCategory>.from(
+          json['sub_category'].map((x) => SubCategory.fromJson(x))),
+    );
+  }
+}
+
+class SubCategory {
+  final String subcategoryId;
+  final String cCategory;
+  final List<KidCategory> kidCategory;
+
+  SubCategory(
+      {required this.subcategoryId,
+      required this.cCategory,
+      required this.kidCategory});
+
+  factory SubCategory.fromJson(Map<String, dynamic> json) {
+    return SubCategory(
+      subcategoryId: json['subcategory_id'],
+      cCategory: json['c_category'],
+      kidCategory: List<KidCategory>.from(
+          json['kid_category'].map((x) => KidCategory.fromJson(x))),
+    );
+  }
+}
+
+class KidCategory {
+  final String kidcategoryId;
+  final String cCategory;
+
+  KidCategory({required this.kidcategoryId, required this.cCategory});
+
+  factory KidCategory.fromJson(Map<String, dynamic> json) {
+    return KidCategory(
+      kidcategoryId: json['kidcategory_id'],
+      cCategory: json['c_category'],
+    );
+  }
+}

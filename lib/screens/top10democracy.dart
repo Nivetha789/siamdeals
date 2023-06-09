@@ -12,6 +12,8 @@ import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart
 // import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:siamdealz/ResponseModule/DemographicModel/DemographicModel.dart';
 import 'package:siamdealz/core/ApiProvider/api_provider.dart';
 import 'package:siamdealz/utils/style.dart';
 import 'package:http/http.dart' as http;
@@ -103,6 +105,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
     _getAddressFromLatLng(_currentPosition);
   }
 
+  List<Category> categories = [];
   //**particular democracy api start **//
   Future<dynamic> particulardemocracy(nview) async {
     ProgressDialog().showLoaderDialog(context);
@@ -128,7 +131,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
     if (response.statusCode == 200) {
       Map<String, dynamic> map =
           jsonDecode(await response.stream.bytesToString());
-
+      print("dkjfksdfkdfhskfhdsfkj $map");
       for (var i = 0; i < map["j_result"].length; i++) {
         particularDemocracylist
             .add(SearchVendorJResult.fromJson(map["j_result"][i]));
@@ -147,7 +150,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
   }
 
   Future<dynamic> particulardemocracywithsort(nview) async {
-    debugPrint("DFSDFSDFSDFSD");
+    debugPrint("DFSDFSDFSDFSD $selectedsubcategory");
     ProgressDialog().showLoaderDialog(context);
     var headers = {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -175,6 +178,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
     if (response.statusCode == 200) {
       Map<String, dynamic> map =
           jsonDecode(await response.stream.bytesToString());
+      print("dfsdfkjdfhsdkf ${map}");
       setState(() {
         ProgressDialog().dismissDialog(context);
       });
@@ -258,8 +262,11 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         setState(() {
           distancelist = distancelist;
         });
-        selectedOption =
-            map["data"]["distance_list"][0]["distance_id"].toString();
+        for (var i = 0; i < map["data"]["distance_list"].length; i++) {
+          selectedOption =
+              map["data"]["distance_list"][i]["distance_id"].toString();
+        }
+        print("selectedOption $selectedOption");
       } else {
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
@@ -283,7 +290,7 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         Map<String, dynamic> map = jsonDecode(response.toString());
         districtlist =
             List<Map<String, dynamic>>.from(map["data"]["town_list"]);
-        selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
+        // selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
         debugPrint(selectedtowncategory.toString());
 
         Set<String> uniquetownItems = {};
@@ -320,6 +327,8 @@ class _Top10DemocracyState extends State<Top10Democracy> {
     }
   }
 
+  List<Category> categoryList1 = [];
+  List<String> selectedValues = [];
   getcategorylist() async {
     try {
       Dio dio = Dio();
@@ -330,12 +339,14 @@ class _Top10DemocracyState extends State<Top10Democracy> {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-
+        categories = List<Category>.from(
+            map["data"]["category_list"].map((x) => Category.fromJson(x)));
+        print("sdfnksdfhhdfkjsfkjsdhfkhf $map");
         categoryList =
             List<Map<String, dynamic>>.from(map["data"]["category_list"]);
-        selectedsubcategory = [
-          map["data"]["category_list"][0]['sub_category'][0]["subcategory_id"]
-        ];
+        // selectedsubcategory = [
+        //   map["data"]["category_list"][0]['sub_category'][0]["subcategory_id"]
+        // ];
         Set<String> uniqueItems = {};
         subcategoryList = [];
         for (var category in categoryList) {
@@ -492,65 +503,91 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                       ),
                       child: const Text("All"))),
               const SizedBox(width: 10),
-              SizedBox(
-                width: 90,
-                height: 47,
-                child: MultiSelectDialogField(
-                  // backgroundColor: Colors.transparent,
-                  items: convertedList,
-                  separateSelectedItems: false,
-                  chipDisplay: MultiSelectChipDisplay<String>(
-                    chipWidth: 70,
-                    height: 0,
-                    scroll: true,
-                    chipColor: Colors.blue,
-                    textStyle: const TextStyle(color: Colors.white),
-                  ),
-                  // chipDisplay: ,
-                  buttonText:
-                      // selectedsubcategory.isEmpty ||
-                      //         selectedsubcategory == null ||
-                      //         selectedsubcategory.length == 0
-                      //     ? Text("selectText")
-                      // :
-                      const Text(
-                    "Category",
-                    style: TextStyle(fontSize: 12),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                  selectedColor: Colors.blue,
-                  decoration: BoxDecoration(
-                    // color: Colors.blue.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      width: 1.0,
-                      // assign the color to the border color
-                      color: Colors.grey,
+              InkWell(
+                onTap: () {
+                  _showCategoryDialog(context);
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      // color: Colors.blue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        width: 1.0,
+                        // assign the color to the border color
+                        color: Colors.grey,
+                      ),
                     ),
-                  ),
-                  buttonIcon: const Icon(
-                    Icons.filter_list_sharp,
-                    size: 15,
-                    // color: Colors.blue,
-                  ),
+                    width: 90,
+                    padding: const EdgeInsets.all(5),
+                    height: 35,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Category",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Icon(Icons.filter_list_sharp, size: 15)
+                      ],
+                    )),
 
-                  onConfirm: (results) {
-                    setState(() {
-                      selectedsubcategory = results;
-                    });
-                    particulardemocracywithsort(2);
-                    //_selectedAnimals = results;
-                  },
-                  onSaved: (results) {
-                    debugPrint("Sdsfsdfsdfsdf $results");
-                    setState(() {
-                      selectedsubcategory = results!;
-                    });
-                    debugPrint("selectedsubcategory $selectedsubcategory");
-                    //_selectedAnimals = results;
-                  },
-                ),
+                // child: MultiSelectDialogField(
+                //   // backgroundColor: Colors.transparent,
+                //   items: convertedList,
+                //   separateSelectedItems: false,
+                //   chipDisplay: MultiSelectChipDisplay<String>(
+                //     chipWidth: 70,
+                //     height: 0,
+                //     scroll: true,
+                //     chipColor: Colors.blue,
+                //     textStyle: const TextStyle(color: Colors.white),
+                //   ),
+                //   // chipDisplay: ,
+                //   buttonText:
+                //       // selectedsubcategory.isEmpty ||
+                //       //         selectedsubcategory == null ||
+                //       //         selectedsubcategory.length == 0
+                //       //     ? Text("selectText")
+                //       // :
+                //       const Text(
+                //     "Category",
+                //     style: TextStyle(fontSize: 12),
+                //     overflow: TextOverflow.ellipsis,
+                //   ),
+
+                //   selectedColor: Colors.blue,
+                //   decoration: BoxDecoration(
+                //     // color: Colors.blue.withOpacity(0.1),
+                //     borderRadius: BorderRadius.circular(10),
+                //     border: Border.all(
+                //       width: 1.0,
+                //       // assign the color to the border color
+                //       color: Colors.grey,
+                //     ),
+                //   ),
+                //   buttonIcon: const Icon(
+                //     Icons.filter_list_sharp,
+                //     size: 15,
+                //     // color: Colors.blue,
+                //   ),
+
+                //   onConfirm: (results) {
+                //     setState(() {
+                //       selectedsubcategory = results;
+                //     });
+                //     particulardemocracywithsort(2);
+                //     //_selectedAnimals = results;
+                //   },
+                //   onSaved: (results) {
+                //     debugPrint("Sdsfsdfsdfsdf $results");
+                //     setState(() {
+                //       selectedsubcategory = results!;
+                //     });
+                //     debugPrint("selectedsubcategory $selectedsubcategory");
+                //     //_selectedAnimals = results;
+                //   },
+                // ),
               ),
               const SizedBox(
                 width: 10,
@@ -944,6 +981,113 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                 ),
         ],
       ),
+    );
+  }
+
+  void _showCategoryDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (
+        BuildContext context,
+      ) {
+        return AlertDialog(
+          title: const Text('Selected Categories'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: categoryList.length,
+                itemBuilder: (context, index) {
+                  final category = categoryList[index];
+                  return ExpansionTile(
+                    title: Text(category['c_category']),
+                    children: List.generate(
+                      category['sub_category'].length,
+                      (subIndex) {
+                        final subCategory = category['sub_category'][subIndex];
+                        return Column(
+                          children: [
+                            CheckboxListTile(
+                              title: Text(subCategory['c_category']),
+                              value: selectedsubcategory
+                                  .contains(subCategory["subcategory_id"]),
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value!) {
+                                    selectedsubcategory
+                                        .add(subCategory["subcategory_id"]);
+                                  } else {
+                                    selectedsubcategory
+                                        .remove(subCategory["subcategory_id"]);
+                                  }
+                                });
+                              },
+                            ),
+                            if (subCategory.containsKey('kid_category'))
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: subCategory['kid_category'].length,
+                                  itemBuilder: (context, kidIndex) {
+                                    final kidCategory =
+                                        subCategory['kid_category'][kidIndex];
+                                    return CheckboxListTile(
+                                      title: Text(kidCategory['c_category']),
+                                      value: selectedsubcategory.contains(
+                                          kidCategory["kidcategory_id"]),
+                                      onChanged: (value) {
+                                        print("value $value");
+                                        setState(() {
+                                          if (value!) {
+                                            selectedsubcategory.add(
+                                                kidCategory["kidcategory_id"]);
+                                            print("value $selectedCategories");
+                                          } else {
+                                            selectedsubcategory.remove(
+                                                kidCategory["kidcategory_id"]);
+                                          }
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    selectedsubcategory.clear();
+                    particulardemocracy("1");
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    particulardemocracywithsort(2);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Ok'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }
