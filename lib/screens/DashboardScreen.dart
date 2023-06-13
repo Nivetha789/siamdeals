@@ -66,7 +66,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   final searchUnitController = TextEditingController();
   List<CityJResult> cityDataList = [];
   List<CityJResult> searchCityDataList = [];
-  late String cityId;
+  var cityId;
   String cityName = "Select City";
   bool checkCityListFirst = true;
 
@@ -479,7 +479,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       // checkBanner = true;
       getBannerList("city", cityId);
       getCategoryList(id);
-      getcityList("city", cityId);
+      getcitypopupList("city", cityId);
     });
   }
 
@@ -804,6 +804,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
               box.remove("popupcityid");
               box.remove('cityname');
+              box.remove('categoryid');
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (BuildContext context) => this.widget));
             },
@@ -816,11 +817,32 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         title: checkScrollText
             ? InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Top10Democracy(
-                              id: dealzid, cityid: cityId, name: dealzname)));
+                  if (cityId == null || cityId == "") {
+                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                      return await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content:
+                                  const Text("Please choose your City first"),
+                              actions: [
+                                InkWell(
+                                  child: const Text("OK"),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          });
+                    });
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Top10Democracy(
+                                id: dealzid, cityid: cityId, name: dealzname)));
+                  }
                 },
                 child: TextScroll(
                   scrollText,
@@ -1218,18 +1240,44 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             right: 10.0, bottom: 10.0),
                                         child: InkWell(
                                           onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => Top10Democracy(
-                                                        id: demographicJResultList[
-                                                                postion]
-                                                            .nId!,
-                                                        cityid: cityId,
-                                                        name: demographicJResultList[
-                                                                postion]
-                                                            .cDemographic!)));
-
+                                            if (cityId == null ||
+                                                cityId == "") {
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback(
+                                                      (_) async {
+                                                return await showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        content: const Text(
+                                                            "Please choose your City first"),
+                                                        actions: [
+                                                          InkWell(
+                                                            child: const Text(
+                                                                "OK"),
+                                                            onTap: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
+                                              });
+                                            } else {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => Top10Democracy(
+                                                          id: demographicJResultList[
+                                                                  postion]
+                                                              .nId!,
+                                                          cityid: cityId,
+                                                          name: demographicJResultList[
+                                                                  postion]
+                                                              .cDemographic!)));
+                                            }
                                             setState(() {});
                                           },
                                           child: Container(
@@ -1573,6 +1621,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
                         box.remove("popupcityid");
                         box.remove('cityname');
+                        box.remove('categoryid');
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) => this.widget));
                       },
@@ -1758,6 +1807,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
                       box.remove("popupcityid");
                       box.remove('cityname');
+                      box.remove('categoryid');
                       await SharedPreference().clearSharep().then((v) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) => LoginScreen()));
@@ -2109,7 +2159,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     }
   }
 
-  getcityList(String type, String actionId) async {
+  getcitypopupList(String type, String actionId) async {
     try {
       Dio dio = Dio();
       debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");

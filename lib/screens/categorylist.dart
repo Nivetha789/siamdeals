@@ -86,7 +86,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     // ignore: todo
     // TODO: implement initState
     super.initState();
-    getpopupList("category", "0");
+    getpopupList("category",  widget.categoryId.toString());
     categoryId = widget.categoryId;
 
     if (widget.checkCategory) {
