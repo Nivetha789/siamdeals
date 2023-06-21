@@ -208,22 +208,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               return popupJResultList[index].npopuptype ==
                                           "2" ||
                                       popupJResultList[index].npopuptype == 2
-                                  ? SizedBox(
-                                      width: 300.0,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
-
-                                      // height: 100.0,
-                                      child: SingleChildScrollView(
-                                        // width:
-                                        //     MediaQuery.of(context).size.width,
-                                        // height:
-                                        //     MediaQuery.of(context).size.height /
-                                        //         2,
-                                        child: HtmlWidget(
-                                          popupJResultList[index].cdescription!,
-                                        ),
+                                  ? SingleChildScrollView(
+                                      child: HtmlWidget(
+                                        popupJResultList[index].cdescription!,
                                       ),
                                     )
                                   : Card(
@@ -231,11 +218,12 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       clipBehavior: Clip.antiAlias,
-                                      child: SizedBox(
-                                        width: 300.0,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                3,
+                                      child: Expanded(
+                                        flex: 2,
+                                        // width: 300.0,
+                                        // height:
+                                        //     MediaQuery.of(context).size.height /
+                                        //         3,
                                         child: SizedBox(
                                             width: MediaQuery.of(context)
                                                 .size
@@ -281,7 +269,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                 autoPlay:
                                     popupJResultList.isNotEmpty ? true : false,
                                 viewportFraction: 1.0,
-                                // height: type == "2" ? 50 : 150,
+                                height: type == "2" ? 250 : 150,
                                 enlargeCenterPage: false,
                                 enableInfiniteScroll: false,
                                 onPageChanged: (index, reason) {
@@ -2089,7 +2077,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
       debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
-      var parameters = {"c_type": type, "n_actionid": actionId};
+      var parameters = {"c_type": type, "n_city": actionId};
 
       final response = await dio.post(ApiProvider.getBanner,
           options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -2120,7 +2108,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     try {
       Dio dio = Dio();
       debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
-      var parameters = {"c_type": type, "n_actionid": actionId};
+      var parameters = {"c_type": type, "n_city": actionId};
 
       final response = await dio.post(ApiProvider.getPopup,
           options: Options(contentType: Headers.formUrlEncodedContentType),
@@ -2163,7 +2151,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     try {
       Dio dio = Dio();
       debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
-      var parameters = {"c_type": type, "n_actionid": actionId};
+      var parameters = {"c_type": type, "n_city": actionId};
 
       final response = await dio.post(ApiProvider.getPopup,
           options: Options(contentType: Headers.formUrlEncodedContentType),

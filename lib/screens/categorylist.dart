@@ -403,13 +403,14 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
   getpopupList(String type, String actionId) async {
     try {
       Dio dio = Dio();
-      debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
+      debugPrint(
+          "vsfdsfsdfdsf ${type}  actionid${widget.categoryId} ${widget.cityid}");
       var parameters = {
         "c_type": type,
-        "n_city": widget.cityId,
-        "n_category": widget.categoryId
+        "n_city": widget.cityid.toString(),
+        "n_category": widget.categoryId.toString(),
       };
-
+      print(parameters);
       final response = await dio.post(ApiProvider.getPopup,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
@@ -498,6 +499,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                           "2" ||
                                       popupJResultList[index].npopuptype == 2
                                   ? Expanded(
+                                      flex: 5,
                                       // width: 300.0,
                                       // height:
                                       //     MediaQuery.of(context).size.height /
@@ -505,11 +507,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
                                       // height: 100.0,
                                       child: SingleChildScrollView(
-                                        // width:
-                                        //     MediaQuery.of(context).size.width,
-                                        // height:
-                                        //     MediaQuery.of(context).size.height /
-                                        //         2,
                                         child: HtmlWidget(
                                           popupJResultList[index].cdescription!,
                                         ),
@@ -521,6 +518,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                               BorderRadius.circular(20)),
                                       clipBehavior: Clip.antiAlias,
                                       child: Expanded(
+                                        flex: 2,
                                         // width: 300.0,
                                         // height:
                                         //     MediaQuery.of(context).size.height /
@@ -570,7 +568,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                 autoPlay:
                                     popupJResultList.isNotEmpty ? true : false,
                                 viewportFraction: 1.0,
-                                height: type == "2" ? 50 : 150,
+                                height: type == "2" ? 250 : 150,
                                 enlargeCenterPage: false,
                                 enableInfiniteScroll: false,
                                 onPageChanged: (index, reason) {
@@ -676,8 +674,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
               stateSetter = setState;
               return Column(
                 children: [
-                  Expanded(
-                    flex: 1,
+                  Container(
+                    height: 60,
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -835,191 +833,192 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                         : Container(),
                   ),
                   subCategoryDataList.isNotEmpty
-                      ? Expanded(
-                          flex: 1,
+                      ? Container(
+                        height: 100,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 100,
+                          margin: const EdgeInsets.only(
+                              left: 11.0, right: 11.0),
                           child: Container(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              margin: const EdgeInsets.only(
-                                  left: 11.0, right: 11.0),
-                              child: Container(
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: [
-                                    Container(
-                                      child: ListView.builder(
-                                          itemCount:
-                                              subCategoryDataList.length > 4
-                                                  ? 3
-                                                  : 0,
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemBuilder:
-                                              (BuildContext context, index) {
-                                            return GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  if (subCategoryDataList[index]
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                Container(height: 60,
+                                  child: ListView.builder(
+                                      itemCount:
+                                          subCategoryDataList.length > 4
+                                              ? 3
+                                              : 0,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder:
+                                          (BuildContext context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              if (subCategoryDataList[index]
+                                                  .addRemove!) {
+                                                searchVendorJResultList
+                                                    .clear();
+                                                categoryId =
+                                                    widget.categoryId;
+                                                subCategoryDataList[index]
+                                                        .addRemove =
+                                                    !subCategoryDataList[
+                                                            index]
+                                                        .addRemove!;
+                                              } else {
+                                                for (int i = 0;
+                                                    i <
+                                                        subCategoryDataList
+                                                            .length;
+                                                    i++) {
+                                                  if (subCategoryDataList[i]
                                                       .addRemove!) {
-                                                    searchVendorJResultList
-                                                        .clear();
-                                                    categoryId =
-                                                        widget.categoryId;
-                                                    subCategoryDataList[index]
-                                                            .addRemove =
-                                                        !subCategoryDataList[
-                                                                index]
-                                                            .addRemove!;
-                                                  } else {
-                                                    for (int i = 0;
-                                                        i <
-                                                            subCategoryDataList
-                                                                .length;
-                                                        i++) {
-                                                      if (subCategoryDataList[i]
-                                                          .addRemove!) {
-                                                        subCategoryDataList[i]
-                                                            .addRemove = false;
-                                                      }
-                                                    }
-                                                    subCategoryDataList[index]
-                                                        .addRemove = true;
-
-                                                    categoryId = int.parse(
-                                                        subCategoryDataList[
-                                                                index]
-                                                            .nId!);
+                                                    subCategoryDataList[i]
+                                                        .addRemove = false;
                                                   }
-                                                });
+                                                }
+                                                subCategoryDataList[index]
+                                                    .addRemove = true;
 
-                                                offset = 0;
-                                                limit = 10;
+                                                categoryId = int.parse(
+                                                    subCategoryDataList[
+                                                            index]
+                                                        .nId!);
+                                              }
+                                            });
 
-                                                check().then((intenet) {
-                                                  if (intenet) {
-                                                    searchVendorListApi(
-                                                        searchTxt, "Search");
-                                                  } else {
-                                                    ToastHandler.showToast(
-                                                        message:
-                                                            "Please check your internet connection");
-                                                  }
-                                                });
-                                              },
-                                              child: Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 5.0,
-                                                    right: 5.0,
-                                                    top: 10.0,
-                                                    bottom: 10.0),
-                                                decoration: BoxDecoration(
-                                                    border:
-                                                        subCategoryDataList[index]
-                                                                .addRemove!
-                                                            ? Border.all(
-                                                                color:
-                                                                    Style.colors
-                                                                        .logoRed)
-                                                            : Border.all(
-                                                                color: Style
-                                                                    .colors
-                                                                    .app_black),
-                                                    color: subCategoryDataList[
-                                                                index]
+                                            offset = 0;
+                                            limit = 10;
+
+                                            check().then((intenet) {
+                                              if (intenet) {
+                                                searchVendorListApi(
+                                                    searchTxt, "Search");
+                                              } else {
+                                                ToastHandler.showToast(
+                                                    message:
+                                                        "Please check your internet connection");
+                                              }
+                                            });
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                left: 5.0,
+                                                right: 5.0,
+                                                top: 10.0,
+                                                bottom: 10.0),
+                                               height:60,
+                                            decoration: BoxDecoration(
+                                                border:
+                                                    subCategoryDataList[index]
                                                             .addRemove!
-                                                        ? Style.colors.logoRed
-                                                            .withOpacity(0.2)
-                                                        : Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30.0)),
-                                                child: Container(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 15.0,
-                                                                right: 15.0),
-                                                        child: Row(
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          100.0),
-                                                              child:
-                                                                  Image.network(
-                                                                subCategoryDataList[
-                                                                        index]
-                                                                    .cCategoryImage!,
-                                                                height: 30,
-                                                                width: 30,
-                                                                fit: BoxFit
-                                                                    .contain,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              subCategoryDataList[
-                                                                      index]
-                                                                  .cCategory!,
-                                                              style: TextStyle(
-                                                                  color: Style
-                                                                      .colors
-                                                                      .app_black,
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontFamily: Style
-                                                                      .montserrat),
-                                                            ),
-                                                          ],
+                                                        ? Border.all(
+                                                            color:
+                                                                Style.colors
+                                                                    .logoRed)
+                                                        : Border.all(
+                                                            color: Style
+                                                                .colors
+                                                                .app_black),
+                                                color: subCategoryDataList[
+                                                            index]
+                                                        .addRemove!
+                                                    ? Style.colors.logoRed
+                                                        .withOpacity(0.2)
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        30.0)),
+                                            child: Container(
+                                              height: 60,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets
+                                                                .only(
+                                                            left: 15.0,
+                                                            right: 15.0),
+                                                    child: Row(
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      100.0),
+                                                          child:
+                                                              Image.network(
+                                                            subCategoryDataList[
+                                                                    index]
+                                                                .cCategoryImage!,
+                                                            height: 30,
+                                                            width: 30,
+                                                            fit: BoxFit
+                                                                .contain,
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Text(
+                                                          subCategoryDataList[
+                                                                  index]
+                                                              .cCategory!,
+                                                          style: TextStyle(
+                                                              color: Style
+                                                                  .colors
+                                                                  .app_black,
+                                                              fontSize:
+                                                                  12.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontFamily: Style
+                                                                  .montserrat),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                            );
-                                          }),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        searchSubCategoryList.clear();
-                                        setState(() {
-                                          searchSubCategoryList
-                                              .addAll(subCategoryDataList);
-                                        });
-                                        SubCategoryBottomList(context);
-                                      },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        margin:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .view_all!,
-                                          style: TextStyle(
-                                              color: Style.colors.logoRed,
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: Style.montserrat),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                            ),
+                                          ),
+                                        );
+                                      }),
                                 ),
-                              ),
+                                InkWell(
+                                  onTap: () {
+                                    searchSubCategoryList.clear();
+                                    setState(() {
+                                      searchSubCategoryList
+                                          .addAll(subCategoryDataList);
+                                    });
+                                    SubCategoryBottomList(context);
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    margin:
+                                        const EdgeInsets.only(left: 10.0),
+                                    child: Text(
+                                      AppLocalizations.of(context)!
+                                          .view_all!,
+                                      style: TextStyle(
+                                          color: Style.colors.logoRed,
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: Style.montserrat),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        )
+                        ),
+                      )
                       : Container(),
                   Expanded(
                     flex: 5,
@@ -1411,8 +1410,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
 
-      var parameters = {"c_type": type, "n_actionid": widget.categoryId};
-
+      var parameters = {
+        "c_type": type,
+        "n_city": widget.cityid.toString(),
+        "n_category": widget.categoryId.toString(),
+      };
       final response = await dio.post(ApiProvider.getBanner,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
