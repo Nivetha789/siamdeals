@@ -86,7 +86,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     // ignore: todo
     // TODO: implement initState
     super.initState();
-    getpopupList("category",  widget.categoryId.toString());
+    getpopupList("category", widget.categoryId.toString());
     categoryId = widget.categoryId;
 
     if (widget.checkCategory) {
@@ -316,20 +316,31 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                 left: 20.0,
                                                 top: 10.0,
                                                 bottom: 5.0),
-                                            child: Text(
-                                              searchSubCategoryList[postion]
-                                                      .cCategory!
-                                                      .isNotEmpty
-                                                  ? searchSubCategoryList[
-                                                          postion]
-                                                      .cCategory!
-                                                  : "",
-                                              style: TextStyle(
-                                                  color: Colors.black87,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.w400,
-                                                  fontFamily:
-                                                      Style.sfproddisplay),
+                                            child: Row(
+                                              children: [
+                                                Image.network(
+                                                    searchSubCategoryList[
+                                                            postion]
+                                                        .cCategoryImage!,
+                                                    height: 30,
+                                                    width: 30),
+                                                Text(
+                                                  searchSubCategoryList[postion]
+                                                          .cCategory!
+                                                          .isNotEmpty
+                                                      ? searchSubCategoryList[
+                                                              postion]
+                                                          .cCategory!
+                                                      : "",
+                                                  style: TextStyle(
+                                                      color: Colors.black87,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontFamily:
+                                                          Style.sfproddisplay),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -393,16 +404,21 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     try {
       Dio dio = Dio();
       debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
-      var parameters = {"c_type": type, "n_actionid": actionId};
+      var parameters = {
+        "c_type": type,
+        "n_city": widget.cityId,
+        "n_category": widget.categoryId
+      };
 
       final response = await dio.post(ApiProvider.getPopup,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
-      debugPrint("vsfdsfsdsf12333 ${response.data["j_result"][0]["n_id"]}");
+      debugPrint("vsfdsfsdsf12333 ${response.data}");
       var popuphomeid = await box.read('categoryid');
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
+
         debugPrint("vsfdsfsdsf12333 ${map["j_result"][0]}");
         PopupModel popupModel = PopupModel.fromJson(map);
         debugPrint("PAvithramanoharan123444 ${popupModel.jResult}");
@@ -481,11 +497,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                               return popupJResultList[index].npopuptype ==
                                           "2" ||
                                       popupJResultList[index].npopuptype == 2
-                                  ? SizedBox(
-                                      width: 300.0,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
+                                  ? Expanded(
+                                      // width: 300.0,
+                                      // height:
+                                      //     MediaQuery.of(context).size.height /
+                                      //         3,
 
                                       // height: 100.0,
                                       child: SingleChildScrollView(
@@ -504,11 +520,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                           borderRadius:
                                               BorderRadius.circular(20)),
                                       clipBehavior: Clip.antiAlias,
-                                      child: SizedBox(
-                                        width: 300.0,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                3,
+                                      child: Expanded(
+                                        // width: 300.0,
+                                        // height:
+                                        //     MediaQuery.of(context).size.height /
+                                        //         3,
                                         child: SizedBox(
                                             width: MediaQuery.of(context)
                                                 .size
@@ -554,7 +570,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                 autoPlay:
                                     popupJResultList.isNotEmpty ? true : false,
                                 viewportFraction: 1.0,
-                                // height: type == "2" ? 50 : 150,
+                                height: type == "2" ? 50 : 150,
                                 enlargeCenterPage: false,
                                 enableInfiniteScroll: false,
                                 onPageChanged: (index, reason) {
@@ -714,7 +730,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                     visible: checkBanner,
                     child: bannerJResultList.isNotEmpty
                         ? Expanded(
-                            flex: 4,
+                            flex: 5,
                             child: Container(
                               child: Column(
                                 children: [
@@ -742,54 +758,51 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                   BorderRadius.circular(20)),
                                           clipBehavior: Clip.antiAlias,
                                           child: SizedBox(
-                                            width: 300.0,
-                                            height: 200.0,
-                                            child: SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: bannerJResultList[index]
-                                                          .cBannerLink ==
-                                                      null
-                                                  ? Image.network(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 160,
+                                            child: bannerJResultList[index]
+                                                        .cBannerLink ==
+                                                    null
+                                                ? Image.network(
+                                                    bannerJResultList[index]
+                                                        .cBannerImage!,
+                                                    fit: BoxFit.fitWidth,
+                                                  )
+                                                : InkWell(
+                                                    onTap: () async {
+                                                      // debugPrint(
+                                                      //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                                      // String
+                                                      //     url =
+                                                      //     bannerJResultList[index]
+                                                      //         .cBannerLink;
+                                                      // var url =
+                                                      //     bannerJResultList[index]
+                                                      //         .cBannerLink!;
+                                                      // if (await canLaunch(
+                                                      //     url)) {
+                                                      //   await launch(
+                                                      //       url);
+                                                      // } else {
+                                                      //   throw 'Could not launch $url';
+                                                      // }
+                                                      openbannerlaunchurl(
+                                                          bannerJResultList[
+                                                                  index]
+                                                              .cBannerLink!);
+                                                    },
+                                                    child: Image.network(
                                                       bannerJResultList[index]
                                                           .cBannerImage!,
                                                       fit: BoxFit.fitWidth,
-                                                    )
-                                                  : InkWell(
-                                                      onTap: () async {
-                                                        // debugPrint(
-                                                        //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                                        // String
-                                                        //     url =
-                                                        //     bannerJResultList[index]
-                                                        //         .cBannerLink;
-                                                        // var url =
-                                                        //     bannerJResultList[index]
-                                                        //         .cBannerLink!;
-                                                        // if (await canLaunch(
-                                                        //     url)) {
-                                                        //   await launch(
-                                                        //       url);
-                                                        // } else {
-                                                        //   throw 'Could not launch $url';
-                                                        // }
-                                                        openbannerlaunchurl(
-                                                            bannerJResultList[
-                                                                    index]
-                                                                .cBannerLink!);
-                                                      },
-                                                      child: Image.network(
-                                                        bannerJResultList[index]
-                                                            .cBannerImage!,
-                                                        fit: BoxFit.fitWidth,
-                                                      ),
                                                     ),
-                                            ),
+                                                  ),
                                           ),
                                         );
                                       },
-                                      options: new CarouselOptions(
+                                      options: CarouselOptions(
                                           autoPlay: bannerJResultList.length > 0
                                               ? true
                                               : false,
@@ -932,20 +945,41 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                     .only(
                                                                 left: 15.0,
                                                                 right: 15.0),
-                                                        child: Text(
-                                                          subCategoryDataList[
-                                                                  index]
-                                                              .cCategory!,
-                                                          style: TextStyle(
-                                                              color: Style
-                                                                  .colors
-                                                                  .app_black,
-                                                              fontSize: 12.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily: Style
-                                                                  .montserrat),
+                                                        child: Row(
+                                                          children: [
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100.0),
+                                                              child:
+                                                                  Image.network(
+                                                                subCategoryDataList[
+                                                                        index]
+                                                                    .cCategoryImage!,
+                                                                height: 30,
+                                                                width: 30,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              subCategoryDataList[
+                                                                      index]
+                                                                  .cCategory!,
+                                                              style: TextStyle(
+                                                                  color: Style
+                                                                      .colors
+                                                                      .app_black,
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontFamily: Style
+                                                                      .montserrat),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ],

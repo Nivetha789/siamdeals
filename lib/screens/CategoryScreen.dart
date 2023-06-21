@@ -166,19 +166,9 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                               return popupJResultList[index].npopuptype ==
                                           "2" ||
                                       popupJResultList[index].npopuptype == 2
-                                  ? SizedBox(
-                                      width: 300.0,
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
-
-                                      // height: 100.0,
-                                      child: SingleChildScrollView(
-                                        // width:
-                                        //     MediaQuery.of(context).size.width,
-                                        // height:
-                                        //     MediaQuery.of(context).size.height /
-                                        //         2,
+                                  ? Expanded(
+                                      child: Container(
+                                        // height: 100.0,
                                         child: HtmlWidget(
                                           popupJResultList[index].cdescription!,
                                         ),
