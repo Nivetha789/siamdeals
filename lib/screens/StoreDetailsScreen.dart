@@ -263,6 +263,17 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
         });
   }
 
+  void launchGoogleMaps(double latitude, double longitude) async {
+    String googleMapsUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+
+    if (await canLaunch(googleMapsUrl)) {
+      await launch(googleMapsUrl);
+    } else {
+      throw 'Could not launch $googleMapsUrl';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
@@ -299,16 +310,21 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
               labelColor: Style.colors.white,
               labelBackgroundColor: Colors.green,
             ),
-            // HawkFabMenuItem(
-            //   label: 'Line',
-            //   ontap: () {
-            //     launch(('tel://${"+66810673747"}'));
-            //   },
-            //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
-            //   color: Style.colors.white,
-            //   labelColor: Style.colors.white,
-            //   labelBackgroundColor: Colors.blue,
-            // ),
+            HawkFabMenuItem(
+              label: 'Map',
+              ontap: () {
+                double latitude = double.parse(
+                    nLatitude!); // Replace with your desired latitude
+                double longitude = double.parse(
+                    nLongitude!); // Replace with your desired longitude
+
+                launchGoogleMaps(latitude, longitude);
+              },
+              icon: Image.asset("images/map.png", height: 30, width: 30),
+              color: Style.colors.white,
+              labelColor: Style.colors.white,
+              labelBackgroundColor: Colors.blue,
+            ),
           ],
           body: Container(
               width: MediaQuery.of(context).size.width,
@@ -736,11 +752,11 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                     scrollDirection:
                                                         Axis.horizontal,
                                                     itemCount:
-                                                        storeDetailsJImagesList
+                                                        storeDetailsJAlbumsList
                                                             .length,
                                                     shrinkWrap: true,
                                                     itemBuilder:
-                                                        (context, postion) {
+                                                        (context, postion1) {
                                                       return InkWell(
                                                         onTap: () {
 //
@@ -782,7 +798,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                                               1 / 1,
                                                                           child:
                                                                               Image.network(
-                                                                            storeDetailsJAlbumsList[postion].cListingImg!,
+                                                                            storeDetailsJAlbumsList[postion1].cListingImg!,
                                                                             filterQuality:
                                                                                 FilterQuality.high,
                                                                             fit:
