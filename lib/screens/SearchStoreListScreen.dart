@@ -2020,7 +2020,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
     particularDemocracylist = [];
     categoryJResultList = [];
     demographicJResultList = [];
-    debugPrint("response : $response");
+    debugPrint("response12333 : $response");
     if (response.statusCode == 200) {
       Map<String, dynamic> map = jsonDecode(response.toString());
       ProgressDialog().dismissDialog(context);

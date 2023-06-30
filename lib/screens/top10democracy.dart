@@ -71,9 +71,12 @@ class _Top10DemocracyState extends State<Top10Democracy> {
         desiredAccuracy: LocationAccuracy.high);
     debugPrint(_currentPosition.longitude.toString()); //Output: 80.24599079
     debugPrint(_currentPosition.latitude.toString()); //Output: 29.6593457
+    setState(() {
+      long = _currentPosition.longitude.toString();
+      lat = _currentPosition.latitude.toString();
+      //refresh UI on update
+    });
 
-    long = _currentPosition.longitude.toString();
-    lat = _currentPosition.latitude.toString();
     value == 0 ? particulardemocracy("1") : particulardemocracywithsort("2");
     setState(() {
       //refresh UI
@@ -124,6 +127,10 @@ class _Top10DemocracyState extends State<Top10Democracy> {
       'n_longitude': long,
       'n_view': nview
     };
+    print("dkjfksdfkdfhskfhdsfkj${widget.id}");
+    print("dkjfksdfkdfhskfhdsfkj${lat}");
+    print("dkjfksdfkdfhskfhdsfkj${long}");
+    print("dkjfksdfkdfhskfhdsfkj${nview}");
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();

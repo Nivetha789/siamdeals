@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
 
 import 'dart:convert';
 import 'dart:io';
@@ -6,7 +6,6 @@ import 'dart:io';
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get_storage/get_storage.dart';
@@ -88,7 +87,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     super.initState();
     getpopupList("category", widget.categoryId.toString());
     categoryId = widget.categoryId;
-
+    getSubCategoryList();
     if (widget.checkCategory) {
       categoryName = widget.categoryName;
       searchHint = "Search";
@@ -109,7 +108,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
           searchHint = "Search for stores ,products,brands,dishes..";
         }
 
-        searchVendorListApi(searchTxt, "Search");
+        // searchVendorListApi(searchTxt, "Search");
       } else {
         ToastHandler.showToast(
             message: "Please check your internet connection");
@@ -153,7 +152,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
       offset = 0;
       limit = 10;
-
+ categoryId = int.parse(subCategoryDataList[0].nId!);
+    searchVendorListApi(searchTxt, "Search");
       check().then((intenet) {
         if (intenet) {
           searchVendorListApi(searchTxt, "Search");
@@ -381,7 +381,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     setState(() {
       subCategoryDataList.addAll(subCategoryDataList1);
     });
-
+    categoryId = int.parse(subCategoryDataList[0].nId!);
+    searchVendorListApi(searchTxt, "Search");
     if (!checkSubCategoryListFirst) {
       SubCategoryBottomList(context);
     }
@@ -630,7 +631,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                           fontFamily: Style.montserrat),
                     )
                   : Text(
-                      categoryName + "(" + subCategoryName + ")",
+                      "$categoryName($subCategoryName)",
                       style: TextStyle(
                           color: Style.colors.logoRed,
                           fontSize: 17.0,
@@ -834,22 +835,18 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                   ),
                   subCategoryDataList.isNotEmpty
                       ? Container(
-                        height: 100,
-                        child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 100,
-                          margin: const EdgeInsets.only(
-                              left: 11.0, right: 11.0),
+                          height: 60,
+                          margin:
+                              const EdgeInsets.only(left: 11.0, right: 11.0),
                           child: Container(
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [
-                                Container(height: 60,
+                                Container(
+                                  height: 30,
                                   child: ListView.builder(
-                                      itemCount:
-                                          subCategoryDataList.length > 4
-                                              ? 3
-                                              : 0,
+                                      itemCount: subCategoryDataList.length,
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder:
@@ -859,14 +856,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                             setState(() {
                                               if (subCategoryDataList[index]
                                                   .addRemove!) {
-                                                searchVendorJResultList
-                                                    .clear();
-                                                categoryId =
-                                                    widget.categoryId;
+                                                searchVendorJResultList.clear();
+                                                categoryId = widget.categoryId;
                                                 subCategoryDataList[index]
                                                         .addRemove =
-                                                    !subCategoryDataList[
-                                                            index]
+                                                    !subCategoryDataList[index]
                                                         .addRemove!;
                                               } else {
                                                 for (int i = 0;
@@ -884,8 +878,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                     .addRemove = true;
 
                                                 categoryId = int.parse(
-                                                    subCategoryDataList[
-                                                            index]
+                                                    subCategoryDataList[index]
                                                         .nId!);
                                               }
                                             });
@@ -910,30 +903,28 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                 right: 5.0,
                                                 top: 10.0,
                                                 bottom: 10.0),
-                                               height:60,
+                                            height: 30,
                                             decoration: BoxDecoration(
                                                 border:
                                                     subCategoryDataList[index]
                                                             .addRemove!
                                                         ? Border.all(
-                                                            color:
-                                                                Style.colors
-                                                                    .logoRed)
-                                                        : Border.all(
                                                             color: Style
-                                                                .colors
+                                                                .colors.logoRed)
+                                                        : Border.all(
+                                                            color: Style.colors
                                                                 .app_black),
-                                                color: subCategoryDataList[
-                                                            index]
-                                                        .addRemove!
-                                                    ? Style.colors.logoRed
-                                                        .withOpacity(0.2)
-                                                    : Colors.white,
+                                                color:
+                                                    subCategoryDataList[index]
+                                                            .addRemove!
+                                                        ? Style.colors.logoRed
+                                                            .withOpacity(0.2)
+                                                        : Colors.white,
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         30.0)),
                                             child: Container(
-                                              height: 60,
+                                              height: 30,
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -941,8 +932,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                 children: [
                                                   Padding(
                                                     padding:
-                                                        const EdgeInsets
-                                                                .only(
+                                                        const EdgeInsets.only(
                                                             left: 15.0,
                                                             right: 15.0),
                                                     child: Row(
@@ -952,15 +942,13 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                               BorderRadius
                                                                   .circular(
                                                                       100.0),
-                                                          child:
-                                                              Image.network(
+                                                          child: Image.network(
                                                             subCategoryDataList[
                                                                     index]
                                                                 .cCategoryImage!,
                                                             height: 30,
                                                             width: 30,
-                                                            fit: BoxFit
-                                                                .contain,
+                                                            fit: BoxFit.contain,
                                                           ),
                                                         ),
                                                         Text(
@@ -971,8 +959,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                               color: Style
                                                                   .colors
                                                                   .app_black,
-                                                              fontSize:
-                                                                  12.0,
+                                                              fontSize: 12.0,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
@@ -989,36 +976,33 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                         );
                                       }),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    searchSubCategoryList.clear();
-                                    setState(() {
-                                      searchSubCategoryList
-                                          .addAll(subCategoryDataList);
-                                    });
-                                    SubCategoryBottomList(context);
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    margin:
-                                        const EdgeInsets.only(left: 10.0),
-                                    child: Text(
-                                      AppLocalizations.of(context)!
-                                          .view_all!,
-                                      style: TextStyle(
-                                          color: Style.colors.logoRed,
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: Style.montserrat),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
+                                // InkWell(
+                                //   onTap: () {
+                                //     searchSubCategoryList.clear();
+                                //     setState(() {
+                                //       searchSubCategoryList
+                                //           .addAll(subCategoryDataList);
+                                //     });
+                                //     SubCategoryBottomList(context);
+                                //   },
+                                //   child: Container(
+                                //     alignment: Alignment.center,
+                                //     margin: const EdgeInsets.only(left: 10.0),
+                                //     child: Text(
+                                //       AppLocalizations.of(context)!.view_all!,
+                                //       style: TextStyle(
+                                //           color: Style.colors.logoRed,
+                                //           fontSize: 12.0,
+                                //           fontWeight: FontWeight.w500,
+                                //           fontFamily: Style.montserrat),
+                                //       textAlign: TextAlign.center,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),
-                        ),
-                      )
+                        )
                       : Container(),
                   Expanded(
                     flex: 5,
@@ -1070,15 +1054,10 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                           closeTime = "";
                                           checkLeave = false;
                                         } else {
-                                          openTime = "(Open - " +
-                                              searchVendorJResultList[index]
-                                                  .jCurrentDay!
-                                                  .open!;
-                                          closeTime = " - Close - " +
-                                              searchVendorJResultList[index]
-                                                  .jCurrentDay!
-                                                  .close! +
-                                              ")";
+                                          openTime =
+                                              "(Open - ${searchVendorJResultList[index].jCurrentDay!.open!}";
+                                          closeTime =
+                                              " - Close - ${searchVendorJResultList[index].jCurrentDay!.close!})";
                                           checkLeave = false;
                                         }
 
@@ -1168,10 +1147,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                           child: Row(
                                                             children: [
                                                               Text(
-                                                                AppLocalizations.of(
-                                                                            context)!
-                                                                        .category! +
-                                                                    " : ",
+                                                                "${AppLocalizations.of(context)!.category!} : ",
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         13.0,
@@ -1342,7 +1318,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     // ProgressDialog().showLoaderDialog(context);
 
     try {
-      Dio dio = new Dio();
+      Dio dio = Dio();
       // dio.options.connectTimeout = 5000; //5s
       // dio.options.receiveTimeout = 3000;
 
@@ -1399,7 +1375,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
   getBannerList(String type) async {
     try {
-      Dio dio = new Dio();
+      Dio dio = Dio();
       // dio.options.connectTimeout = 5000; //5s
       // dio.options.receiveTimeout = 3000;
 
@@ -1435,7 +1411,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
           checkBanner = false;
         });
         // bannerJResultList.clear();
-        print("Response: " + "Bad Network Connection try again..");
+        print("Response:  Bad Network Connection try again..");
         // ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
 
@@ -1446,7 +1422,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         checkBanner = false;
       });
       // ProgressDialog().dismissDialog(context);
-      print("Response: " + e.toString());
+      print("Response: $e");
     }
   }
 
@@ -1455,23 +1431,23 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       // ProgressDialog().showLoaderDialog(context);
     }
 
-    // BaseOptions options = new BaseOptions(
+    // BaseOptions options =  BaseOptions(
     //   baseUrl: ApiProvider().Baseurl,
     //   connectTimeout: 5000,
     //   receiveTimeout: 3000,
     // );
-    // Dio dio = new Dio(options);
+    // Dio dio =  Dio(options);
 
-    Dio dio = new Dio();
+    Dio dio = Dio();
     // dio.options.connectTimeout = 5000; //5s
     // dio.options.receiveTimeout = 3000;
-
+    print("response123232  $categoryId, $searchTxt");
     var parameters = {
       "n_limit": limit,
       "c_search": searchTxt,
       "n_category_id": categoryId
     };
-    print("request : " + parameters.toString());
+    debugPrint("request : $parameters");
 
     final response = await dio.post(ApiProvider.getSearchVendor,
         options: Options(
@@ -1480,7 +1456,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         ),
         data: parameters);
 
-    print("response : " + response.toString());
+    print("response123232 : $response");
     if (response.statusCode == 200) {
       Map<String, dynamic> map = jsonDecode(response.toString());
       SearchVendorModel searchVendorModel = SearchVendorModel.fromJson(map);
@@ -1536,7 +1512,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
@@ -1544,7 +1520,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
       }
     } else {
       // android , web
@@ -1552,7 +1528,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         await launch(whatsappURl_android);
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
       }
     }
   }

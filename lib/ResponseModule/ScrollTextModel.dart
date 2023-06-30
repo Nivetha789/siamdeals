@@ -29,19 +29,22 @@ class ScrollTextModel {
 
 class ScrollTextJResult {
   String? cText = "";
-  String? cLink = "";
+  var cLink;
+  var scrolltype;
 
-  ScrollTextJResult({this.cText, this.cLink});
+  ScrollTextJResult({this.cText, this.cLink, this.scrolltype});
 
   ScrollTextJResult.fromJson(Map<String, dynamic> json) {
     cText = json['c_text'];
     cLink = json['c_link'];
+    scrolltype = json["n_scroll_type"];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['c_text'] = this.cText;
     data['c_link'] = this.cLink;
+    data["n_scroll_type"] = this.scrolltype;
     return data;
   }
 }

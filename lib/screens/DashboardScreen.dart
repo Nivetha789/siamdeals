@@ -1957,18 +1957,18 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
         if (demographicModel.nStatus == 1) {
           //   ProgressDialog().dismissDialog(context);
-          for (var i = 0; i < demographicModel.jResult!.length; i++) {
-            if (demographicModel.jResult![i].cDemographic ==
-                "DealZ Near Me     коло меня") {
-              print(
-                  "pamuishra   ${demographicModel.jResult![i].cDemographic}            ");
+          // for (var i = 0; i < demographicModel.jResult!.length; i++) {
+          //   if (demographicModel.jResult![i].cDemographic ==
+          //       "DealZ Near Me     коло меня") {
+          //     print(
+          //         "pamuishra   ${demographicModel.jResult![i].cDemographic}            ");
 
-              setState(() {
-                dealzid = demographicModel.jResult![i].nId;
-                dealzname = demographicModel.jResult![i].cDemographic;
-              });
-            }
-          }
+          //     setState(() {
+          //       dealzid = demographicModel.jResult![i].nId;
+          //       dealzname = demographicModel.jResult![i].cDemographic;
+          //     });
+          //   }
+          // }
           updateDemoGraphicList(demographicModel.jResult!);
         } else {
           //  ProgressDialog().dismissDialog(context);
@@ -2211,6 +2211,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           setState(() {
             checkScrollText = true;
             scrollText = scrollTextModel.jResult![0].cText!;
+            dealzid = scrollTextModel.jResult![0].cLink!;
+            dealzname = scrollTextModel.jResult![0].cText!;
           });
         }
       } else {

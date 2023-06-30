@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_line_sdk/flutter_line_sdk.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:siamdealz/ResponseModule/DownloadCouponModel.dart';
 import 'package:siamdealz/screens/viewallreviewimages.dart';
 import 'package:sizer/sizer.dart';
@@ -47,6 +50,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
   String? nLatitude = "";
   String? nLongitude = "";
   String? cPlaceType = "";
+  String? cIntroduction = "";
   String? cSinceType = "";
   String? nCityId = "";
   String? cCity = "";
@@ -193,10 +197,10 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                   closeTime = "";
                                   checkLeave = false;
                                 } else {
-                                  openTime = "Open - " +
-                                      openingHoursList[postion].open!;
-                                  closeTime = " - Close - " +
-                                      openingHoursList[postion].close!;
+                                  openTime =
+                                      "Open - ${openingHoursList[postion].open!}";
+                                  closeTime =
+                                      " - Close - ${openingHoursList[postion].close!}";
                                   checkLeave = false;
                                 }
 
@@ -216,11 +220,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                               top: 10.0,
                                               bottom: 5.0),
                                           child: Text(
-                                            openingHoursList[postion].days! +
-                                                " (" +
-                                                openTime +
-                                                closeTime +
-                                                ")",
+                                            "${openingHoursList[postion].days!} ($openTime$closeTime)",
                                             style: TextStyle(
                                                 color: checkLeave
                                                     ? Colors.red
@@ -272,6 +272,36 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
     } else {
       throw 'Could not launch $googleMapsUrl';
     }
+  }
+
+  void redirectToCall(String phoneNumber) async {
+    if (await Permission.phone.request().isGranted) {
+      // Permission is granted. Proceed with making the phone call.
+      String url = 'tel:$phoneNumber';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    } else {
+      // Permission is not granted. Show a dialog or handle it accordingly.
+      // You can inform the user that the permission is required to make a phone call.
+    }
+  }
+
+  void redirectMailPage(String providerUrl) async {
+    // if (await Permission.email.request().isGranted) {
+    // Permission is granted. Proceed with making the phone call.
+
+    if (await canLaunch("mailto:$providerUrl")) {
+      await launch("mailto:$providerUrl");
+    } else {
+      throw 'Could not launch $providerUrl';
+    }
+    // } else {
+    //   // Permission is not granted. Show a dialog or handle it accordingly.
+    //   // You can inform the user that the permission is required to make a phone call.
+    // }
   }
 
   @override
@@ -400,8 +430,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.place_type! +
-                                    " : ",
+                                "${AppLocalizations.of(context)!.place_type!} : ",
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     color: Style.colors.grey,
@@ -969,7 +998,39 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                 ),
                               )
                             : Container(),
-
+                        cIntroduction == ""
+                            ? Container()
+                            : Container(
+                                margin: const EdgeInsets.only(
+                                    top: 15.0, left: 16.0, right: 16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Introduction",
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: Style.colors.app_black,
+                                          fontFamily: Style.josefinsans),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Text(
+                                        cIntroduction.toString(),
+                                        style: TextStyle(
+                                            fontSize: 13.0,
+                                            color: Style.colors.grey,
+                                            fontFamily: Style.montserrat,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                         Container(
                           margin: const EdgeInsets.only(
                               top: 15.0, left: 16.0, right: 16.0),
@@ -997,8 +1058,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context)!.category! +
-                                          " : ",
+                                      "${AppLocalizations.of(context)!.category!} : ",
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           color: Style.colors.grey,
@@ -1021,9 +1081,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      AppLocalizations.of(context)!
-                                              .place_type! +
-                                          " : ",
+                                      "${AppLocalizations.of(context)!.place_type!} : ",
                                       style: TextStyle(
                                           fontSize: 13.0,
                                           color: Style.colors.grey,
@@ -1069,20 +1127,27 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.ph_no! + " : ",
+                                "${AppLocalizations.of(context)!.ph_no!} : ",
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     color: Style.colors.grey,
                                     fontFamily: Style.montserrat,
                                     fontWeight: FontWeight.w400),
                               ),
-                              Text(
-                                cMobileNumbers!,
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
+                              InkWell(
+                                onTap: () {
+                                  cPlaceType == "Public places"
+                                      ? null
+                                      : redirectToCall(cMobileNumbers!);
+                                },
+                                child: Text(
+                                  cMobileNumbers!,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Style.colors.grey,
+                                      fontFamily: Style.montserrat,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ],
                           ),
@@ -1095,20 +1160,27 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.email_id! + " : ",
+                                "${AppLocalizations.of(context)!.email_id!} : ",
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     color: Style.colors.grey,
                                     fontFamily: Style.montserrat,
                                     fontWeight: FontWeight.w400),
                               ),
-                              Text(
-                                cEmailids!,
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
+                              InkWell(
+                                onTap: () {
+                                  cPlaceType == "Public places"
+                                      ? null
+                                      : redirectMailPage(cEmailids!);
+                                },
+                                child: Text(
+                                  cEmailids!,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Style.colors.grey,
+                                      fontFamily: Style.montserrat,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                             ],
                           ),
@@ -1121,7 +1193,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                           child: Row(
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.address! + " : ",
+                                "${AppLocalizations.of(context)!.address!} : ",
                                 style: TextStyle(
                                     fontSize: 13.0,
                                     color: Style.colors.grey,
@@ -1129,13 +1201,24 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                     fontWeight: FontWeight.w400),
                               ),
                               Flexible(
-                                child: Text(
-                                  cAddress!,
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Style.colors.grey,
-                                      fontFamily: Style.montserrat,
-                                      fontWeight: FontWeight.w400),
+                                child: InkWell(
+                                  onTap: () {
+                                    double latitude = double.parse(
+                                        nLatitude!); // Replace with your desired latitude
+                                    double longitude = double.parse(
+                                        nLongitude!); // Replace with your desired longitude
+                                    cPlaceType == "Public places"
+                                        ? null
+                                        : launchGoogleMaps(latitude, longitude);
+                                  },
+                                  child: Text(
+                                    cAddress!,
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: Style.colors.grey,
+                                        fontFamily: Style.montserrat,
+                                        fontWeight: FontWeight.w400),
+                                  ),
                                 ),
                               ),
                             ],
@@ -1265,11 +1348,10 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
 
-      final response = await dio.get(
-          ApiProvider.getVendorDetails + widget.storeId,
+      final response = await dio.get(ApiProvider.getVendorDetails + widget.storeId,
           options: Options(contentType: Headers.formUrlEncodedContentType));
 
-      debugPrint("response ${widget.storeId}" + response.toString());
+      debugPrint("response ${widget.storeId} $response");
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
@@ -1284,6 +1366,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             nLatitude = storeDetailsModel.jResult!.nLatitude;
             nLongitude = storeDetailsModel.jResult!.nLongitude;
             cPlaceType = storeDetailsModel.jResult!.cPlaceType;
+            cIntroduction = storeDetailsModel.jResult!.cintroduction;
             cSinceType = storeDetailsModel.jResult!.cSinceType;
             nCityId = storeDetailsModel.jResult!.nCityId;
             cCity = storeDetailsModel.jResult!.cCity;
@@ -1303,21 +1386,21 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             if (storeDetailsModel.jResult!.jCurrentDay!.open!.isEmpty &&
                 storeDetailsModel.jResult!.jCurrentDay!.close!.isEmpty) {
               currentOpenTime =
-                  storeDetailsModel.jResult!.jCurrentDay!.days! + " (Leave)";
+                  "${storeDetailsModel.jResult!.jCurrentDay!.days!} (Leave)";
               currentCloseTime = "";
               checkCurrentLeave = true;
             } else if (storeDetailsModel
                     .jResult!.jCurrentDay!.open!.isNotEmpty &&
                 storeDetailsModel.jResult!.jCurrentDay!.close!.isEmpty) {
-              currentOpenTime = storeDetailsModel.jResult!.jCurrentDay!.days! +
-                  " (Open - 24 Hours)";
+              currentOpenTime =
+                  "${storeDetailsModel.jResult!.jCurrentDay!.days!} (Open - 24 Hours)";
               currentCloseTime = "";
               checkCurrentLeave = false;
             } else {
               currentOpenTime =
-                  "Open - " + storeDetailsModel.jResult!.jCurrentDay!.open!;
-              currentCloseTime = " - Close - " +
-                  storeDetailsModel.jResult!.jCurrentDay!.close!;
+                  "Open - ${storeDetailsModel.jResult!.jCurrentDay!.open!}";
+              currentCloseTime =
+                  " - Close - ${storeDetailsModel.jResult!.jCurrentDay!.close!}";
               checkCurrentLeave = false;
             }
 
@@ -1348,7 +1431,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
       // debugPrint(response);
     } catch (e) {
-      debugPrint("Exception " + e.toString());
+      debugPrint("Exception $e");
       ProgressDialog().dismissDialog(context);
       setState(() {
         checkEmpty = true;
@@ -1359,20 +1442,20 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
-    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
+    var whatsappurlAndroid = "whatsapp://send?phone=$whatsapp&text=";
+    var whatappurlIos = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
-      if (await canLaunch(whatappURL_ios)) {
-        await launch(whatappURL_ios, forceSafariVC: false);
+      if (await canLaunch(whatappurlIos)) {
+        await launch(whatappurlIos, forceSafariVC: false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("whatsapp no installed")));
       }
     } else {
       // android , web
-      if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
+      if (await canLaunch(whatsappurlAndroid)) {
+        await launch(whatsappurlAndroid);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("whatsapp no installed")));
@@ -1623,7 +1706,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w600)),
                               TextSpan(
-                                  text: "Single Use till " + outputDate,
+                                  text: "Single Use till $outputDate",
                                   style: const TextStyle(
                                       color: Color(0xff0012f8),
                                       fontSize: 15.0,
@@ -1785,7 +1868,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
         // user avatar -> result.userProfile?.pictureUrl
         // etc...
 
-        debugPrint('displayNamedisplayName ' + _userProfile.displayName);
+        debugPrint('displayNamedisplayName ${_userProfile.displayName}');
       });
     } on PlatformException catch (e) {
       // Error handling.
@@ -1823,7 +1906,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
-      debugPrint("response " + response.toString());
+      debugPrint("response $response");
 
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
@@ -1845,7 +1928,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
       // debugPrint(response);
     } catch (e) {
-      debugPrint("Exception " + e.toString());
+      debugPrint("Exception $e");
       ProgressDialog().dismissDialog(context);
       ToastHandler.showToast(message: "Bad Network Connection try again..");
     }

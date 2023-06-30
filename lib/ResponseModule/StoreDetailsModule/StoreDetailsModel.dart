@@ -29,6 +29,7 @@ class JResult {
   String? nLatitude;
   String? nLongitude;
   String? cPlaceType;
+  String? cintroduction;
   String? cSinceType;
   String? nCityId;
   String? cCity;
@@ -56,6 +57,7 @@ class JResult {
       this.nLatitude,
       this.nLongitude,
       this.cPlaceType,
+      this.cintroduction,
       this.cSinceType,
       this.nCityId,
       this.cCity,
@@ -79,6 +81,7 @@ class JResult {
     nLatitude = json['n_latitude'];
     nLongitude = json['n_longitude'];
     cPlaceType = json['c_place_type'];
+    cintroduction = json['c_introduction'];
     cSinceType = json['c_since_type'];
     nCityId = json['n_city_id'];
     cCity = json['c_city'];
@@ -129,6 +132,7 @@ class JResult {
     data['n_latitude'] = this.nLatitude;
     data['n_longitude'] = this.nLongitude;
     data['c_place_type'] = this.cPlaceType;
+    data['c_introduction'] = this.cintroduction;
     data['c_since_type'] = this.cSinceType;
     data['n_city_id'] = this.nCityId;
     data['c_city'] = this.cCity;
