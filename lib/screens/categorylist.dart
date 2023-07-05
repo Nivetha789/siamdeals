@@ -668,69 +668,70 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
             //   labelBackgroundColor: Colors.blue,
             // ),
           ],
-          body: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-              stateSetter = setState;
-              return Column(
-                children: [
-                  Container(
-                    height: 60,
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchStoreListScreen(
-                                    0, widget.cityid, "", false)));
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 5.0, bottom: 5.0, left: 16.0, right: 16.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(7.0)),
-                        height: MediaQuery.of(context).size.height,
-                        child: Row(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 10.0),
-                              child: Icon(
-                                Icons.search,
-                                size: 20.0,
-                                color: Style.colors.logoRed,
-                              ),
-                            ),
-                            Flexible(
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                margin: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  AppLocalizations.of(context)!.mainSearch!,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                      color: Style.colors.app_black,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: Style.montserrat,
-                                      fontSize: 15.0),
+          body: ListView(
+            shrinkWrap: true,
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height,
+                child: StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                  stateSetter = setState;
+                  return Column(
+                    children: [
+                      Container(
+                        height: 60,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SearchStoreListScreen(
+                                        0, widget.cityid, "", false)));
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                top: 5.0, bottom: 5.0, left: 16.0, right: 16.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(7.0)),
+                            height: MediaQuery.of(context).size.height,
+                            child: Row(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10.0),
+                                  child: Icon(
+                                    Icons.search,
+                                    size: 20.0,
+                                    color: Style.colors.logoRed,
+                                  ),
                                 ),
-                              ),
+                                Flexible(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    margin: const EdgeInsets.only(left: 10.0),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.mainSearch!,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      style: TextStyle(
+                                          color: Style.colors.app_black,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: Style.montserrat,
+                                          fontSize: 15.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: checkBanner,
-                    child: bannerJResultList.isNotEmpty
-                        ? Expanded(
-                            flex: 5,
-                            child: Container(
+                      Visibility(
+                        visible: checkBanner,
+                        child: bannerJResultList.isNotEmpty
+                            ? Container(
                               child: Column(
                                 children: [
                                   Container(
@@ -767,7 +768,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                 ? Image.network(
                                                     bannerJResultList[index]
                                                         .cBannerImage!,
-                                                    fit: BoxFit.fitWidth,
+                                                    fit: BoxFit.fill,
                                                   )
                                                 : InkWell(
                                                     onTap: () async {
@@ -818,6 +819,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                     ),
                                   ),
                                   Container(
+                                    alignment: Alignment.center,
                                     margin: const EdgeInsets.only(top: 5.0),
                                     child: CarouselIndicator(
                                       count: bannerJResultList.length,
@@ -829,487 +831,488 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                   )
                                 ],
                               ),
-                            ),
-                          )
-                        : Container(),
-                  ),
-                  subCategoryDataList.isNotEmpty
-                      ? Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          margin:
-                              const EdgeInsets.only(left: 11.0, right: 11.0),
-                          child: Container(
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: [
-                                Container(
-                                  height: 30,
-                                  child: ListView.builder(
-                                      itemCount: subCategoryDataList.length,
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              if (subCategoryDataList[index]
-                                                  .addRemove!) {
-                                                searchVendorJResultList.clear();
-                                                categoryId = widget.categoryId;
-                                                subCategoryDataList[index]
-                                                        .addRemove =
-                                                    !subCategoryDataList[index]
-                                                        .addRemove!;
-                                              } else {
-                                                for (int i = 0;
-                                                    i <
-                                                        subCategoryDataList
-                                                            .length;
-                                                    i++) {
-                                                  if (subCategoryDataList[i]
+                            )
+                            : Container(),
+                      ),
+                      subCategoryDataList.isNotEmpty
+                          ? Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 60,
+                              margin:
+                                  const EdgeInsets.only(left: 11.0, right: 11.0),
+                              child: Container(
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      child: ListView.builder(
+                                          itemCount: subCategoryDataList.length,
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder:
+                                              (BuildContext context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (subCategoryDataList[index]
                                                       .addRemove!) {
-                                                    subCategoryDataList[i]
-                                                        .addRemove = false;
+                                                    searchVendorJResultList.clear();
+                                                    categoryId = widget.categoryId;
+                                                    subCategoryDataList[index]
+                                                            .addRemove =
+                                                        !subCategoryDataList[index]
+                                                            .addRemove!;
+                                                  } else {
+                                                    for (int i = 0;
+                                                        i <
+                                                            subCategoryDataList
+                                                                .length;
+                                                        i++) {
+                                                      if (subCategoryDataList[i]
+                                                          .addRemove!) {
+                                                        subCategoryDataList[i]
+                                                            .addRemove = false;
+                                                      }
+                                                    }
+                                                    subCategoryDataList[index]
+                                                        .addRemove = true;
+
+                                                    categoryId = int.parse(
+                                                        subCategoryDataList[index]
+                                                            .nId!);
                                                   }
-                                                }
-                                                subCategoryDataList[index]
-                                                    .addRemove = true;
+                                                });
 
-                                                categoryId = int.parse(
-                                                    subCategoryDataList[index]
-                                                        .nId!);
-                                              }
-                                            });
+                                                offset = 0;
+                                                limit = 10;
 
-                                            offset = 0;
-                                            limit = 10;
-
-                                            check().then((intenet) {
-                                              if (intenet) {
-                                                searchVendorListApi(
-                                                    searchTxt, "Search");
-                                              } else {
-                                                ToastHandler.showToast(
-                                                    message:
-                                                        "Please check your internet connection");
-                                              }
-                                            });
-                                          },
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                                left: 5.0,
-                                                right: 5.0,
-                                                top: 10.0,
-                                                bottom: 10.0),
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                                border:
-                                                    subCategoryDataList[index]
-                                                            .addRemove!
-                                                        ? Border.all(
-                                                            color: Style
-                                                                .colors.logoRed)
-                                                        : Border.all(
-                                                            color: Style.colors
-                                                                .app_black),
-                                                color:
-                                                    subCategoryDataList[index]
-                                                            .addRemove!
-                                                        ? Style.colors.logoRed
-                                                            .withOpacity(0.2)
-                                                        : Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        30.0)),
-                                            child: Container(
-                                              height: 30,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 15.0,
-                                                            right: 15.0),
-                                                    child: Row(
-                                                      children: [
-                                                        ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      100.0),
-                                                          child: Image.network(
-                                                            subCategoryDataList[
-                                                                    index]
-                                                                .cCategoryImage!,
-                                                            height: 30,
-                                                            width: 30,
-                                                            fit: BoxFit.contain,
-                                                          ),
-                                                        ),
-                                                        Text(
-                                                          subCategoryDataList[
-                                                                  index]
-                                                              .cCategory!,
-                                                          style: TextStyle(
-                                                              color: Style
-                                                                  .colors
-                                                                  .app_black,
-                                                              fontSize: 12.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily: Style
-                                                                  .montserrat),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                                ),
-                                // InkWell(
-                                //   onTap: () {
-                                //     searchSubCategoryList.clear();
-                                //     setState(() {
-                                //       searchSubCategoryList
-                                //           .addAll(subCategoryDataList);
-                                //     });
-                                //     SubCategoryBottomList(context);
-                                //   },
-                                //   child: Container(
-                                //     alignment: Alignment.center,
-                                //     margin: const EdgeInsets.only(left: 10.0),
-                                //     child: Text(
-                                //       AppLocalizations.of(context)!.view_all!,
-                                //       style: TextStyle(
-                                //           color: Style.colors.logoRed,
-                                //           fontSize: 12.0,
-                                //           fontWeight: FontWeight.w500,
-                                //           fontFamily: Style.montserrat),
-                                //       textAlign: TextAlign.center,
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : Container(),
-                  Expanded(
-                    flex: 5,
-                    child: Stack(
-                      children: [
-                        Visibility(
-                          visible: checkInbox,
-                          child: Container(
-                            child: LoadMore(
-                              isFinish: searchVendorJResultList.length >= total,
-                              onLoadMore: _loadMore,
-                              whenEmptyLoad: false,
-                              delegate: const DefaultLoadMoreDelegate(),
-                              textBuilder: DefaultLoadMoreTextBuilder.english,
-                              child: ListView(
-                                children: [
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: searchVendorJResultList.length,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        String openTime = "";
-                                        String closeTime = "";
-                                        bool checkLeave = false;
-
-                                        if (searchVendorJResultList[index]
-                                                .jCurrentDay!
-                                                .open!
-                                                .isEmpty &&
-                                            searchVendorJResultList[index]
-                                                .jCurrentDay!
-                                                .close!
-                                                .isEmpty) {
-                                          openTime = " (Leave)";
-                                          closeTime = "";
-                                          checkLeave = true;
-                                        } else if (searchVendorJResultList[
-                                                    index]
-                                                .jCurrentDay!
-                                                .open!
-                                                .isNotEmpty &&
-                                            searchVendorJResultList[index]
-                                                .jCurrentDay!
-                                                .close!
-                                                .isEmpty) {
-                                          openTime = " (Open - 24 Hours)";
-                                          closeTime = "";
-                                          checkLeave = false;
-                                        } else {
-                                          openTime =
-                                              "(Open - ${searchVendorJResultList[index].jCurrentDay!.open!}";
-                                          closeTime =
-                                              " - Close - ${searchVendorJResultList[index].jCurrentDay!.close!})";
-                                          checkLeave = false;
-                                        }
-
-                                        return Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 12.0, right: 8, top: 8),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          StoreDetailsScreen(
-                                                              searchVendorJResultList[
-                                                                      index]
-                                                                  .nId!,
-                                                              searchVendorJResultList[
-                                                                      index]
-                                                                  .cName!)));
-                                            },
-                                            child: Card(
-                                              elevation: 3,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.sp)),
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    height: 20.5.h,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10.sp),
-                                                                topRight:
-                                                                    Radius.circular(
-                                                                        10.sp)),
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image: NetworkImage(searchVendorJResultList[index]
-                                                                    .jImages!
-                                                                    .isNotEmpty
-                                                                ? searchVendorJResultList[
-                                                                        index]
-                                                                    .jImages![0]
-                                                                    .cListingImg!
-                                                                : ''))),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 12.0,
-                                                            right: 8,
-                                                            top: 0,
-                                                            bottom: 13),
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 15.0),
-                                                          child: Text(
-                                                            searchVendorJResultList[
-                                                                    index]
-                                                                .cName!,
-                                                            style: TextStyle(
-                                                                fontSize: 15.0,
+                                                check().then((intenet) {
+                                                  if (intenet) {
+                                                    searchVendorListApi(
+                                                        searchTxt, "Search");
+                                                  } else {
+                                                    ToastHandler.showToast(
+                                                        message:
+                                                            "Please check your internet connection");
+                                                  }
+                                                });
+                                              },
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    left: 5.0,
+                                                    right: 5.0,
+                                                    top: 10.0,
+                                                    bottom: 10.0),
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                    border:
+                                                        subCategoryDataList[index]
+                                                                .addRemove!
+                                                            ? Border.all(
                                                                 color: Style
-                                                                    .colors
-                                                                    .app_black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 5.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                "${AppLocalizations.of(context)!.category!} : ",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        13.0,
-                                                                    color: Style
-                                                                        .colors
-                                                                        .app_black,
-                                                                    fontFamily:
-                                                                        Style
-                                                                            .montserrat,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400),
+                                                                    .colors.logoRed)
+                                                            : Border.all(
+                                                                color: Style.colors
+                                                                    .app_black),
+                                                    color:
+                                                        subCategoryDataList[index]
+                                                                .addRemove!
+                                                            ? Style.colors.logoRed
+                                                                .withOpacity(0.2)
+                                                            : Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30.0)),
+                                                child: Container(
+                                                  height: 30,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                left: 15.0,
+                                                                right: 15.0),
+                                                        child: Row(
+                                                          children: [
+                                                            ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100.0),
+                                                              child: Image.network(
+                                                                subCategoryDataList[
+                                                                        index]
+                                                                    .cCategoryImage!,
+                                                                height: 30,
+                                                                width: 30,
+                                                                fit: BoxFit.contain,
                                                               ),
-                                                              Text(
-                                                                searchVendorJResultList[
-                                                                            index]
-                                                                        .cCategory!
+                                                            ),
+                                                            Text(
+                                                              subCategoryDataList[
+                                                                      index]
+                                                                  .cCategory!,
+                                                              style: TextStyle(
+                                                                  color: Style
+                                                                      .colors
+                                                                      .app_black,
+                                                                  fontSize: 12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontFamily: Style
+                                                                      .montserrat),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                    // InkWell(
+                                    //   onTap: () {
+                                    //     searchSubCategoryList.clear();
+                                    //     setState(() {
+                                    //       searchSubCategoryList
+                                    //           .addAll(subCategoryDataList);
+                                    //     });
+                                    //     SubCategoryBottomList(context);
+                                    //   },
+                                    //   child: Container(
+                                    //     alignment: Alignment.center,
+                                    //     margin: const EdgeInsets.only(left: 10.0),
+                                    //     child: Text(
+                                    //       AppLocalizations.of(context)!.view_all!,
+                                    //       style: TextStyle(
+                                    //           color: Style.colors.logoRed,
+                                    //           fontSize: 12.0,
+                                    //           fontWeight: FontWeight.w500,
+                                    //           fontFamily: Style.montserrat),
+                                    //       textAlign: TextAlign.center,
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      Expanded(
+                        flex: 5,
+                        child: Stack(
+                          children: [
+                            Visibility(
+                              visible: checkInbox,
+                              child: Container(
+                                child: LoadMore(
+                                  isFinish: searchVendorJResultList.length >= total,
+                                  onLoadMore: _loadMore,
+                                  whenEmptyLoad: false,
+                                  delegate: const DefaultLoadMoreDelegate(),
+                                  textBuilder: DefaultLoadMoreTextBuilder.english,
+                                  child: ListView(
+                                    children: [
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: searchVendorJResultList.length,
+                                          itemBuilder:
+                                              (BuildContext context, index) {
+                                            String openTime = "";
+                                            String closeTime = "";
+                                            bool checkLeave = false;
+
+                                            if (searchVendorJResultList[index]
+                                                    .jCurrentDay!
+                                                    .open!
+                                                    .isEmpty &&
+                                                searchVendorJResultList[index]
+                                                    .jCurrentDay!
+                                                    .close!
+                                                    .isEmpty) {
+                                              openTime = " (Leave)";
+                                              closeTime = "";
+                                              checkLeave = true;
+                                            } else if (searchVendorJResultList[
+                                                        index]
+                                                    .jCurrentDay!
+                                                    .open!
+                                                    .isNotEmpty &&
+                                                searchVendorJResultList[index]
+                                                    .jCurrentDay!
+                                                    .close!
+                                                    .isEmpty) {
+                                              openTime = " (Open - 24 Hours)";
+                                              closeTime = "";
+                                              checkLeave = false;
+                                            } else {
+                                              openTime =
+                                                  "(Open - ${searchVendorJResultList[index].jCurrentDay!.open!}";
+                                              closeTime =
+                                                  " - Close - ${searchVendorJResultList[index].jCurrentDay!.close!})";
+                                              checkLeave = false;
+                                            }
+
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 12.0, right: 8, top: 8),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              StoreDetailsScreen(
+                                                                  searchVendorJResultList[
+                                                                          index]
+                                                                      .nId!,
+                                                                  searchVendorJResultList[
+                                                                          index]
+                                                                      .cName!)));
+                                                },
+                                                child: Card(
+                                                  elevation: 3,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.sp)),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        height: 20.5.h,
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            10.sp),
+                                                                    topRight:
+                                                                        Radius.circular(
+                                                                            10.sp)),
+                                                            image: DecorationImage(
+                                                                fit: BoxFit.cover,
+                                                                image: NetworkImage(searchVendorJResultList[index]
+                                                                        .jImages!
                                                                         .isNotEmpty
                                                                     ? searchVendorJResultList[
                                                                             index]
-                                                                        .cCategory!
-                                                                    : " - ",
+                                                                        .jImages![0]
+                                                                        .cListingImg!
+                                                                    : ''))),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                left: 12.0,
+                                                                right: 8,
+                                                                top: 0,
+                                                                bottom: 13),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 15.0),
+                                                              child: Text(
+                                                                searchVendorJResultList[
+                                                                        index]
+                                                                    .cName!,
                                                                 style: TextStyle(
-                                                                    fontSize:
-                                                                        13.0,
+                                                                    fontSize: 15.0,
                                                                     color: Style
                                                                         .colors
                                                                         .app_black,
-                                                                    fontFamily:
-                                                                        Style
-                                                                            .montserrat,
                                                                     fontWeight:
                                                                         FontWeight
-                                                                            .w400),
+                                                                            .w500),
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 5.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                    "${AppLocalizations.of(context)!.category!} : ",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            13.0,
+                                                                        color: Style
+                                                                            .colors
+                                                                            .app_black,
+                                                                        fontFamily:
+                                                                            Style
+                                                                                .montserrat,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400),
+                                                                  ),
+                                                                  Text(
+                                                                    searchVendorJResultList[
+                                                                                index]
+                                                                            .cCategory!
+                                                                            .isNotEmpty
+                                                                        ? searchVendorJResultList[
+                                                                                index]
+                                                                            .cCategory!
+                                                                        : " - ",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            13.0,
+                                                                        color: Style
+                                                                            .colors
+                                                                            .app_black,
+                                                                        fontFamily:
+                                                                            Style
+                                                                                .montserrat,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 5.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .access_time,
+                                                                    color: checkLeave
+                                                                        ? Colors.red
+                                                                        : Style
+                                                                            .colors
+                                                                            .green,
+                                                                    size: 18.0,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                                .only(
+                                                                            left:
+                                                                                2.0),
+                                                                    child: Text(
+                                                                      searchVendorJResultList[
+                                                                                  index]
+                                                                              .jCurrentDay!
+                                                                              .days! +
+                                                                          openTime,
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13.0,
+                                                                          color: checkLeave
+                                                                              ? Colors
+                                                                                  .red
+                                                                              : Style
+                                                                                  .colors
+                                                                                  .green,
+                                                                          fontFamily:
+                                                                              Style
+                                                                                  .montserrat,
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .w400),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                                .only(
+                                                                            left:
+                                                                                2.0),
+                                                                    child: Text(
+                                                                      closeTime,
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13.0,
+                                                                          color: checkLeave
+                                                                              ? Colors
+                                                                                  .red
+                                                                              : Style
+                                                                                  .colors
+                                                                                  .green,
+                                                                          fontFamily:
+                                                                              Style
+                                                                                  .montserrat,
+                                                                          fontWeight:
+                                                                              FontWeight
+                                                                                  .w400),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 5.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .access_time,
-                                                                color: checkLeave
-                                                                    ? Colors.red
-                                                                    : Style
-                                                                        .colors
-                                                                        .green,
-                                                                size: 18.0,
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            2.0),
-                                                                child: Text(
-                                                                  searchVendorJResultList[
-                                                                              index]
-                                                                          .jCurrentDay!
-                                                                          .days! +
-                                                                      openTime,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          13.0,
-                                                                      color: checkLeave
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Style
-                                                                              .colors
-                                                                              .green,
-                                                                      fontFamily:
-                                                                          Style
-                                                                              .montserrat,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            2.0),
-                                                                child: Text(
-                                                                  closeTime,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          13.0,
-                                                                      color: checkLeave
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Style
-                                                                              .colors
-                                                                              .green,
-                                                                      fontFamily:
-                                                                          Style
-                                                                              .montserrat,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        );
-                                      }),
+                                            );
+                                          }),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: inboxNoData,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Container(
+                                  //   child: Text(
+                                  //     'No Data Found',
+                                  //     style: TextStyle(
+                                  //         letterSpacing: 1.0,
+                                  //         fontSize: 15.0,
+                                  //         fontWeight: FontWeight.w600,
+                                  //         color: MyColor().theme_dark_purple),
+                                  //   ),
+                                  // ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.only(
+                                        left: 20.0, right: 20.0),
+                                    child: Text(
+                                      noDataText,
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: Style.colors.grey),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Visibility(
-                          visible: inboxNoData,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Container(
-                              //   child: Text(
-                              //     'No Data Found',
-                              //     style: TextStyle(
-                              //         letterSpacing: 1.0,
-                              //         fontSize: 15.0,
-                              //         fontWeight: FontWeight.w600,
-                              //         color: MyColor().theme_dark_purple),
-                              //   ),
-                              // ),
-                              Container(
-                                alignment: Alignment.center,
-                                margin: const EdgeInsets.only(
-                                    left: 20.0, right: 20.0),
-                                child: Text(
-                                  noDataText,
-                                  style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Style.colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              );
-            }),
+                      )
+                    ],
+                  );
+                }),
+              ),
+            ],
           ),
         ));
   }

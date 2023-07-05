@@ -66,11 +66,17 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
   String? cEmailids = "";
   String? cAddress = "";
   String? cTerms = "";
+  String? nVendorType = "";
+  String? nNavigate = "";
   String currentOpenTime = "";
   String currentCloseTime = "";
   bool checkCurrentLeave = false;
 
   HawkFabMenuController hawkFabMenuController = HawkFabMenuController();
+
+  bool callUs = false;
+  bool mailUs = false;
+  bool navigateRoot = false;
 
   @override
   void initState() {
@@ -1136,9 +1142,9 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  cPlaceType == "Public places"
-                                      ? null
-                                      : redirectToCall(cMobileNumbers!);
+                                  // cPlaceType == "Public places"
+                                  //     ? null
+                                  //     : redirectToCall(cMobileNumbers!);
                                 },
                                 child: Text(
                                   cMobileNumbers!,
@@ -1169,9 +1175,9 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  cPlaceType == "Public places"
-                                      ? null
-                                      : redirectMailPage(cEmailids!);
+                                  // cPlaceType == "Public places"
+                                  //     ? null
+                                  //     : redirectMailPage(cEmailids!);
                                 },
                                 child: Text(
                                   cEmailids!,
@@ -1203,13 +1209,13 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                               Flexible(
                                 child: InkWell(
                                   onTap: () {
-                                    double latitude = double.parse(
-                                        nLatitude!); // Replace with your desired latitude
-                                    double longitude = double.parse(
-                                        nLongitude!); // Replace with your desired longitude
-                                    cPlaceType == "Public places"
-                                        ? null
-                                        : launchGoogleMaps(latitude, longitude);
+                                    // double latitude = double.parse(
+                                    //     nLatitude!); // Replace with your desired latitude
+                                    // double longitude = double.parse(
+                                    //     nLongitude!); // Replace with your desired longitude
+                                    // cPlaceType == "Public places"
+                                    //     ? null
+                                    //     : launchGoogleMaps(latitude, longitude);
                                   },
                                   child: Text(
                                     cAddress!,
@@ -1310,6 +1316,83 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                         //       );
                         //     }),
 
+                        Container(
+                          margin: EdgeInsets.only(top: 15.0, left: 16.0),
+                          child: Row(
+                            children: [
+                              Visibility(
+                                visible: callUs,
+                                child: InkWell(
+                                  onTap: () {
+                                    redirectToCall(cMobileNumbers!);
+                                  },
+                                  child: Tooltip(
+                                    message: "Contact us",
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 8.0),
+                                      child: CircleAvatar(
+                                        child: Image.asset(
+                                          "images/telephone.png",
+                                          height: 30,
+                                        ),
+                                        backgroundColor:
+                                            Colors.blue.withOpacity(0.3),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: mailUs,
+                                child: InkWell(
+                                  onTap: () {
+                                    redirectMailPage(cEmailids!);
+                                  },
+                                  child: Tooltip(
+                                    message: "Connect with Gmail",
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 8.0),
+                                      child: CircleAvatar(
+                                        child: Image.asset(
+                                          "images/gmail.png",
+                                          color: Colors.red,
+                                          height: 30,
+                                        ),
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.3),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
+                                visible: navigateRoot,
+                                child: InkWell(
+                                  onTap: () {
+                                    double latitude = double.parse(
+                                        nLatitude!); // Replace with your desired latitude
+                                    double longitude = double.parse(
+                                        nLongitude!); // Replace with your desired longitude
+                                    launchGoogleMaps(latitude, longitude);
+                                  },
+                                  child: Tooltip(
+                                    message: "Navigate to Map",
+                                    child: Container(
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.3),
+                                        child: Image.asset(
+                                          "images/map.png",
+                                          height: 30,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         const SizedBox(
                           height: 100.0,
                         )
@@ -1348,7 +1431,8 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
 
-      final response = await dio.get(ApiProvider.getVendorDetails + widget.storeId,
+      final response = await dio.get(
+          ApiProvider.getVendorDetails + widget.storeId,
           options: Options(contentType: Headers.formUrlEncodedContentType));
 
       debugPrint("response ${widget.storeId} $response");
@@ -1366,7 +1450,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             nLatitude = storeDetailsModel.jResult!.nLatitude;
             nLongitude = storeDetailsModel.jResult!.nLongitude;
             cPlaceType = storeDetailsModel.jResult!.cPlaceType;
-            cIntroduction = storeDetailsModel.jResult!.cintroduction;
+            cIntroduction = storeDetailsModel.jResult!.cIntroduction;
             cSinceType = storeDetailsModel.jResult!.cSinceType;
             nCityId = storeDetailsModel.jResult!.nCityId;
             cCity = storeDetailsModel.jResult!.cCity;
@@ -1382,6 +1466,24 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             cEmailids = storeDetailsModel.jResult!.cEmailids;
             cAddress = storeDetailsModel.jResult!.cAddress;
             cTerms = storeDetailsModel.jResult!.cTerms;
+            nVendorType =storeDetailsModel.jResult!.nVendorType;
+            nNavigate =storeDetailsModel.jResult!.nNavigate;
+
+            if (cMobileNumbers != "" && nVendorType=="1") {
+              callUs = true;
+            } else {
+              callUs = false;
+            }
+            if (cEmailids != "" && nVendorType=="1") {
+              mailUs = true;
+            }else{
+              mailUs = false;
+            }
+            if (nLatitude != "" && nLongitude !="" && nNavigate=="1") {
+              navigateRoot = true;
+            }else{
+              navigateRoot = false;
+            }
 
             if (storeDetailsModel.jResult!.jCurrentDay!.open!.isEmpty &&
                 storeDetailsModel.jResult!.jCurrentDay!.close!.isEmpty) {
@@ -1485,7 +1587,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
           clipBehavior: Clip.antiAlias,
           content: Container(
             width: 400,
-            height: MediaQuery.of(context).size.height / 1.8,
+            height: MediaQuery.of(context).size.height / 1.4,
             decoration: const BoxDecoration(
               shape: BoxShape.rectangle,
               color: Color(0xFFFFFF),
@@ -1516,164 +1618,223 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                   ),
                 ),
                 Container(
-                    child: ListView(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 15.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 120.0,
-                              // decoration:
-                              // BoxDecoration(
-                              //   border: Border.all(
-                              //       color: Style.colors.white.withOpacity(0.3), width: 1),
-                              //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              // ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: AspectRatio(
-                                  aspectRatio: 1 / 1,
-                                  child: Image.network(
-                                    storeDetailsJCoupons[index].cImage!,
-                                    filterQuality: FilterQuality.high,
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                ),
-                              ),
-                              alignment: Alignment.topCenter,
+                  color: Colors.transparent,
+                  height: MediaQuery.of(context).size.height / 1.0,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          alignment: Alignment.centerRight,
+                          margin: EdgeInsets.only(bottom: 8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image.asset(
+                              "images/close_circle.jpg",
+                              width: 25.0,
+                              height: 25.0,
+                              color: Colors.purple,
                             ),
                           ),
-                          Expanded(
-                            flex: 3,
-                            child: Column(
+                        ),
+                      ),
+                      Container(
+                          child: Column(
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                                left: 10.0, right: 10.0, top: 15.0),
+                            child: Row(
                               children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        child: Text(cName!,
-                                            style: const TextStyle(
-                                                color: Color(0xff27b552),
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.w600)),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    // decoration:
+                                    // BoxDecoration(
+                                    //   border: Border.all(
+                                    //       color: Style.colors.white.withOpacity(0.3), width: 1),
+                                    //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    // ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: AspectRatio(
+                                        aspectRatio: 1 / 1,
+                                        child: Image.network(
+                                          storeDetailsJCoupons[index].cImage!,
+                                          filterQuality: FilterQuality.high,
+                                          fit: BoxFit.fitHeight,
+                                        ),
                                       ),
-                                      flex: 3,
                                     ),
-                                    Expanded(
-                                      child: Visibility(
-                                        visible: storeDetailsJCoupons[index]
-                                                .c_coupon_code!
-                                                .isNotEmpty
-                                            ? true
-                                            : false,
-                                        child: Container(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Container(
-                                                child: Text(
-                                                  "Coupon",
-                                                  style: TextStyle(
-                                                      fontSize: 14.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          Style.josefinsans),
-                                                ),
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Style.colors.white,
-                                                      width: 1.5),
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(2.0)),
-                                                  color: Colors.yellow,
-                                                ),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 2.0,
-                                                          bottom: 2.0,
-                                                          right: 5.0,
-                                                          left: 5.0),
-                                                  child: Text(
-                                                    storeDetailsJCoupons[index]
-                                                        .c_coupon_code!,
-                                                    style: TextStyle(
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w600,
+                                    alignment: Alignment.topCenter,
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(left: 10.0, right: 8.0),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                child: Text(cName!,
+                                                    style: const TextStyle(
                                                         color:
-                                                            Style.colors.white,
-                                                        fontFamily:
-                                                            Style.josefinsans),
+                                                            Color(0xff27b552),
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600)),
+                                              ),
+                                              flex: 3,
+                                            ),
+                                            Expanded(
+                                              child: Visibility(
+                                                visible:
+                                                    storeDetailsJCoupons[index]
+                                                            .c_coupon_code!
+                                                            .isNotEmpty
+                                                        ? true
+                                                        : false,
+                                                child: Container(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      Container(
+                                                        child: Text(
+                                                          "Coupon",
+                                                          style: TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color:
+                                                                  Colors.black,
+                                                              fontFamily: Style
+                                                                  .josefinsans),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color: Style
+                                                                  .colors.white,
+                                                              width: 1.5),
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                      .all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          2.0)),
+                                                          color: Colors.yellow,
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 2.0,
+                                                                  bottom: 2.0,
+                                                                  right: 5.0,
+                                                                  left: 5.0),
+                                                          child: Text(
+                                                            storeDetailsJCoupons[
+                                                                    index]
+                                                                .c_coupon_code!,
+                                                            style: TextStyle(
+                                                                fontSize: 14.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color: Style
+                                                                    .colors
+                                                                    .white,
+                                                                fontFamily: Style
+                                                                    .josefinsans),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
-                                            ],
+                                              flex: 2,
+                                            ),
+                                          ],
+                                        ),
+                                        Container(
+                                          margin:
+                                              const EdgeInsets.only(top: 10.0),
+                                          child: RichText(
+                                            text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                TextSpan(
+                                                    text: "Add: ",
+                                                    style: TextStyle(
+                                                        color: Style
+                                                            .colors.logoRed,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                                TextSpan(
+                                                    text: cAddress,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      flex: 2,
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 10.0),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        TextSpan(
-                                            text: "Add: ",
-                                            style: TextStyle(
-                                                color: Style.colors.logoRed,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w500)),
-                                        TextSpan(
-                                            text: cAddress,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w500)),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 10.0),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: DefaultTextStyle.of(context).style,
-                                      children: [
-                                        TextSpan(
-                                            text: "Tel: ",
-                                            style: TextStyle(
-                                                color: Style.colors.logoRed,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w500)),
-                                        TextSpan(
-                                            text: cMobileNumbers,
-                                            style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w500)),
-                                        TextSpan(
-                                            text:
-                                                " (Must call to validate this coupon)",
-                                            style: TextStyle(
-                                                color: Style.colors.onHold,
-                                                fontSize: 15.0,
-                                                fontWeight: FontWeight.w500)),
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              top: 10.0, bottom: 8.0),
+                                          child: RichText(
+                                            text: TextSpan(
+                                              style:
+                                                  DefaultTextStyle.of(context)
+                                                      .style,
+                                              children: [
+                                                TextSpan(
+                                                    text: "Tel: ",
+                                                    style: TextStyle(
+                                                        color: Style
+                                                            .colors.logoRed,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                                TextSpan(
+                                                    text: cMobileNumbers,
+                                                    style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                                TextSpan(
+                                                    text:
+                                                        " (Must call to validate this coupon)",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Style.colors.onHold,
+                                                        fontSize: 15.0,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -1681,174 +1842,191 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                               ],
                             ),
                           ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 8.0, left: 10.0, right: 10.0, bottom: 5.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Style.colors.green, width: 3),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(2.0)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10.0,
+                                  right: 10.0,
+                                  top: 10.0,
+                                  bottom: 10.0),
+                              child: RichText(
+                                text: TextSpan(
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: [
+                                    const TextSpan(
+                                        text: "VALIDITY: ",
+                                        style: TextStyle(
+                                            color: Color(0xff0012f8),
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w600)),
+                                    TextSpan(
+                                        text: "Single Use till $outputDate",
+                                        style: const TextStyle(
+                                            color: Color(0xff0012f8),
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w500)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 8.0, left: 10.0, right: 10.0),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: "Description:",
+                                      style: TextStyle(
+                                          color: Style.colors.logoRed,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w500)),
+                                  TextSpan(
+                                      text: storeDetailsJCoupons[index]
+                                          .cDescription!,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w500)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(
+                                top: 8.0, left: 10.0, right: 10.0),
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                      text: "T&C:",
+                                      style: TextStyle(
+                                          color: Style.colors.logoRed,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w500)),
+                                  TextSpan(
+                                      text: storeDetailsJCoupons[index].cTerms!,
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w500)),
+                                ],
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              downloadCoupon(
+                                  nId!, storeDetailsJCoupons[index].nCouponId!);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 20.0, left: 10.0, right: 10.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Style.colors.white.withOpacity(0.3),
+                                    width: 1),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0)),
+                                color: Style.colors.logoRed,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0,
+                                    right: 10.0,
+                                    top: 10.0,
+                                    bottom: 10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.download_outlined,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        left: 5.0,
+                                      ),
+                                      child: Text(
+                                          AppLocalizations.of(context)!
+                                              .download!,
+                                          style: TextStyle(
+                                              fontFamily: Style.montserrat,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              redirectToCall(cMobileNumbers!);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(
+                                  top: 10.0,
+                                  left: 10.0,
+                                  right: 10.0,
+                                  bottom: 10.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Style.colors.white.withOpacity(0.3),
+                                    width: 1),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0)),
+                                color: Style.colors.logoRed,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0,
+                                    right: 10.0,
+                                    top: 10.0,
+                                    bottom: 10.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.call,
+                                      color: Colors.white,
+                                      size: 20.0,
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                        left: 5.0,
+                                      ),
+                                      child: Text(
+                                          AppLocalizations.of(context)!
+                                              .call_to_confirm!,
+                                          style: TextStyle(
+                                              fontFamily: Style.montserrat,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                          top: 8.0, left: 10.0, right: 10.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Style.colors.green, width: 3),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(2.0)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
-                        child: RichText(
-                          text: TextSpan(
-                            style: DefaultTextStyle.of(context).style,
-                            children: [
-                              const TextSpan(
-                                  text: "VALIDITY: ",
-                                  style: TextStyle(
-                                      color: Color(0xff0012f8),
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w600)),
-                              TextSpan(
-                                  text: "Single Use till $outputDate",
-                                  style: const TextStyle(
-                                      color: Color(0xff0012f8),
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w500)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                          top: 8.0, left: 10.0, right: 10.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: "Description:",
-                                style: TextStyle(
-                                    color: Style.colors.logoRed,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500)),
-                            TextSpan(
-                                text: storeDetailsJCoupons[index].cDescription!,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                          top: 8.0, left: 10.0, right: 10.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: "T&C:",
-                                style: TextStyle(
-                                    color: Style.colors.logoRed,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500)),
-                            TextSpan(
-                                text: storeDetailsJCoupons[index].cTerms!,
-                                style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
-                                    fontWeight: FontWeight.w500)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                        downloadCoupon(
-                            nId!, storeDetailsJCoupons[index].nCouponId!);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 20.0, left: 10.0, right: 10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Style.colors.white.withOpacity(0.3),
-                              width: 1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          color: Style.colors.logoRed,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.download_outlined,
-                                color: Colors.white,
-                                size: 20.0,
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                  left: 5.0,
-                                ),
-                                child: Text(
-                                    AppLocalizations.of(context)!.download!,
-                                    style: TextStyle(
-                                        fontFamily: Style.montserrat,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 10.0, left: 10.0, right: 10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Style.colors.white.withOpacity(0.3),
-                              width: 1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                          color: Style.colors.logoRed,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.call,
-                                color: Colors.white,
-                                size: 20.0,
-                              ),
-                              Container(
-                                margin: const EdgeInsets.only(
-                                  left: 5.0,
-                                ),
-                                child: Text(
-                                    AppLocalizations.of(context)!
-                                        .call_to_confirm!,
-                                    style: TextStyle(
-                                        fontFamily: Style.montserrat,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white)),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+                      )),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

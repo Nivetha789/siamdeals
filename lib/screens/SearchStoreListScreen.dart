@@ -481,154 +481,99 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
           ],
           body: Container(
             height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                child: StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setState) {
-                  stateSetter = setState;
-                  return Column(
-                    children: [
-                      Container(
-                        // flex: 1,
-                        child: Container(
-                          margin:
-                              const EdgeInsets.only(left: 16.0, right: 16.0),
-                          alignment: Alignment.center,
-                          height: 70,
-                          child: Container(
-                            height: 50.0,
-                            alignment: Alignment.topLeft,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(6)),
-                                border: Border.all(
-                                    width: 1,
-                                    color: const Color(0xffC0C0C0)
-                                        .withOpacity(0.7))),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  // width: 100,
-                                  flex: 5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Stack(
-                                      alignment: Alignment.centerRight,
-                                      children: [
-                                        TextFormField(
-                                          autofocus: false,
-                                          textInputAction:
-                                              TextInputAction.search,
-                                          keyboardType: TextInputType.text,
-                                          controller: searchController,
-                                          textAlign: TextAlign.start,
-                                          // inputFormatters: <TextInputFormatter>[
-                                          //   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")),
-                                          // ],
-                                          decoration: InputDecoration(
-                                            // labelText: "Search",
-                                            // labelStyle: TextStyle(
-                                            //   fontSize: 14.0,
-                                            //   color: Color(0xff495271),
-                                            // ),
-                                            hintText: searchHint,
-                                            hintStyle: TextStyle(
-                                                fontSize: 14.0,
-                                                fontFamily: Style.montserrat,
-                                                fontWeight: FontWeight.w500),
-                                            border: InputBorder.none,
-                                          ),
-                                          style: const TextStyle(
-                                              color: Color(0xff495271),
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w500),
-                                          onChanged: (String text) {
-                                            setState(() {
-                                              searchTxt = text;
-                                              if (searchTxt.isEmpty) {
-                                                searchClearImg = false;
-                                                offset = 0;
-                                                limit = 10;
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              stateSetter = setState;
+              return ListView(
+                shrinkWrap: true,
+                children: [
+                  Container(
+                    // flex: 1,
+                    child: Container(
+                      margin:
+                          const EdgeInsets.only(left: 16.0, right: 16.0),
+                      alignment: Alignment.center,
+                      height: 70,
+                      child: Container(
+                        height: 50.0,
+                        alignment: Alignment.topLeft,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(6)),
+                            border: Border.all(
+                                width: 1,
+                                color: const Color(0xffC0C0C0)
+                                    .withOpacity(0.7))),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              // width: 100,
+                              flex: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    TextFormField(
+                                      autofocus: false,
+                                      textInputAction:
+                                          TextInputAction.search,
+                                      keyboardType: TextInputType.text,
+                                      controller: searchController,
+                                      textAlign: TextAlign.start,
+                                      // inputFormatters: <TextInputFormatter>[
+                                      //   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")),
+                                      // ],
+                                      decoration: InputDecoration(
+                                        // labelText: "Search",
+                                        // labelStyle: TextStyle(
+                                        //   fontSize: 14.0,
+                                        //   color: Color(0xff495271),
+                                        // ),
+                                        hintText: searchHint,
+                                        hintStyle: TextStyle(
+                                            fontSize: 14.0,
+                                            fontFamily: Style.montserrat,
+                                            fontWeight: FontWeight.w500),
+                                        border: InputBorder.none,
+                                      ),
+                                      style: const TextStyle(
+                                          color: Color(0xff495271),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.w500),
+                                      onChanged: (String text) {
+                                        setState(() {
+                                          searchTxt = text;
+                                          if (searchTxt.isEmpty) {
+                                            searchClearImg = false;
+                                            offset = 0;
+                                            limit = 10;
 
-                                                check().then((intenet) {
-                                                  if (intenet) {
-                                                    searchVendorListApi(
-                                                        searchTxt, "Search");
-                                                  } else {
-                                                    ToastHandler.showToast(
-                                                        message:
-                                                            "Please check your internet connection");
-                                                  }
-                                                });
+                                            check().then((intenet) {
+                                              if (intenet) {
+                                                searchVendorListApi(
+                                                    searchTxt, "Search");
                                               } else {
-                                                searchClearImg = true;
+                                                ToastHandler.showToast(
+                                                    message:
+                                                        "Please check your internet connection");
                                               }
                                             });
-                                          },
-                                        ),
-                                        Visibility(
-                                          visible: searchClearImg,
-                                          child: InkWell(
-                                            onTap: () {
-                                              searchController.text = "";
-                                              searchTxt = "";
-                                              searchClearImg = false;
-
-                                              searchClearImg = false;
-                                              offset = 0;
-                                              limit = 10;
-
-                                              check().then((intenet) {
-                                                if (intenet) {
-                                                  searchVendorListApi(
-                                                      searchTxt, "Search");
-                                                } else {
-                                                  ToastHandler.showToast(
-                                                      message:
-                                                          "Please check your internet connection");
-                                                }
-                                              });
-
-                                              FocusScopeNode currentFocus =
-                                                  FocusScope.of(context);
-                                              if (!currentFocus
-                                                      .hasPrimaryFocus &&
-                                                  currentFocus.focusedChild !=
-                                                      null) {
-                                                currentFocus.focusedChild!
-                                                    .unfocus();
-                                              }
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              width: 30.0,
-                                              height: 30.0,
-                                              margin: const EdgeInsets.only(
-                                                  right: 10.0),
-                                              child: Icon(
-                                                Icons.cancel_outlined,
-                                                color: Style.colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                          } else {
+                                            searchClearImg = true;
+                                          }
+                                        });
+                                      },
                                     ),
-                                  ),
-                                ),
-                                VerticalDivider(
-                                    width: 1,
-                                    color: const Color(0xffC0C0C0)
-                                        .withOpacity(0.7)),
-                                Expanded(
-                                    flex: 1,
-                                    child: InkWell(
-                                      onTap: () {
-                                        // searchController.text = "";
-                                        // searchTxt = "";
+                                    Visibility(
+                                      visible: searchClearImg,
+                                      child: InkWell(
+                                        onTap: () {
+                                          searchController.text = "";
+                                          searchTxt = "";
+                                          searchClearImg = false;
 
-                                        if (searchTxt.isNotEmpty) {
+                                          searchClearImg = false;
                                           offset = 0;
                                           limit = 10;
 
@@ -642,1234 +587,1016 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                       "Please check your internet connection");
                                             }
                                           });
-                                        }
-                                      },
-                                      child: Container(
-                                          alignment: Alignment.center,
-                                          child: searchTxt.isEmpty
-                                              ? Icon(
-                                                  Icons.search_rounded,
-                                                  color: const Color(0xffC0C0C0)
-                                                      .withOpacity(0.7),
-                                                )
-                                              : Icon(
-                                                  Icons.search_rounded,
-                                                  color: Style.colors.logoRed,
-                                                )),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Visibility(
-                      //   visible: checkBanner,
-                      //   child: bannerJResultList.isNotEmpty
-                      //       ? Expanded(
-                      //           flex: 4,
-                      //           child: Container(
-                      //             child: Column(
-                      //               children: [
-                      //                 Container(
-                      //                   child: Text(
-                      //                       AppLocalizations.of(context)!
-                      //                           .city_spotLight!,
-                      //                       style: TextStyle(
-                      //                           fontSize: 16.0,
-                      //                           fontWeight: FontWeight.w600,
-                      //                           fontFamily: Style.josefinsans)),
-                      //                   margin: const EdgeInsets.only(
-                      //                       top: 15.0, left: 16.0),
-                      //                   alignment: Alignment.centerLeft,
-                      //                 ),
-                      //                 Container(
-                      //                   margin: const EdgeInsets.only(top: 15.0),
-                      //                   child: CarouselSlider.builder(
-                      //                     itemCount: bannerJResultList.length,
-                      //                     itemBuilder: (BuildContext context,
-                      //                         int index, int realIdx) {
-                      //                       return Card(
-                      //                         shape: RoundedRectangleBorder(
-                      //                             borderRadius:
-                      //                                 BorderRadius.circular(20)),
-                      //                         child: SizedBox(
-                      //                           width: 330.0,
-                      //                           height: 200.0,
-                      //                           child: SizedBox(
-                      //                             child: Image.network(
-                      //                               bannerJResultList[index]
-                      //                                   .cBannerImage!,
-                      //                               fit: BoxFit.fitWidth,
-                      //                             ),
-                      //                             width: MediaQuery.of(context)
-                      //                                 .size
-                      //                                 .width,
-                      //                           ),
-                      //                         ),
-                      //                         clipBehavior: Clip.antiAlias,
-                      //                       );
-                      //                     },
-                      //                     options: new CarouselOptions(
-                      //                         autoPlay:
-                      //                             bannerJResultList.length > 0
-                      //                                 ? true
-                      //                                 : false,
-                      //                         viewportFraction: 1.0,
-                      //                         height: 200,
-                      //                         enlargeCenterPage: false,
-                      //                         enableInfiniteScroll: false,
-                      //                         onPageChanged: (index, reason) {
-                      //                           setState(() {
-                      //                             pageIndex = index;
-                      //                             // _current = index;
-                      //                           });
-                      //                         }),
-                      //                   ),
-                      //                 ),
-                      //                 Container(
-                      //                   child: CarouselIndicator(
-                      //                     count: bannerJResultList.length,
-                      //                     index: pageIndex,
-                      //                     color:
-                      //                         Style.colors.grey.withOpacity(0.3),
-                      //                     activeColor: Style.colors.logoRed,
-                      //                     width: 10.0,
-                      //                   ),
-                      //                   margin: const EdgeInsets.only(top: 5.0),
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         )
-                      //       : Container(),
-                      // ),
-                      demographicJResultList.isEmpty
-                          ? const SizedBox(height: 0)
-                          : Container(
-                              color: Colors.grey.withOpacity(0.3),
-                              width: MediaQuery.of(context).size.width,
-                              height: 1.0,
-                              margin: const EdgeInsets.only(top: 10.0),
-                            ),
-                      demographicJResultList.isEmpty
-                          ? const SizedBox(height: 0)
-                          : Container(
-                              margin: const EdgeInsets.only(top: 10.0),
-                              height: 90.0,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 16.0, right: 16.0, top: 10.0),
-                                    child: ListView.builder(
-                                        itemCount:
-                                            demographicJResultList.length,
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, postion) {
-                                          return Card(
-                                            elevation: 2,
-                                            color: Style.colors.logoRed,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.sp),
-                                            ),
-                                            margin: const EdgeInsets.only(
-                                                right: 10.0, bottom: 10.0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            Top10Democracy(
-                                                                id: demographicJResultList[
-                                                                        postion]
-                                                                    .nId!,
-                                                                cityid: widget
-                                                                    .cityid,
-                                                                name: demographicJResultList[
-                                                                        postion]
-                                                                    .cDemographic!)));
 
-                                                setState(() {});
-                                              },
-                                              child: Container(
-                                                width: 120.0,
-                                                margin: const EdgeInsets.only(
-                                                    left: 10.0),
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius: BorderRadius
-                                                        .only(
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    5.0),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    5.0))),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 10.0,
-                                                                right: 10.0),
-                                                        child: Text(
-                                                            demographicJResultList[
-                                                                    postion]
-                                                                .cDemographic!,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                fontSize: 13.0,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily: Style
-                                                                    .montserrat)),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                ],
-                              ),
-                            ),
-                      categoryJResultList.isNotEmpty
-                          ? Container(
-                              margin: const EdgeInsets.only(
-                                  top: 20.0, left: 16.0, right: 16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Text(
-                                              AppLocalizations.of(context)!
-                                                  .category!,
-                                              style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily:
-                                                      Style.josefinsans)),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CategoryListScreen(
-                                                              widget.cityid)));
-                                            },
-                                            child: Container(
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .view_all!,
-                                                  style: TextStyle(
-                                                      fontSize: 15.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color:
-                                                          Style.colors.logoRed,
-                                                      fontFamily:
-                                                          Style.josefinsans)),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 25.h,
-                                    margin: const EdgeInsets.only(top: 15.0),
-                                    child: GridView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        shrinkWrap: true,
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: .0.sp,
-                                          mainAxisSpacing: 0.sp,
-                                          childAspectRatio: .60.sp,
-                                        ),
-                                        itemCount: categoryJResultList.length,
-                                        physics: const ClampingScrollPhysics(),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return Padding(
-                                            padding: EdgeInsets.only(
-                                                right: 7.sp, bottom: 7.sp),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CategoryStoreListScreen(
-                                                                int.parse(
-                                                                    categoryJResultList[
-                                                                            index]
-                                                                        .nId!),
-                                                                widget.cityid,
-                                                                categoryJResultList[
-                                                                        index]
-                                                                    .cCategory!,
-                                                                true)));
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7.sp),
-                                                    color: Colors.white,
-                                                    border: Border.all(
-                                                        color: Style.colors.grey
-                                                            .withOpacity(.2))),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 5.5.h,
-                                                      width: 13.w,
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      30.sp)),
-                                                          image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image: NetworkImage(
-                                                                  categoryJResultList[
-                                                                          index]
-                                                                      .cCategoryImage!))),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 1.h,
-                                                    ),
-                                                    Text(
-                                                        categoryJResultList[
-                                                                index]
-                                                            .cCategory!,
-                                                        style: TextStyle(
-                                                            fontSize: 12.0,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontFamily: Style
-                                                                .montserrat)),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                  ),
-
-                                  // Visibility(
-                                  //   visible: checkBanner,
-                                  //   child: Column(
-                                  //     children: [
-                                  //       bannerJResultList.isNotEmpty
-                                  //           ? Container(
-                                  //               margin: const EdgeInsets.only(
-                                  //                   top: 15.0),
-                                  //               alignment: Alignment.centerLeft,
-                                  //               child: Text(
-                                  //                   AppLocalizations.of(context)!
-                                  //                       .city_spotLight!,
-                                  //                   style: TextStyle(
-                                  //                       fontSize: 16.0,
-                                  //                       fontWeight: FontWeight.w600,
-                                  //                       fontFamily:
-                                  //                           Style.josefinsans)),
-                                  //             )
-                                  //           : Container(),
-                                  //       bannerJResultList.isNotEmpty
-                                  //           ? Container(
-                                  //               margin: const EdgeInsets.only(
-                                  //                   top: 15.0),
-                                  //               child: CarouselSlider.builder(
-                                  //                 itemCount:
-                                  //                     bannerJResultList.length,
-                                  //                 itemBuilder:
-                                  //                     (BuildContext context,
-                                  //                         int index, int realIdx) {
-                                  //                   return Card(
-                                  //                     shape: RoundedRectangleBorder(
-                                  //                         borderRadius:
-                                  //                             BorderRadius.circular(
-                                  //                                 20)),
-                                  //                     clipBehavior: Clip.antiAlias,
-                                  //                     child: SizedBox(
-                                  //                       width: 300.0,
-                                  //                       height: 200.0,
-                                  //                       child: SizedBox(
-                                  //                         width:
-                                  //                             MediaQuery.of(context)
-                                  //                                 .size
-                                  //                                 .width,
-                                  //                         child: bannerJResultList[
-                                  //                                         index]
-                                  //                                     .cBannerLink ==
-                                  //                                 null
-                                  //                             ? Image.network(
-                                  //                                 bannerJResultList[
-                                  //                                         index]
-                                  //                                     .cBannerImage!,
-                                  //                                 fit: BoxFit
-                                  //                                     .fitWidth,
-                                  //                               )
-                                  //                             : InkWell(
-                                  //                                 onTap: () async {
-                                  //                                   // debugPrint(
-                                  //                                   //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                  //                                   // String
-                                  //                                   //     url =
-                                  //                                   //     bannerJResultList[index]
-                                  //                                   //         .cBannerLink;
-                                  //                                   // var url =
-                                  //                                   //     bannerJResultList[index]
-                                  //                                   //         .cBannerLink!;
-                                  //                                   // if (await canLaunch(
-                                  //                                   //     url)) {
-                                  //                                   //   await launch(
-                                  //                                   //       url);
-                                  //                                   // } else {
-                                  //                                   //   throw 'Could not launch $url';
-                                  //                                   // }
-                                  //                                   // openbannerlaunchurl(
-                                  //                                   //     bannerJResultList[index]
-                                  //                                   //         .cBannerLink!);
-                                  //                                 },
-                                  //                                 child:
-                                  //                                     Image.network(
-                                  //                                   bannerJResultList[
-                                  //                                           index]
-                                  //                                       .cBannerImage!,
-                                  //                                   fit: BoxFit
-                                  //                                       .fitWidth,
-                                  //                                 ),
-                                  //                               ),
-                                  //                       ),
-                                  //                     ),
-                                  //                   );
-                                  //                 },
-                                  //                 options: CarouselOptions(
-                                  //                     autoPlay: bannerJResultList
-                                  //                             .isNotEmpty
-                                  //                         ? true
-                                  //                         : false,
-                                  //                     viewportFraction: 1.0,
-                                  //                     height: 200,
-                                  //                     enlargeCenterPage: false,
-                                  //                     enableInfiniteScroll: false,
-                                  //                     onPageChanged:
-                                  //                         (index, reason) {
-                                  //                       setState(() {
-                                  //                         pageIndex = index;
-                                  //                         // _current = index;
-                                  //                       });
-                                  //                     }),
-                                  //               ),
-                                  //             )
-                                  //           : Container(),
-                                  //       bannerJResultList.isNotEmpty
-                                  //           ? Container(
-                                  //               margin:
-                                  //                   const EdgeInsets.only(top: 5.0),
-                                  //               child: CarouselIndicator(
-                                  //                 count: bannerJResultList.length,
-                                  //                 index: pageIndex,
-                                  //                 color: Style.colors.grey
-                                  //                     .withOpacity(0.3),
-                                  //                 activeColor: Style.colors.logoRed,
-                                  //                 width: 10.0,
-                                  //               ),
-                                  //             )
-                                  //           : Container(),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  // SizedBox(
-                                  //   height: 10.sp,
-                                  // ),
-                                  SizedBox(
-                                    height: 15.sp,
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(),
-                      particularDemocracylist.isEmpty
-                          ? Container()
-                          : Container(
-                              height: 300,
-                              // flex: 1,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  // physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: particularDemocracylist.length,
-                                  itemBuilder: (BuildContext context, index) {
-                                    String openTime = "";
-                                    String closeTime = "";
-                                    bool checkLeave = false;
-
-                                    if (particularDemocracylist[index]
-                                                .jCurrentDay!
-                                                .open ==
-                                            null &&
-                                        particularDemocracylist[index]
-                                                .jCurrentDay!
-                                                .close ==
-                                            null) {
-                                      openTime = " (Leave)";
-                                      closeTime = "";
-                                      checkLeave = true;
-                                    } else if (particularDemocracylist[index]
-                                                .jCurrentDay!
-                                                .open !=
-                                            null &&
-                                        particularDemocracylist[index]
-                                                .jCurrentDay!
-                                                .close ==
-                                            null) {
-                                      openTime = " (Open - 24 Hours)";
-                                      closeTime = "";
-                                      checkLeave = false;
-                                    } else {
-                                      openTime =
-                                          "(Open - ${particularDemocracylist[index].jCurrentDay!.open}";
-                                      closeTime =
-                                          " - Close - ${particularDemocracylist[index].jCurrentDay!.close})";
-                                      checkLeave = false;
-                                    }
-
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 12.0, right: 8, top: 8),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  StoreDetailsScreen(
-                                                particularDemocracylist[index]
-                                                    .nId!,
-                                                particularDemocracylist[index]
-                                                    .cName!,
-                                              ),
-                                            ),
-                                          );
+                                          FocusScopeNode currentFocus =
+                                              FocusScope.of(context);
+                                          if (!currentFocus
+                                                  .hasPrimaryFocus &&
+                                              currentFocus.focusedChild !=
+                                                  null) {
+                                            currentFocus.focusedChild!
+                                                .unfocus();
+                                          }
                                         },
-                                        child: Card(
-                                          elevation: 3,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.sp)),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                height: 20.5.h,
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                10.sp),
-                                                        topRight:
-                                                            Radius.circular(
-                                                                10.sp)),
-                                                    image: DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image: NetworkImage(
-                                                            particularDemocracylist[
-                                                                        index]
-                                                                    .jImages!
-                                                                    .isNotEmpty
-                                                                ? particularDemocracylist[
-                                                                        index]
-                                                                    .jImages![0]
-                                                                    .cListingImg!
-                                                                : ''))),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 12.0,
-                                                    right: 8,
-                                                    top: 0,
-                                                    bottom: 13),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  top: 15.0),
-                                                          child: Text(
-                                                            particularDemocracylist[
-                                                                    index]
-                                                                .cName!,
-                                                            style: TextStyle(
-                                                                fontSize: 15.0,
-                                                                color: Style
-                                                                    .colors
-                                                                    .app_black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
-                                                          ),
-                                                        ),
-                                                        // Container(
-                                                        //   margin:
-                                                        //       const EdgeInsets
-                                                        //               .only(
-                                                        //           top:
-                                                        //               15.0),
-                                                        //   child: Text(
-                                                        //     "${particularDemocracylist[index].nkilometre}KM",
-                                                        //     style: TextStyle(
-                                                        //         fontSize:
-                                                        //             15.0,
-                                                        //         color: Style
-                                                        //             .colors
-                                                        //             .app_black,
-                                                        //         fontWeight:
-                                                        //             FontWeight
-                                                        //                 .w500),
-                                                        //   ),
-                                                        // ),
-                                                      ],
-                                                    ),
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              top: 5.0),
-                                                      child: Row(
-                                                        children: [
-                                                          Text(
-                                                            "${AppLocalizations.of(context)!.category!} : ",
-                                                            style: TextStyle(
-                                                                fontSize: 13.0,
-                                                                color: Style
-                                                                    .colors
-                                                                    .app_black,
-                                                                fontFamily: Style
-                                                                    .montserrat,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
-                                                          ),
-                                                          Text(
-                                                            particularDemocracylist[
-                                                                        index]
-                                                                    .cCategory!
-                                                                    .isNotEmpty
-                                                                ? particularDemocracylist[
-                                                                        index]
-                                                                    .cCategory!
-                                                                : " - ",
-                                                            style: TextStyle(
-                                                                fontSize: 13.0,
-                                                                color: Style
-                                                                    .colors
-                                                                    .app_black,
-                                                                fontFamily: Style
-                                                                    .montserrat,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets.only(
-                                                              top: 5.0),
-                                                      child: Row(
-                                                        children: [
-                                                          Icon(
-                                                            Icons.access_time,
-                                                            color: checkLeave
-                                                                ? Colors.red
-                                                                : Style.colors
-                                                                    .green,
-                                                            size: 18.0,
-                                                          ),
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 2.0),
-                                                            child: Text(
-                                                              particularDemocracylist[
-                                                                          index]
-                                                                      .jCurrentDay!
-                                                                      .days! +
-                                                                  openTime,
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      13.0,
-                                                                  color: checkLeave
-                                                                      ? Colors
-                                                                          .red
-                                                                      : Style
-                                                                          .colors
-                                                                          .green,
-                                                                  fontFamily: Style
-                                                                      .montserrat,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            width: 100,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 2.0),
-                                                            child: Text(
-                                                              closeTime,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      13.0,
-                                                                  color: checkLeave
-                                                                      ? Colors
-                                                                          .red
-                                                                      : Style
-                                                                          .colors
-                                                                          .green,
-                                                                  fontFamily: Style
-                                                                      .montserrat,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          width: 30.0,
+                                          height: 30.0,
+                                          margin: const EdgeInsets.only(
+                                              right: 10.0),
+                                          child: Icon(
+                                            Icons.cancel_outlined,
+                                            color: Style.colors.grey,
                                           ),
                                         ),
                                       ),
-                                    );
-                                  }),
-                            ),
-
-                      // subCategoryDataList.isNotEmpty
-                      //     ? Expanded(
-                      //         flex: 1,
-                      //         child: Container(
-                      //           child: Container(
-                      //             width: MediaQuery.of(context).size.width,
-                      //             margin: const EdgeInsets.only(
-                      //                 left: 11.0, right: 11.0),
-                      //             child: Container(
-                      //               child: ListView(
-                      //                 scrollDirection: Axis.horizontal,
-                      //                 children: [
-                      //                   Container(
-                      //                     child: ListView.builder(
-                      //                         itemCount:
-                      //                             subCategoryDataList.length > 4
-                      //                                 ? 3
-                      //                                 : 0,
-                      //                         shrinkWrap: true,
-                      //                         scrollDirection: Axis.horizontal,
-                      //                         itemBuilder:
-                      //                             (BuildContext context, index) {
-                      //                           return GestureDetector(
-                      //                             onTap: () {
-                      //                               setState(() {
-                      //                                 if (subCategoryDataList[index]
-                      //                                     .addRemove!) {
-                      //                                   searchVendorJResultList
-                      //                                       .clear();
-                      //                                   categoryId =
-                      //                                       widget.categoryId;
-                      //                                   subCategoryDataList[index]
-                      //                                           .addRemove =
-                      //                                       !subCategoryDataList[
-                      //                                               index]
-                      //                                           .addRemove!;
-                      //                                 } else {
-                      //                                   for (int i = 0;
-                      //                                       i <
-                      //                                           subCategoryDataList
-                      //                                               .length;
-                      //                                       i++) {
-                      //                                     if (subCategoryDataList[i]
-                      //                                         .addRemove!) {
-                      //                                       subCategoryDataList[i]
-                      //                                           .addRemove = false;
-                      //                                     }
-                      //                                   }
-                      //                                   subCategoryDataList[index]
-                      //                                       .addRemove = true;
-
-                      //                                   categoryId = int.parse(
-                      //                                       subCategoryDataList[
-                      //                                               index]
-                      //                                           .nId!);
-                      //                                 }
-                      //                               });
-
-                      //                               offset = 0;
-                      //                               limit = 10;
-
-                      //                               check().then((intenet) {
-                      //                                 if (intenet) {
-                      //                                   searchVendorListApi(
-                      //                                       searchTxt, "Search");
-                      //                                 } else {
-                      //                                   ToastHandler.showToast(
-                      //                                       message:
-                      //                                           "Please check your internet connection");
-                      //                                 }
-                      //                               });
-                      //                             },
-                      //                             child: Container(
-                      //                               margin: const EdgeInsets.only(
-                      //                                   left: 5.0,
-                      //                                   right: 5.0,
-                      //                                   top: 10.0,
-                      //                                   bottom: 10.0),
-                      //                               decoration: BoxDecoration(
-                      //                                   border:
-                      //                                       subCategoryDataList[index]
-                      //                                               .addRemove!
-                      //                                           ? Border.all(
-                      //                                               color:
-                      //                                                   Style.colors
-                      //                                                       .logoRed)
-                      //                                           : Border.all(
-                      //                                               color: Style
-                      //                                                   .colors
-                      //                                                   .app_black),
-                      //                                   color: subCategoryDataList[
-                      //                                               index]
-                      //                                           .addRemove!
-                      //                                       ? Style.colors.logoRed
-                      //                                           .withOpacity(0.2)
-                      //                                       : Colors.white,
-                      //                                   borderRadius:
-                      //                                       BorderRadius.circular(
-                      //                                           30.0)),
-                      //                               child: Container(
-                      //                                 child: Column(
-                      //                                   mainAxisAlignment:
-                      //                                       MainAxisAlignment
-                      //                                           .spaceEvenly,
-                      //                                   children: [
-                      //                                     Padding(
-                      //                                       padding:
-                      //                                           const EdgeInsets
-                      //                                                   .only(
-                      //                                               left: 15.0,
-                      //                                               right: 15.0),
-                      //                                       child: Text(
-                      //                                         subCategoryDataList[
-                      //                                                 index]
-                      //                                             .cCategory!,
-                      //                                         style: TextStyle(
-                      //                                             color: Style
-                      //                                                 .colors
-                      //                                                 .app_black,
-                      //                                             fontSize: 12.0,
-                      //                                             fontWeight:
-                      //                                                 FontWeight
-                      //                                                     .w500,
-                      //                                             fontFamily: Style
-                      //                                                 .montserrat),
-                      //                                       ),
-                      //                                     ),
-                      //                                   ],
-                      //                                 ),
-                      //                               ),
-                      //                             ),
-                      //                           );
-                      //                         }),
-                      //                   ),
-                      //                   InkWell(
-                      //                     onTap: () {
-                      //                       searchSubCategoryList.clear();
-                      //                       setState(() {
-                      //                         searchSubCategoryList
-                      //                             .addAll(subCategoryDataList);
-                      //                       });
-                      //                       SubCategoryBottomList(context);
-                      //                     },
-                      //                     child: Container(
-                      //                       child: Text(
-                      //                         AppLocalizations.of(context)!
-                      //                             .view_all!,
-                      //                         style: TextStyle(
-                      //                             color: Style.colors.logoRed,
-                      //                             fontSize: 12.0,
-                      //                             fontWeight: FontWeight.w500,
-                      //                             fontFamily: Style.montserrat),
-                      //                         textAlign: TextAlign.center,
-                      //                       ),
-                      //                       alignment: Alignment.center,
-                      //                       margin:
-                      //                           const EdgeInsets.only(left: 10.0),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       )
-                      //     : Container(),
-
-                      Expanded(
-                        flex: 5,
-                        child: Stack(
-                          children: [
-                            // Visibility(
-                            //   visible: checkInbox,
-                            //   child: Container(
-                            //     child: LoadMore(
-                            //       isFinish: searchVendorJResultList.length >= total,
-                            //       onLoadMore: _loadMore,
-                            //       whenEmptyLoad: false,
-                            //       delegate: const DefaultLoadMoreDelegate(),
-                            //       textBuilder: DefaultLoadMoreTextBuilder.english,
-                            //       child: ListView(
-                            //         children: [
-                            //           ListView.builder(
-                            //               shrinkWrap: true,
-                            //               physics:
-                            //                   const NeverScrollableScrollPhysics(),
-                            //               itemCount: searchVendorJResultList.length,
-                            //               itemBuilder:
-                            //                   (BuildContext context, index) {
-                            //                 String openTime = "";
-                            //                 String closeTime = "";
-                            //                 bool checkLeave = false;
-
-                            //                 if (searchVendorJResultList[index]
-                            //                         .jCurrentDay!
-                            //                         .open!
-                            //                         .isEmpty &&
-                            //                     searchVendorJResultList[index]
-                            //                         .jCurrentDay!
-                            //                         .close!
-                            //                         .isEmpty) {
-                            //                   openTime = " (Leave)";
-                            //                   closeTime = "";
-                            //                   checkLeave = true;
-                            //                 } else if (searchVendorJResultList[
-                            //                             index]
-                            //                         .jCurrentDay!
-                            //                         .open!
-                            //                         .isNotEmpty &&
-                            //                     searchVendorJResultList[index]
-                            //                         .jCurrentDay!
-                            //                         .close!
-                            //                         .isEmpty) {
-                            //                   openTime = " (Open - 24 Hours)";
-                            //                   closeTime = "";
-                            //                   checkLeave = false;
-                            //                 } else {
-                            //                   openTime =
-                            //                       "(Open - ${searchVendorJResultList[index].jCurrentDay!.open!}";
-                            //                   closeTime =
-                            //                       " - Close - ${searchVendorJResultList[index].jCurrentDay!.close!})";
-                            //                   checkLeave = false;
-                            //                 }
-
-                            //                 return Padding(
-                            //                   padding: const EdgeInsets.only(
-                            //                       left: 12.0, right: 8, top: 8),
-                            //                   child: GestureDetector(
-                            //                     onTap: () {
-                            //                       Navigator.push(
-                            //                           context,
-                            //                           MaterialPageRoute(
-                            //                               builder: (context) =>
-                            //                                   StoreDetailsScreen(
-                            //                                       searchVendorJResultList[
-                            //                                               index]
-                            //                                           .nId!,
-                            //                                       searchVendorJResultList[
-                            //                                               index]
-                            //                                           .cName!)));
-                            //                     },
-                            //                     child: Card(
-                            //                       elevation: 3,
-                            //                       shape: RoundedRectangleBorder(
-                            //                           borderRadius:
-                            //                               BorderRadius.circular(
-                            //                                   10.sp)),
-                            //                       child: Column(
-                            //                         children: [
-                            //                           Container(
-                            //                             height: 20.5.h,
-                            //                             decoration: BoxDecoration(
-                            //                                 borderRadius:
-                            //                                     BorderRadius.only(
-                            //                                         topLeft: Radius
-                            //                                             .circular(
-                            //                                                 10.sp),
-                            //                                         topRight:
-                            //                                             Radius.circular(
-                            //                                                 10.sp)),
-                            //                                 image: DecorationImage(
-                            //                                     fit: BoxFit.cover,
-                            //                                     image: NetworkImage(searchVendorJResultList[index]
-                            //                                             .jImages!
-                            //                                             .isNotEmpty
-                            //                                         ? searchVendorJResultList[
-                            //                                                 index]
-                            //                                             .jImages![0]
-                            //                                             .cListingImg!
-                            //                                         : ''))),
-                            //                           ),
-                            //                           Padding(
-                            //                             padding:
-                            //                                 const EdgeInsets.only(
-                            //                                     left: 12.0,
-                            //                                     right: 8,
-                            //                                     top: 0,
-                            //                                     bottom: 13),
-                            //                             child: Column(
-                            //                               crossAxisAlignment:
-                            //                                   CrossAxisAlignment
-                            //                                       .start,
-                            //                               children: [
-                            //                                 Container(
-                            //                                   child: Text(
-                            //                                     searchVendorJResultList[
-                            //                                             index]
-                            //                                         .cName!,
-                            //                                     style: TextStyle(
-                            //                                         fontSize: 15.0,
-                            //                                         color: Style
-                            //                                             .colors
-                            //                                             .app_black,
-                            //                                         fontWeight:
-                            //                                             FontWeight
-                            //                                                 .w500),
-                            //                                   ),
-                            //                                   margin:
-                            //                                       const EdgeInsets
-                            //                                               .only(
-                            //                                           top: 15.0),
-                            //                                 ),
-                            //                                 Container(
-                            //                                   margin:
-                            //                                       const EdgeInsets
-                            //                                               .only(
-                            //                                           top: 5.0),
-                            //                                   child: Row(
-                            //                                     children: [
-                            //                                       Text(
-                            //                                         "${AppLocalizations.of(context)!.category!} : ",
-                            //                                         style: TextStyle(
-                            //                                             fontSize:
-                            //                                                 13.0,
-                            //                                             color: Style
-                            //                                                 .colors
-                            //                                                 .app_black,
-                            //                                             fontFamily:
-                            //                                                 Style
-                            //                                                     .montserrat,
-                            //                                             fontWeight:
-                            //                                                 FontWeight
-                            //                                                     .w400),
-                            //                                       ),
-                            //                                       Text(
-                            //                                         searchVendorJResultList[
-                            //                                                     index]
-                            //                                                 .cCategory!
-                            //                                                 .isNotEmpty
-                            //                                             ? searchVendorJResultList[
-                            //                                                     index]
-                            //                                                 .cCategory!
-                            //                                             : " - ",
-                            //                                         style: TextStyle(
-                            //                                             fontSize:
-                            //                                                 13.0,
-                            //                                             color: Style
-                            //                                                 .colors
-                            //                                                 .app_black,
-                            //                                             fontFamily:
-                            //                                                 Style
-                            //                                                     .montserrat,
-                            //                                             fontWeight:
-                            //                                                 FontWeight
-                            //                                                     .w400),
-                            //                                       ),
-                            //                                     ],
-                            //                                   ),
-                            //                                 ),
-                            //                                 Container(
-                            //                                   margin:
-                            //                                       const EdgeInsets
-                            //                                               .only(
-                            //                                           top: 5.0),
-                            //                                   child: Row(
-                            //                                     children: [
-                            //                                       Icon(
-                            //                                         Icons
-                            //                                             .access_time,
-                            //                                         color: checkLeave
-                            //                                             ? Colors.red
-                            //                                             : Style
-                            //                                                 .colors
-                            //                                                 .green,
-                            //                                         size: 18.0,
-                            //                                       ),
-                            //                                       Padding(
-                            //                                         padding:
-                            //                                             const EdgeInsets
-                            //                                                     .only(
-                            //                                                 left:
-                            //                                                     2.0),
-                            //                                         child: Text(
-                            //                                           searchVendorJResultList[
-                            //                                                       index]
-                            //                                                   .jCurrentDay!
-                            //                                                   .days! +
-                            //                                               openTime,
-                            //                                           style: TextStyle(
-                            //                                               fontSize:
-                            //                                                   13.0,
-                            //                                               color: checkLeave
-                            //                                                   ? Colors
-                            //                                                       .red
-                            //                                                   : Style
-                            //                                                       .colors
-                            //                                                       .green,
-                            //                                               fontFamily:
-                            //                                                   Style
-                            //                                                       .montserrat,
-                            //                                               fontWeight:
-                            //                                                   FontWeight
-                            //                                                       .w400),
-                            //                                         ),
-                            //                                       ),
-                            //                                       Padding(
-                            //                                         padding:
-                            //                                             const EdgeInsets
-                            //                                                     .only(
-                            //                                                 left:
-                            //                                                     2.0),
-                            //                                         child: Text(
-                            //                                           closeTime,
-                            //                                           style: TextStyle(
-                            //                                               fontSize:
-                            //                                                   13.0,
-                            //                                               color: checkLeave
-                            //                                                   ? Colors
-                            //                                                       .red
-                            //                                                   : Style
-                            //                                                       .colors
-                            //                                                       .green,
-                            //                                               fontFamily:
-                            //                                                   Style
-                            //                                                       .montserrat,
-                            //                                               fontWeight:
-                            //                                                   FontWeight
-                            //                                                       .w400),
-                            //                                         ),
-                            //                                       ),
-                            //                                     ],
-                            //                                   ),
-                            //                                 ),
-                            //                               ],
-                            //                             ),
-                            //                           ),
-                            //                         ],
-                            //                       ),
-                            //                     ),
-                            //                   ),
-                            //                 );
-                            //               }),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                            Visibility(
-                              visible: inboxNoData,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  // Container(
-                                  //   child: Text(
-                                  //     'No Data Found',
-                                  //     style: TextStyle(
-                                  //         letterSpacing: 1.0,
-                                  //         fontSize: 15.0,
-                                  //         fontWeight: FontWeight.w600,
-                                  //         color: MyColor().theme_dark_purple),
-                                  //   ),
-                                  // ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    margin: const EdgeInsets.only(
-                                        left: 20.0, right: 20.0),
-                                    child: Text(
-                                      noDataText,
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Style.colors.grey),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
+                            VerticalDivider(
+                                width: 1,
+                                color: const Color(0xffC0C0C0)
+                                    .withOpacity(0.7)),
+                            Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                  onTap: () {
+                                    // searchController.text = "";
+                                    // searchTxt = "";
+
+                                    if (searchTxt.isNotEmpty) {
+                                      offset = 0;
+                                      limit = 10;
+
+                                      check().then((intenet) {
+                                        if (intenet) {
+                                          searchVendorListApi(
+                                              searchTxt, "Search");
+                                        } else {
+                                          ToastHandler.showToast(
+                                              message:
+                                                  "Please check your internet connection");
+                                        }
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      child: searchTxt.isEmpty
+                                          ? Icon(
+                                              Icons.search_rounded,
+                                              color: const Color(0xffC0C0C0)
+                                                  .withOpacity(0.7),
+                                            )
+                                          : Icon(
+                                              Icons.search_rounded,
+                                              color: Style.colors.logoRed,
+                                            )),
+                                )),
                           ],
                         ),
-                      )
-                    ],
-                  );
-                }),
-              ),
-            ),
+                      ),
+                    ),
+                  ),
+                  // Visibility(
+                  //   visible: checkBanner,
+                  //   child: bannerJResultList.isNotEmpty
+                  //       ? Expanded(
+                  //           flex: 4,
+                  //           child: Container(
+                  //             child: Column(
+                  //               children: [
+                  //                 Container(
+                  //                   child: Text(
+                  //                       AppLocalizations.of(context)!
+                  //                           .city_spotLight!,
+                  //                       style: TextStyle(
+                  //                           fontSize: 16.0,
+                  //                           fontWeight: FontWeight.w600,
+                  //                           fontFamily: Style.josefinsans)),
+                  //                   margin: const EdgeInsets.only(
+                  //                       top: 15.0, left: 16.0),
+                  //                   alignment: Alignment.centerLeft,
+                  //                 ),
+                  //                 Container(
+                  //                   margin: const EdgeInsets.only(top: 15.0),
+                  //                   child: CarouselSlider.builder(
+                  //                     itemCount: bannerJResultList.length,
+                  //                     itemBuilder: (BuildContext context,
+                  //                         int index, int realIdx) {
+                  //                       return Card(
+                  //                         shape: RoundedRectangleBorder(
+                  //                             borderRadius:
+                  //                                 BorderRadius.circular(20)),
+                  //                         child: SizedBox(
+                  //                           width: 330.0,
+                  //                           height: 200.0,
+                  //                           child: SizedBox(
+                  //                             child: Image.network(
+                  //                               bannerJResultList[index]
+                  //                                   .cBannerImage!,
+                  //                               fit: BoxFit.fitWidth,
+                  //                             ),
+                  //                             width: MediaQuery.of(context)
+                  //                                 .size
+                  //                                 .width,
+                  //                           ),
+                  //                         ),
+                  //                         clipBehavior: Clip.antiAlias,
+                  //                       );
+                  //                     },
+                  //                     options: new CarouselOptions(
+                  //                         autoPlay:
+                  //                             bannerJResultList.length > 0
+                  //                                 ? true
+                  //                                 : false,
+                  //                         viewportFraction: 1.0,
+                  //                         height: 200,
+                  //                         enlargeCenterPage: false,
+                  //                         enableInfiniteScroll: false,
+                  //                         onPageChanged: (index, reason) {
+                  //                           setState(() {
+                  //                             pageIndex = index;
+                  //                             // _current = index;
+                  //                           });
+                  //                         }),
+                  //                   ),
+                  //                 ),
+                  //                 Container(
+                  //                   child: CarouselIndicator(
+                  //                     count: bannerJResultList.length,
+                  //                     index: pageIndex,
+                  //                     color:
+                  //                         Style.colors.grey.withOpacity(0.3),
+                  //                     activeColor: Style.colors.logoRed,
+                  //                     width: 10.0,
+                  //                   ),
+                  //                   margin: const EdgeInsets.only(top: 5.0),
+                  //                 )
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         )
+                  //       : Container(),
+                  // ),
+                  demographicJResultList.isEmpty
+                      ? const SizedBox(height: 0)
+                      : Container(
+                          color: Colors.grey.withOpacity(0.3),
+                          width: MediaQuery.of(context).size.width,
+                          height: 1.0,
+                          margin: const EdgeInsets.only(top: 10.0),
+                        ),
+                  demographicJResultList.isEmpty
+                      ? const SizedBox(height: 0)
+                      : Container(
+                          margin: const EdgeInsets.only(top: 10.0),
+                          height: 90.0,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                    left: 16.0, right: 16.0, top: 10.0),
+                                child: ListView.builder(
+                                    itemCount:
+                                        demographicJResultList.length,
+                                    shrinkWrap: false,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, postion) {
+                                      return Card(
+                                        elevation: 2,
+                                        color: Style.colors.logoRed,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.sp),
+                                        ),
+                                        margin: const EdgeInsets.only(
+                                            right: 10.0, bottom: 10.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Top10Democracy(
+                                                            id: demographicJResultList[
+                                                                    postion]
+                                                                .nId!,
+                                                            cityid: widget
+                                                                .cityid,
+                                                            name: demographicJResultList[
+                                                                    postion]
+                                                                .cDemographic!)));
+
+                                            setState(() {});
+                                          },
+                                          child: Container(
+                                            width: 120.0,
+                                            margin: const EdgeInsets.only(
+                                                left: 10.0),
+                                            decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius
+                                                    .only(
+                                                        topRight:
+                                                            Radius.circular(
+                                                                5.0),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                5.0))),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.center,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets
+                                                                .only(
+                                                            left: 10.0,
+                                                            right: 10.0),
+                                                    child: Text(
+                                                        demographicJResultList[
+                                                                postion]
+                                                            .cDemographic!,
+                                                        textAlign: TextAlign
+                                                            .center,
+                                                        style: TextStyle(
+                                                            fontSize: 13.0,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600,
+                                                            color: Colors
+                                                                .black,
+                                                            fontFamily: Style
+                                                                .montserrat)),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
+                          ),
+                        ),
+                  categoryJResultList.isNotEmpty
+                      ? Container(
+                          margin: const EdgeInsets.only(
+                              top: 20.0, left: 16.0, right: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                          AppLocalizations.of(context)!
+                                              .category!,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily:
+                                                  Style.josefinsans)),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CategoryListScreen(
+                                                          widget.cityid)));
+                                        },
+                                        child: Container(
+                                          alignment: Alignment.centerRight,
+                                          child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .view_all!,
+                                              style: TextStyle(
+                                                  fontSize: 15.0,
+                                                  fontWeight:
+                                                      FontWeight.w600,
+                                                  color:
+                                                      Style.colors.logoRed,
+                                                  fontFamily:
+                                                      Style.josefinsans)),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 40.h,
+                                margin: const EdgeInsets.only(top: 15.0),
+                                child: GridView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: .0.sp,
+                                      mainAxisSpacing: 0.sp,
+                                      childAspectRatio: .60.sp,
+                                    ),
+                                    itemCount: categoryJResultList.length,
+                                    physics: const ClampingScrollPhysics(),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 7.sp, bottom: 7.sp),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CategoryStoreListScreen(
+                                                            int.parse(
+                                                                categoryJResultList[
+                                                                        index]
+                                                                    .nId!),
+                                                            widget.cityid,
+                                                            categoryJResultList[
+                                                                    index]
+                                                                .cCategory!,
+                                                            true)));
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        7.sp),
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color: Style.colors.grey
+                                                        .withOpacity(.2))),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  height: 5.7.h,
+                                                  width: 13.w,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  30.sp)),
+                                                      image: DecorationImage(
+                                                          fit: BoxFit.cover,
+                                                          image: NetworkImage(
+                                                              categoryJResultList[
+                                                                      index]
+                                                                  .cCategoryImage!))),
+                                                ),
+                                                SizedBox(
+                                                  height: 1.h,
+                                                ),
+                                                Text(
+                                                    categoryJResultList[
+                                                            index]
+                                                        .cCategory!,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily: Style
+                                                            .montserrat)),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ),
+
+                              // Visibility(
+                              //   visible: checkBanner,
+                              //   child: Column(
+                              //     children: [
+                              //       bannerJResultList.isNotEmpty
+                              //           ? Container(
+                              //               margin: const EdgeInsets.only(
+                              //                   top: 15.0),
+                              //               alignment: Alignment.centerLeft,
+                              //               child: Text(
+                              //                   AppLocalizations.of(context)!
+                              //                       .city_spotLight!,
+                              //                   style: TextStyle(
+                              //                       fontSize: 16.0,
+                              //                       fontWeight: FontWeight.w600,
+                              //                       fontFamily:
+                              //                           Style.josefinsans)),
+                              //             )
+                              //           : Container(),
+                              //       bannerJResultList.isNotEmpty
+                              //           ? Container(
+                              //               margin: const EdgeInsets.only(
+                              //                   top: 15.0),
+                              //               child: CarouselSlider.builder(
+                              //                 itemCount:
+                              //                     bannerJResultList.length,
+                              //                 itemBuilder:
+                              //                     (BuildContext context,
+                              //                         int index, int realIdx) {
+                              //                   return Card(
+                              //                     shape: RoundedRectangleBorder(
+                              //                         borderRadius:
+                              //                             BorderRadius.circular(
+                              //                                 20)),
+                              //                     clipBehavior: Clip.antiAlias,
+                              //                     child: SizedBox(
+                              //                       width: 300.0,
+                              //                       height: 200.0,
+                              //                       child: SizedBox(
+                              //                         width:
+                              //                             MediaQuery.of(context)
+                              //                                 .size
+                              //                                 .width,
+                              //                         child: bannerJResultList[
+                              //                                         index]
+                              //                                     .cBannerLink ==
+                              //                                 null
+                              //                             ? Image.network(
+                              //                                 bannerJResultList[
+                              //                                         index]
+                              //                                     .cBannerImage!,
+                              //                                 fit: BoxFit
+                              //                                     .fitWidth,
+                              //                               )
+                              //                             : InkWell(
+                              //                                 onTap: () async {
+                              //                                   // debugPrint(
+                              //                                   //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                              //                                   // String
+                              //                                   //     url =
+                              //                                   //     bannerJResultList[index]
+                              //                                   //         .cBannerLink;
+                              //                                   // var url =
+                              //                                   //     bannerJResultList[index]
+                              //                                   //         .cBannerLink!;
+                              //                                   // if (await canLaunch(
+                              //                                   //     url)) {
+                              //                                   //   await launch(
+                              //                                   //       url);
+                              //                                   // } else {
+                              //                                   //   throw 'Could not launch $url';
+                              //                                   // }
+                              //                                   // openbannerlaunchurl(
+                              //                                   //     bannerJResultList[index]
+                              //                                   //         .cBannerLink!);
+                              //                                 },
+                              //                                 child:
+                              //                                     Image.network(
+                              //                                   bannerJResultList[
+                              //                                           index]
+                              //                                       .cBannerImage!,
+                              //                                   fit: BoxFit
+                              //                                       .fitWidth,
+                              //                                 ),
+                              //                               ),
+                              //                       ),
+                              //                     ),
+                              //                   );
+                              //                 },
+                              //                 options: CarouselOptions(
+                              //                     autoPlay: bannerJResultList
+                              //                             .isNotEmpty
+                              //                         ? true
+                              //                         : false,
+                              //                     viewportFraction: 1.0,
+                              //                     height: 200,
+                              //                     enlargeCenterPage: false,
+                              //                     enableInfiniteScroll: false,
+                              //                     onPageChanged:
+                              //                         (index, reason) {
+                              //                       setState(() {
+                              //                         pageIndex = index;
+                              //                         // _current = index;
+                              //                       });
+                              //                     }),
+                              //               ),
+                              //             )
+                              //           : Container(),
+                              //       bannerJResultList.isNotEmpty
+                              //           ? Container(
+                              //               margin:
+                              //                   const EdgeInsets.only(top: 5.0),
+                              //               child: CarouselIndicator(
+                              //                 count: bannerJResultList.length,
+                              //                 index: pageIndex,
+                              //                 color: Style.colors.grey
+                              //                     .withOpacity(0.3),
+                              //                 activeColor: Style.colors.logoRed,
+                              //                 width: 10.0,
+                              //               ),
+                              //             )
+                              //           : Container(),
+                              //     ],
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 10.sp,
+                              // ),
+                              SizedBox(
+                                height: 15.sp,
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(),
+                  particularDemocracylist.isEmpty
+                      ? Container()
+                      : Container(
+                          height: MediaQuery.of(context).size.height/1,
+                          // flex: 1,
+                          child: ListView.builder(
+                              shrinkWrap: false,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: particularDemocracylist.length,
+                              itemBuilder: (BuildContext context, index) {
+                                String openTime = "";
+                                String closeTime = "";
+                                bool checkLeave = false;
+
+                                if (particularDemocracylist[index]
+                                            .jCurrentDay!
+                                            .open ==
+                                        null &&
+                                    particularDemocracylist[index]
+                                            .jCurrentDay!
+                                            .close ==
+                                        null) {
+                                  openTime = " (Leave)";
+                                  closeTime = "";
+                                  checkLeave = true;
+                                } else if (particularDemocracylist[index]
+                                            .jCurrentDay!
+                                            .open !=
+                                        null &&
+                                    particularDemocracylist[index]
+                                            .jCurrentDay!
+                                            .close ==
+                                        null) {
+                                  openTime = " (Open - 24 Hours)";
+                                  closeTime = "";
+                                  checkLeave = false;
+                                } else {
+                                  openTime =
+                                      "(Open - ${particularDemocracylist[index].jCurrentDay!.open}";
+                                  closeTime =
+                                      " - Close - ${particularDemocracylist[index].jCurrentDay!.close})";
+                                  checkLeave = false;
+                                }
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 12.0, right: 8, top: 8),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              StoreDetailsScreen(
+                                            particularDemocracylist[index]
+                                                .nId!,
+                                            particularDemocracylist[index]
+                                                .cName!,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Card(
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.sp)),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 20.5.h,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(
+                                                            10.sp),
+                                                    topRight:
+                                                        Radius.circular(
+                                                            10.sp)),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        particularDemocracylist[
+                                                                    index]
+                                                                .jImages!
+                                                                .isNotEmpty
+                                                            ? particularDemocracylist[
+                                                                    index]
+                                                                .jImages![0]
+                                                                .cListingImg!
+                                                            : ''))),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 12.0,
+                                                right: 8,
+                                                top: 0,
+                                                bottom: 13),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      margin:
+                                                          const EdgeInsets
+                                                                  .only(
+                                                              top: 15.0),
+                                                      child: Text(
+                                                        particularDemocracylist[
+                                                                index]
+                                                            .cName!,
+                                                        style: TextStyle(
+                                                            fontSize: 15.0,
+                                                            color: Style
+                                                                .colors
+                                                                .app_black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                    ),
+                                                    // Container(
+                                                    //   margin:
+                                                    //       const EdgeInsets
+                                                    //               .only(
+                                                    //           top:
+                                                    //               15.0),
+                                                    //   child: Text(
+                                                    //     "${particularDemocracylist[index].nkilometre}KM",
+                                                    //     style: TextStyle(
+                                                    //         fontSize:
+                                                    //             15.0,
+                                                    //         color: Style
+                                                    //             .colors
+                                                    //             .app_black,
+                                                    //         fontWeight:
+                                                    //             FontWeight
+                                                    //                 .w500),
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "${AppLocalizations.of(context)!.category!} : ",
+                                                        style: TextStyle(
+                                                            fontSize: 13.0,
+                                                            color: Style
+                                                                .colors
+                                                                .app_black,
+                                                            fontFamily: Style
+                                                                .montserrat,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                      Text(
+                                                        particularDemocracylist[
+                                                                    index]
+                                                                .cCategory!
+                                                                .isNotEmpty
+                                                            ? particularDemocracylist[
+                                                                    index]
+                                                                .cCategory!
+                                                            : " - ",
+                                                        style: TextStyle(
+                                                            fontSize: 13.0,
+                                                            color: Style
+                                                                .colors
+                                                                .app_black,
+                                                            fontFamily: Style
+                                                                .montserrat,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.only(
+                                                          top: 5.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.access_time,
+                                                        color: checkLeave
+                                                            ? Colors.red
+                                                            : Style.colors
+                                                                .green,
+                                                        size: 18.0,
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Text(
+                                                          particularDemocracylist[
+                                                                      index]
+                                                                  .jCurrentDay!
+                                                                  .days! +
+                                                              openTime,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  13.0,
+                                                              color: checkLeave
+                                                                  ? Colors
+                                                                      .red
+                                                                  : Style
+                                                                      .colors
+                                                                      .green,
+                                                              fontFamily: Style
+                                                                  .montserrat,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 100,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 2.0),
+                                                        child: Text(
+                                                          closeTime,
+                                                          overflow:
+                                                              TextOverflow
+                                                                  .ellipsis,
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  13.0,
+                                                              color: checkLeave
+                                                                  ? Colors
+                                                                      .red
+                                                                  : Style
+                                                                      .colors
+                                                                      .green,
+                                                              fontFamily: Style
+                                                                  .montserrat,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+
+                  // subCategoryDataList.isNotEmpty
+                  //     ? Expanded(
+                  //         flex: 1,
+                  //         child: Container(
+                  //           child: Container(
+                  //             width: MediaQuery.of(context).size.width,
+                  //             margin: const EdgeInsets.only(
+                  //                 left: 11.0, right: 11.0),
+                  //             child: Container(
+                  //               child: ListView(
+                  //                 scrollDirection: Axis.horizontal,
+                  //                 children: [
+                  //                   Container(
+                  //                     child: ListView.builder(
+                  //                         itemCount:
+                  //                             subCategoryDataList.length > 4
+                  //                                 ? 3
+                  //                                 : 0,
+                  //                         shrinkWrap: true,
+                  //                         scrollDirection: Axis.horizontal,
+                  //                         itemBuilder:
+                  //                             (BuildContext context, index) {
+                  //                           return GestureDetector(
+                  //                             onTap: () {
+                  //                               setState(() {
+                  //                                 if (subCategoryDataList[index]
+                  //                                     .addRemove!) {
+                  //                                   searchVendorJResultList
+                  //                                       .clear();
+                  //                                   categoryId =
+                  //                                       widget.categoryId;
+                  //                                   subCategoryDataList[index]
+                  //                                           .addRemove =
+                  //                                       !subCategoryDataList[
+                  //                                               index]
+                  //                                           .addRemove!;
+                  //                                 } else {
+                  //                                   for (int i = 0;
+                  //                                       i <
+                  //                                           subCategoryDataList
+                  //                                               .length;
+                  //                                       i++) {
+                  //                                     if (subCategoryDataList[i]
+                  //                                         .addRemove!) {
+                  //                                       subCategoryDataList[i]
+                  //                                           .addRemove = false;
+                  //                                     }
+                  //                                   }
+                  //                                   subCategoryDataList[index]
+                  //                                       .addRemove = true;
+
+                  //                                   categoryId = int.parse(
+                  //                                       subCategoryDataList[
+                  //                                               index]
+                  //                                           .nId!);
+                  //                                 }
+                  //                               });
+
+                  //                               offset = 0;
+                  //                               limit = 10;
+
+                  //                               check().then((intenet) {
+                  //                                 if (intenet) {
+                  //                                   searchVendorListApi(
+                  //                                       searchTxt, "Search");
+                  //                                 } else {
+                  //                                   ToastHandler.showToast(
+                  //                                       message:
+                  //                                           "Please check your internet connection");
+                  //                                 }
+                  //                               });
+                  //                             },
+                  //                             child: Container(
+                  //                               margin: const EdgeInsets.only(
+                  //                                   left: 5.0,
+                  //                                   right: 5.0,
+                  //                                   top: 10.0,
+                  //                                   bottom: 10.0),
+                  //                               decoration: BoxDecoration(
+                  //                                   border:
+                  //                                       subCategoryDataList[index]
+                  //                                               .addRemove!
+                  //                                           ? Border.all(
+                  //                                               color:
+                  //                                                   Style.colors
+                  //                                                       .logoRed)
+                  //                                           : Border.all(
+                  //                                               color: Style
+                  //                                                   .colors
+                  //                                                   .app_black),
+                  //                                   color: subCategoryDataList[
+                  //                                               index]
+                  //                                           .addRemove!
+                  //                                       ? Style.colors.logoRed
+                  //                                           .withOpacity(0.2)
+                  //                                       : Colors.white,
+                  //                                   borderRadius:
+                  //                                       BorderRadius.circular(
+                  //                                           30.0)),
+                  //                               child: Container(
+                  //                                 child: Column(
+                  //                                   mainAxisAlignment:
+                  //                                       MainAxisAlignment
+                  //                                           .spaceEvenly,
+                  //                                   children: [
+                  //                                     Padding(
+                  //                                       padding:
+                  //                                           const EdgeInsets
+                  //                                                   .only(
+                  //                                               left: 15.0,
+                  //                                               right: 15.0),
+                  //                                       child: Text(
+                  //                                         subCategoryDataList[
+                  //                                                 index]
+                  //                                             .cCategory!,
+                  //                                         style: TextStyle(
+                  //                                             color: Style
+                  //                                                 .colors
+                  //                                                 .app_black,
+                  //                                             fontSize: 12.0,
+                  //                                             fontWeight:
+                  //                                                 FontWeight
+                  //                                                     .w500,
+                  //                                             fontFamily: Style
+                  //                                                 .montserrat),
+                  //                                       ),
+                  //                                     ),
+                  //                                   ],
+                  //                                 ),
+                  //                               ),
+                  //                             ),
+                  //                           );
+                  //                         }),
+                  //                   ),
+                  //                   InkWell(
+                  //                     onTap: () {
+                  //                       searchSubCategoryList.clear();
+                  //                       setState(() {
+                  //                         searchSubCategoryList
+                  //                             .addAll(subCategoryDataList);
+                  //                       });
+                  //                       SubCategoryBottomList(context);
+                  //                     },
+                  //                     child: Container(
+                  //                       child: Text(
+                  //                         AppLocalizations.of(context)!
+                  //                             .view_all!,
+                  //                         style: TextStyle(
+                  //                             color: Style.colors.logoRed,
+                  //                             fontSize: 12.0,
+                  //                             fontWeight: FontWeight.w500,
+                  //                             fontFamily: Style.montserrat),
+                  //                         textAlign: TextAlign.center,
+                  //                       ),
+                  //                       alignment: Alignment.center,
+                  //                       margin:
+                  //                           const EdgeInsets.only(left: 10.0),
+                  //                     ),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : Container(),
+
+                  Visibility(
+                    visible: inboxNoData,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height/1.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Container(
+                          //   child: Text(
+                          //     'No Data Found',
+                          //     style: TextStyle(
+                          //         letterSpacing: 1.0,
+                          //         fontSize: 15.0,
+                          //         fontWeight: FontWeight.w600,
+                          //         color: MyColor().theme_dark_purple),
+                          //   ),
+                          // ),
+                          Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(
+                                left: 20.0, right: 20.0),
+                            child: Text(
+                              noDataText,
+                              style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Style.colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }),
           ),
         ));
   }

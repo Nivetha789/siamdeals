@@ -855,32 +855,39 @@ class _Top10DemocracyState extends State<Top10Democracy> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 15.0),
-                                              child: Text(
-                                                particularDemocracylist[index]
-                                                    .cName!,
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    color:
-                                                        Style.colors.app_black,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                            Expanded(
+                                              flex:5,
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 15.0),
+                                                child: Text(
+                                                  particularDemocracylist[index]
+                                                      .cName!,
+                                                  style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      color:
+                                                          Style.colors.app_black,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
                                               ),
                                             ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 15.0),
-                                              child: Text(
-                                                particularDemocracylist[index]
-                                                    .nkilometre!,
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    color:
-                                                        Style.colors.app_black,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 15.0),
+                                                child: Text(
+                                                  particularDemocracylist[index]
+                                                      .nkilometre!,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                      fontSize: 15.0,
+                                                      color:
+                                                          Style.colors.app_black,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
                                               ),
                                             ),
                                           ],

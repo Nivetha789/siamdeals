@@ -28,8 +28,8 @@ class JResult {
   String? nId;
   String? nLatitude;
   String? nLongitude;
+  String? nVendorType;
   String? cPlaceType;
-  String? cintroduction;
   String? cSinceType;
   String? nCityId;
   String? cCity;
@@ -44,7 +44,10 @@ class JResult {
   String? cMobileNumbers;
   String? cEmailids;
   String? cAddress;
+  String? nNavigate;
   String? cTerms;
+  String? cIntroduction;
+  String? nDormant;
   List<JImages>? jImages;
 
   List<JAlbums>? jAlbums;
@@ -54,25 +57,28 @@ class JResult {
 
   JResult(
       {this.nId,
-      this.nLatitude,
-      this.nLongitude,
-      this.cPlaceType,
-      this.cintroduction,
-      this.cSinceType,
-      this.nCityId,
-      this.cCity,
-      this.nDistrictId,
-      this.cDistrict,
-      this.nTownId,
-      this.cTown,
-      this.nCategoryId,
-      this.cCategory,
-      this.cName,
-      this.cNameInThai,
-      this.cMobileNumbers,
-      this.cEmailids,
-      this.cAddress,
-      this.cTerms,
+        this.nLatitude,
+        this.nLongitude,
+        this.nVendorType,
+        this.cPlaceType,
+        this.cSinceType,
+        this.nCityId,
+        this.cCity,
+        this.nDistrictId,
+        this.cDistrict,
+        this.nTownId,
+        this.cTown,
+        this.nCategoryId,
+        this.cCategory,
+        this.cName,
+        this.cNameInThai,
+        this.cMobileNumbers,
+        this.cEmailids,
+        this.cAddress,
+        this.nNavigate,
+        this.cTerms,
+        this.cIntroduction,
+        this.nDormant,
       this.jImages,
       this.jAlbums});
 
@@ -80,8 +86,8 @@ class JResult {
     nId = json['n_id'];
     nLatitude = json['n_latitude'];
     nLongitude = json['n_longitude'];
+    nVendorType = json['n_vendor_type'];
     cPlaceType = json['c_place_type'];
-    cintroduction = json['c_introduction'];
     cSinceType = json['c_since_type'];
     nCityId = json['n_city_id'];
     cCity = json['c_city'];
@@ -96,7 +102,10 @@ class JResult {
     cMobileNumbers = json['c_mobile_numbers'];
     cEmailids = json['c_emailids'];
     cAddress = json['c_address'];
+    nNavigate = json['n_navigate'];
     cTerms = json['c_terms'];
+    cIntroduction = json['c_introduction'];
+    nDormant = json['n_dormant'];
     if (json['j_images'] != null) {
       jImages = <JImages>[];
       json['j_images'].forEach((v) {
@@ -131,8 +140,8 @@ class JResult {
     data['n_id'] = this.nId;
     data['n_latitude'] = this.nLatitude;
     data['n_longitude'] = this.nLongitude;
+    data['n_vendor_type'] = this.nVendorType;
     data['c_place_type'] = this.cPlaceType;
-    data['c_introduction'] = this.cintroduction;
     data['c_since_type'] = this.cSinceType;
     data['n_city_id'] = this.nCityId;
     data['c_city'] = this.cCity;
@@ -147,7 +156,10 @@ class JResult {
     data['c_mobile_numbers'] = this.cMobileNumbers;
     data['c_emailids'] = this.cEmailids;
     data['c_address'] = this.cAddress;
+    data['n_navigate'] = this.nNavigate;
     data['c_terms'] = this.cTerms;
+    data['c_introduction'] = this.cIntroduction;
+    data['n_dormant'] = this.nDormant;
     if (this.jImages != null) {
       data['j_images'] = this.jImages!.map((v) => v.toJson()).toList();
     }

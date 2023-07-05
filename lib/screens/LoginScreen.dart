@@ -90,7 +90,7 @@ class LoginScreenState extends State<LoginScreen> {
                       child: TextFormField(
                         autofocus: false,
                         textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.emailAddress,
                         focusNode: usernameFocus,
                         controller: _userUsernameController,
                         maxLines: 1,

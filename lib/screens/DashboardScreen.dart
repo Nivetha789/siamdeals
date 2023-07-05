@@ -763,6 +763,21 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     });
   }
 
+  openbannerlaunchurl(url) async {
+    print("dsfjhsdgfhsfsdf $url");
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      await launchUrl(
+        Uri.parse("http://" + url),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var appLanguage = Provider.of<AppLanguage>(context);
@@ -825,11 +840,15 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                           });
                     });
                   } else {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Top10Democracy(
-                                id: dealzid, cityid: cityId, name: dealzname)));
+                    dealztype == "1" || dealztype == 1
+                        ? openbannerlaunchurl(dealzid)
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Top10Democracy(
+                                    id: dealzid,
+                                    cityid: cityId,
+                                    name: dealzname)));
                   }
                 },
                 child: TextScroll(
@@ -1370,7 +1389,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                     ),
                                     Container(
                                       width: double.infinity,
-                                      height: 25.h,
+                                      height: 220,
                                       margin: const EdgeInsets.only(top: 15.0),
                                       child: GridView.builder(
                                           scrollDirection: Axis.horizontal,
@@ -1446,6 +1465,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                           categoryJResultList[
                                                                   index]
                                                               .cCategory!,
+                                                          textAlign: TextAlign.center,
                                                           style: TextStyle(
                                                               fontSize: 12.0,
                                                               fontWeight:
@@ -1476,7 +1496,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             children: [
                               bannerJResultList.isNotEmpty
                                   ? Container(
-                                      margin: const EdgeInsets.only(top: 15.0),
+                                      margin: const EdgeInsets.only(left:16.0,top: 10.0),
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                           AppLocalizations.of(context)!
@@ -1497,10 +1517,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                           return Card(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(20)),
+                                                    BorderRadius.circular(18)),
                                             clipBehavior: Clip.antiAlias,
                                             child: SizedBox(
-                                              width: 300.0,
+                                              width: 400.0,
                                               height: 200.0,
                                               child: SizedBox(
                                                 width: MediaQuery.of(context)
@@ -1512,7 +1532,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                     ? Image.network(
                                                         bannerJResultList[index]
                                                             .cBannerImage!,
-                                                        fit: BoxFit.fitWidth,
+                                                        fit: BoxFit.fill,
                                                       )
                                                     : InkWell(
                                                         onTap: () async {
@@ -1541,7 +1561,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                           bannerJResultList[
                                                                   index]
                                                               .cBannerImage!,
-                                                          fit: BoxFit.fitWidth,
+                                                          fit: BoxFit.fill,
                                                         ),
                                                       ),
                                               ),
@@ -1568,7 +1588,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   : Container(),
                               bannerJResultList.isNotEmpty
                                   ? Container(
-                                      margin: const EdgeInsets.only(top: 5.0),
+                                      margin: const EdgeInsets.only(top: 5.0,bottom: 10.0),
                                       child: CarouselIndicator(
                                         count: bannerJResultList.length,
                                         index: pageIndex,
@@ -1867,19 +1887,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     }
   }
 
-  openbannerlaunchurl(url) async {
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
-      await launchUrl(
-        Uri.parse("http://" + url),
-        mode: LaunchMode.externalApplication,
-      );
-    } else {
-      await launchUrl(
-        Uri.parse(url),
-        mode: LaunchMode.externalApplication,
-      );
-    }
-  }
+ 
 
   getCityList() async {
     try {
@@ -1931,6 +1939,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
   var dealzid;
   var dealzname;
+
+  var dealztype;
   getDemoGraphicList() async {
     try {
       //   ProgressDialog().showLoaderDialog(context);
@@ -2213,6 +2223,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
             scrollText = scrollTextModel.jResult![0].cText!;
             dealzid = scrollTextModel.jResult![0].cLink!;
             dealzname = scrollTextModel.jResult![0].cText!;
+            dealztype = scrollTextModel.jResult![0].scrolltype;
           });
         }
       } else {
