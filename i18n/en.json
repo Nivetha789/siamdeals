@@ -2,6 +2,7 @@
   "appName": "Siam DealZ",
   "description": "The Best DealZ of Thailand",
   "category": "Category",
+  "sub_category": "Sub Category",
   "categories": "Categories",
   "select_city": "Select City",
   "search_city": "Search City",

@@ -372,7 +372,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                 visible: checkBanner,
                 child: bannerJResultList.isNotEmpty
                     ? Expanded(
-                        flex: 4,
+                        flex: 5,
                         child: Column(
                           children: [
                             Container(
@@ -397,7 +397,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                             BorderRadius.circular(20)),
                                     clipBehavior: Clip.antiAlias,
                                     child: SizedBox(
-                                      width: 300.0,
+                                      width: 400.0,
                                       height: 200.0,
                                       child: SizedBox(
                                         width:
@@ -408,7 +408,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                             ? Image.network(
                                                 bannerJResultList[index]
                                                     .cBannerImage!,
-                                                fit: BoxFit.fitWidth,
+                                                fit: BoxFit.fill,
                                               )
                                             : InkWell(
                                                 onTap: () async {
@@ -459,7 +459,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 5.0),
+                              margin: EdgeInsets.only(left:15.0,right:15.0,top: 5.0),
                               child: CarouselIndicator(
                                 count: bannerJResultList.length,
                                 index: pageIndex,
@@ -534,7 +534,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                                     topRight:
                                                         Radius.circular(10.sp)),
                                                 image: DecorationImage(
-                                                    fit: BoxFit.cover,
+                                                    fit: BoxFit.fill,
                                                     image: NetworkImage(
                                                         categoryJResultList[
                                                                 index]

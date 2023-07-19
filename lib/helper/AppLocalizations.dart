@@ -45,6 +45,8 @@ class AppLocalizations {
 
   String? get category => translate('category');
 
+  String? get sub_category => translate('sub_category');
+
   String? get categories => translate('categories');
 
   String? get select_city => translate('select_city');

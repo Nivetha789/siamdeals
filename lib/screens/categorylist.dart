@@ -152,8 +152,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
       offset = 0;
       limit = 10;
- categoryId = int.parse(subCategoryDataList[0].nId!);
-    searchVendorListApi(searchTxt, "Search");
+      categoryId = int.parse(subCategoryDataList[0].nId!);
+      searchVendorListApi(searchTxt, "Search");
       check().then((intenet) {
         if (intenet) {
           searchVendorListApi(searchTxt, "Search");
@@ -324,21 +324,24 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                         .cCategoryImage!,
                                                     height: 30,
                                                     width: 30),
-                                                Text(
-                                                  searchSubCategoryList[postion]
-                                                          .cCategory!
-                                                          .isNotEmpty
-                                                      ? searchSubCategoryList[
-                                                              postion]
-                                                          .cCategory!
-                                                      : "",
-                                                  style: TextStyle(
-                                                      color: Colors.black87,
-                                                      fontSize: 14.0,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontFamily:
-                                                          Style.sfproddisplay),
+                                                Container(
+                                                  margin: EdgeInsets.only(left:7.0),
+                                                  child: Text(
+                                                    searchSubCategoryList[postion]
+                                                            .cCategory!
+                                                            .isNotEmpty
+                                                        ? searchSubCategoryList[
+                                                                postion]
+                                                            .cCategory!
+                                                        : "",
+                                                    style: TextStyle(
+                                                        color: Colors.black87,
+                                                        fontSize: 14.0,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontFamily:
+                                                            Style.sfproddisplay),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -464,6 +467,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
   }
 
   final box = GetStorage();
+
   Future<void> checkpopupdata(id, name, type, description) async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       return await showDialog(
@@ -732,114 +736,153 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                         visible: checkBanner,
                         child: bannerJResultList.isNotEmpty
                             ? Container(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 15.0, left: 16.0),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                        AppLocalizations.of(context)!
-                                            .city_spotLight!,
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: Style.josefinsans)),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 15.0),
-                                    child: CarouselSlider.builder(
-                                      itemCount: bannerJResultList.length,
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIdx) {
-                                        return Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20)),
-                                          clipBehavior: Clip.antiAlias,
-                                          child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            height: 160,
-                                            child: bannerJResultList[index]
-                                                        .cBannerLink ==
-                                                    null
-                                                ? Image.network(
-                                                    bannerJResultList[index]
-                                                        .cBannerImage!,
-                                                    fit: BoxFit.fill,
-                                                  )
-                                                : InkWell(
-                                                    onTap: () async {
-                                                      // debugPrint(
-                                                      //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                                      // String
-                                                      //     url =
-                                                      //     bannerJResultList[index]
-                                                      //         .cBannerLink;
-                                                      // var url =
-                                                      //     bannerJResultList[index]
-                                                      //         .cBannerLink!;
-                                                      // if (await canLaunch(
-                                                      //     url)) {
-                                                      //   await launch(
-                                                      //       url);
-                                                      // } else {
-                                                      //   throw 'Could not launch $url';
-                                                      // }
-                                                      openbannerlaunchurl(
-                                                          bannerJResultList[
-                                                                  index]
-                                                              .cBannerLink!);
-                                                    },
-                                                    child: Image.network(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 15.0, left: 16.0),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          AppLocalizations.of(context)!
+                                              .city_spotLight!,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: Style.josefinsans)),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.only(top: 15.0),
+                                      child: CarouselSlider.builder(
+                                        itemCount: bannerJResultList.length,
+                                        itemBuilder: (BuildContext context,
+                                            int index, int realIdx) {
+                                          return Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: SizedBox(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              height: 160,
+                                              child: bannerJResultList[index]
+                                                          .cBannerLink ==
+                                                      null
+                                                  ? Image.network(
                                                       bannerJResultList[index]
                                                           .cBannerImage!,
-                                                      fit: BoxFit.fitWidth,
+                                                      fit: BoxFit.fill,
+                                                    )
+                                                  : InkWell(
+                                                      onTap: () async {
+                                                        // debugPrint(
+                                                        //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                                        // String
+                                                        //     url =
+                                                        //     bannerJResultList[index]
+                                                        //         .cBannerLink;
+                                                        // var url =
+                                                        //     bannerJResultList[index]
+                                                        //         .cBannerLink!;
+                                                        // if (await canLaunch(
+                                                        //     url)) {
+                                                        //   await launch(
+                                                        //       url);
+                                                        // } else {
+                                                        //   throw 'Could not launch $url';
+                                                        // }
+                                                        openbannerlaunchurl(
+                                                            bannerJResultList[
+                                                                    index]
+                                                                .cBannerLink!);
+                                                      },
+                                                      child: Image.network(
+                                                        bannerJResultList[index]
+                                                            .cBannerImage!,
+                                                        fit: BoxFit.fitWidth,
+                                                      ),
                                                     ),
-                                                  ),
-                                          ),
-                                        );
-                                      },
-                                      options: CarouselOptions(
-                                          autoPlay: bannerJResultList.length > 0
-                                              ? true
-                                              : false,
-                                          viewportFraction: 1.0,
-                                          height: 200,
-                                          enlargeCenterPage: false,
-                                          enableInfiniteScroll: false,
-                                          onPageChanged: (index, reason) {
-                                            setState(() {
-                                              pageIndex = index;
-                                              // _current = index;
-                                            });
-                                          }),
+                                            ),
+                                          );
+                                        },
+                                        options: CarouselOptions(
+                                            autoPlay:
+                                                bannerJResultList.length > 0
+                                                    ? true
+                                                    : false,
+                                            viewportFraction: 1.0,
+                                            height: 200,
+                                            enlargeCenterPage: false,
+                                            enableInfiniteScroll: false,
+                                            onPageChanged: (index, reason) {
+                                              setState(() {
+                                                pageIndex = index;
+                                                // _current = index;
+                                              });
+                                            }),
+                                      ),
                                     ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    margin: const EdgeInsets.only(top: 5.0),
-                                    child: CarouselIndicator(
-                                      count: bannerJResultList.length,
-                                      index: pageIndex,
-                                      color: Style.colors.grey.withOpacity(0.3),
-                                      activeColor: Style.colors.logoRed,
-                                      width: 10.0,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
+                                    Container(
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(top: 5.0),
+                                      child: CarouselIndicator(
+                                        count: bannerJResultList.length,
+                                        index: pageIndex,
+                                        color:
+                                            Style.colors.grey.withOpacity(0.3),
+                                        activeColor: Style.colors.logoRed,
+                                        width: 10.0,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
                             : Container(),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 15.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(AppLocalizations.of(context)!.sub_category!,
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: Style.josefinsans)),
+                            Visibility(
+                              visible: subCategoryDataList.length > 10,
+                              child: InkWell(
+                                onTap: () {
+                                  searchSubCategoryList.clear();
+                                  setState(() {
+                                    searchSubCategoryList
+                                        .addAll(subCategoryDataList);
+                                  });
+                                  SubCategoryBottomList(context);
+                                },
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                      AppLocalizations.of(context)!.view_all!,
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: Style.colors.logoRed,
+                                          fontFamily: Style.josefinsans)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       subCategoryDataList.isNotEmpty
                           ? Container(
                               width: MediaQuery.of(context).size.width,
                               height: 60,
-                              margin:
-                                  const EdgeInsets.only(left: 11.0, right: 11.0),
+                              margin: const EdgeInsets.only(
+                                  left: 11.0, right: 11.0),
                               child: Container(
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
@@ -857,11 +900,14 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                 setState(() {
                                                   if (subCategoryDataList[index]
                                                       .addRemove!) {
-                                                    searchVendorJResultList.clear();
-                                                    categoryId = widget.categoryId;
+                                                    searchVendorJResultList
+                                                        .clear();
+                                                    categoryId =
+                                                        widget.categoryId;
                                                     subCategoryDataList[index]
                                                             .addRemove =
-                                                        !subCategoryDataList[index]
+                                                        !subCategoryDataList[
+                                                                index]
                                                             .addRemove!;
                                                   } else {
                                                     for (int i = 0;
@@ -879,7 +925,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                         .addRemove = true;
 
                                                     categoryId = int.parse(
-                                                        subCategoryDataList[index]
+                                                        subCategoryDataList[
+                                                                index]
                                                             .nId!);
                                                   }
                                                 });
@@ -910,17 +957,19 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                         subCategoryDataList[index]
                                                                 .addRemove!
                                                             ? Border.all(
-                                                                color: Style
-                                                                    .colors.logoRed)
+                                                                color:
+                                                                    Style.colors
+                                                                        .logoRed)
                                                             : Border.all(
-                                                                color: Style.colors
+                                                                color: Style
+                                                                    .colors
                                                                     .app_black),
-                                                    color:
-                                                        subCategoryDataList[index]
-                                                                .addRemove!
-                                                            ? Style.colors.logoRed
-                                                                .withOpacity(0.2)
-                                                            : Colors.white,
+                                                    color: subCategoryDataList[
+                                                                index]
+                                                            .addRemove!
+                                                        ? Style.colors.logoRed
+                                                            .withOpacity(0.2)
+                                                        : Colors.white,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             30.0)),
@@ -933,7 +982,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                     children: [
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                    .only(
                                                                 left: 15.0,
                                                                 right: 15.0),
                                                         child: Row(
@@ -943,29 +993,36 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                   BorderRadius
                                                                       .circular(
                                                                           100.0),
-                                                              child: Image.network(
+                                                              child:
+                                                                  Image.network(
                                                                 subCategoryDataList[
                                                                         index]
                                                                     .cCategoryImage!,
                                                                 height: 30,
                                                                 width: 30,
-                                                                fit: BoxFit.contain,
+                                                                fit: BoxFit
+                                                                    .contain,
                                                               ),
                                                             ),
-                                                            Text(
-                                                              subCategoryDataList[
-                                                                      index]
-                                                                  .cCategory!,
-                                                              style: TextStyle(
-                                                                  color: Style
-                                                                      .colors
-                                                                      .app_black,
-                                                                  fontSize: 12.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  fontFamily: Style
-                                                                      .montserrat),
+                                                            Container(
+                                                              margin: const EdgeInsets.only(
+                                                                left: 6.0),
+                                                              child: Text(
+                                                                subCategoryDataList[
+                                                                        index]
+                                                                    .cCategory!,
+                                                                style: TextStyle(
+                                                                    color: Style
+                                                                        .colors
+                                                                        .app_black,
+                                                                    fontSize:
+                                                                        12.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontFamily: Style
+                                                                        .montserrat),
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
@@ -977,29 +1034,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                             );
                                           }),
                                     ),
-                                    // InkWell(
-                                    //   onTap: () {
-                                    //     searchSubCategoryList.clear();
-                                    //     setState(() {
-                                    //       searchSubCategoryList
-                                    //           .addAll(subCategoryDataList);
-                                    //     });
-                                    //     SubCategoryBottomList(context);
-                                    //   },
-                                    //   child: Container(
-                                    //     alignment: Alignment.center,
-                                    //     margin: const EdgeInsets.only(left: 10.0),
-                                    //     child: Text(
-                                    //       AppLocalizations.of(context)!.view_all!,
-                                    //       style: TextStyle(
-                                    //           color: Style.colors.logoRed,
-                                    //           fontSize: 12.0,
-                                    //           fontWeight: FontWeight.w500,
-                                    //           fontFamily: Style.montserrat),
-                                    //       textAlign: TextAlign.center,
-                                    //     ),
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -1013,18 +1047,21 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                               visible: checkInbox,
                               child: Container(
                                 child: LoadMore(
-                                  isFinish: searchVendorJResultList.length >= total,
+                                  isFinish:
+                                      searchVendorJResultList.length >= total,
                                   onLoadMore: _loadMore,
                                   whenEmptyLoad: false,
                                   delegate: const DefaultLoadMoreDelegate(),
-                                  textBuilder: DefaultLoadMoreTextBuilder.english,
+                                  textBuilder:
+                                      DefaultLoadMoreTextBuilder.english,
                                   child: ListView(
                                     children: [
                                       ListView.builder(
                                           shrinkWrap: true,
                                           physics:
                                               const NeverScrollableScrollPhysics(),
-                                          itemCount: searchVendorJResultList.length,
+                                          itemCount:
+                                              searchVendorJResultList.length,
                                           itemBuilder:
                                               (BuildContext context, index) {
                                             String openTime = "";
@@ -1090,28 +1127,28 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                       Container(
                                                         height: 20.5.h,
                                                         decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10.sp),
-                                                                    topRight:
-                                                                        Radius.circular(
-                                                                            10.sp)),
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10.sp),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10.sp)),
                                                             image: DecorationImage(
-                                                                fit: BoxFit.cover,
+                                                                fit: BoxFit
+                                                                    .cover,
                                                                 image: NetworkImage(searchVendorJResultList[index]
                                                                         .jImages!
                                                                         .isNotEmpty
-                                                                    ? searchVendorJResultList[
-                                                                            index]
+                                                                    ? searchVendorJResultList[index]
                                                                         .jImages![0]
                                                                         .cListingImg!
                                                                     : ''))),
                                                       ),
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                    .only(
                                                                 left: 12.0,
                                                                 right: 8,
                                                                 top: 0,
@@ -1125,13 +1162,15 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                               margin:
                                                                   const EdgeInsets
                                                                           .only(
-                                                                      top: 15.0),
+                                                                      top:
+                                                                          15.0),
                                                               child: Text(
                                                                 searchVendorJResultList[
                                                                         index]
                                                                     .cName!,
                                                                 style: TextStyle(
-                                                                    fontSize: 15.0,
+                                                                    fontSize:
+                                                                        15.0,
                                                                     color: Style
                                                                         .colors
                                                                         .app_black,
@@ -1159,16 +1198,13 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                             Style
                                                                                 .montserrat,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .w400),
+                                                                            FontWeight.w400),
                                                                   ),
                                                                   Text(
-                                                                    searchVendorJResultList[
-                                                                                index]
+                                                                    searchVendorJResultList[index]
                                                                             .cCategory!
                                                                             .isNotEmpty
-                                                                        ? searchVendorJResultList[
-                                                                                index]
+                                                                        ? searchVendorJResultList[index]
                                                                             .cCategory!
                                                                         : " - ",
                                                                     style: TextStyle(
@@ -1181,8 +1217,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                             Style
                                                                                 .montserrat,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .w400),
+                                                                            FontWeight.w400),
                                                                   ),
                                                                 ],
                                                               ),
@@ -1198,21 +1233,20 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                     Icons
                                                                         .access_time,
                                                                     color: checkLeave
-                                                                        ? Colors.red
+                                                                        ? Colors
+                                                                            .red
                                                                         : Style
                                                                             .colors
                                                                             .green,
                                                                     size: 18.0,
                                                                   ),
                                                                   Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                                .only(
-                                                                            left:
-                                                                                2.0),
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            2.0),
                                                                     child: Text(
-                                                                      searchVendorJResultList[
-                                                                                  index]
+                                                                      searchVendorJResultList[index]
                                                                               .jCurrentDay!
                                                                               .days! +
                                                                           openTime,
@@ -1223,22 +1257,18 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                               ? Colors
                                                                                   .red
                                                                               : Style
-                                                                                  .colors
-                                                                                  .green,
-                                                                          fontFamily:
-                                                                              Style
-                                                                                  .montserrat,
+                                                                                  .colors.green,
+                                                                          fontFamily: Style
+                                                                              .montserrat,
                                                                           fontWeight:
-                                                                              FontWeight
-                                                                                  .w400),
+                                                                              FontWeight.w400),
                                                                     ),
                                                                   ),
                                                                   Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                                .only(
-                                                                            left:
-                                                                                2.0),
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            2.0),
                                                                     child: Text(
                                                                       closeTime,
                                                                       style: TextStyle(
@@ -1248,14 +1278,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                               ? Colors
                                                                                   .red
                                                                               : Style
-                                                                                  .colors
-                                                                                  .green,
-                                                                          fontFamily:
-                                                                              Style
-                                                                                  .montserrat,
+                                                                                  .colors.green,
+                                                                          fontFamily: Style
+                                                                              .montserrat,
                                                                           fontWeight:
-                                                                              FontWeight
-                                                                                  .w400),
+                                                                              FontWeight.w400),
                                                                     ),
                                                                   ),
                                                                 ],

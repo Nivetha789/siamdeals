@@ -176,123 +176,124 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           builder: (context) {
             return AlertDialog(
               content: SingleChildScrollView(
-                // height: MediaQuery.of(context).size.height / 2,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            name == "City Popup" || name == "City"
-                                ? box.write("popupcityid", id).then(((value) {
-                                    Navigator.pop(context);
-                                  }))
-                                : box.write("popuphomeid", id).then(((value) {
-                                    Navigator.pop(context);
-                                  }));
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    popupJResultList.isNotEmpty
-                        ? CarouselSlider.builder(
-                            itemCount: popupJResultList.length,
-                            itemBuilder:
-                                (BuildContext context, int index, int realIdx) {
-                              return popupJResultList[index].npopuptype ==
-                                          "2" ||
-                                      popupJResultList[index].npopuptype == 2
-                                  ? SingleChildScrollView(
-                                      child: HtmlWidget(
-                                        popupJResultList[index].cdescription!,
-                                      ),
-                                    )
-                                  : Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: Expanded(
-                                        flex: 2,
-                                        // width: 300.0,
-                                        // height:
-                                        //     MediaQuery.of(context).size.height /
-                                        //         3,
-                                        child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Image.network(
-                                              popupJResultList[index]
-                                                  .cBannerImage!,
-                                              fit: BoxFit.fitWidth,
-                                            )
-                                            // : InkWell(
-                                            //     onTap: () async {
-                                            //       // debugPrint(
-                                            //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                            //       // String
-                                            //       //     url =
-                                            //       //     bannerJResultList[index]
-                                            //       //         .cBannerLink;
-                                            //       // var url =
-                                            //       //     bannerJResultList[index]
-                                            //       //         .cBannerLink!;
-                                            //       // if (await canLaunch(
-                                            //       //     url)) {
-                                            //       //   await launch(
-                                            //       //       url);
-                                            //       // } else {
-                                            //       //   throw 'Could not launch $url';
-                                            //       // }
-                                            //       openbannerlaunchurl(
-                                            //           bannerJResultList[index]
-                                            //               .cBannerLink!);
-                                            //     },
-                                            //     child: Image.network(
-                                            //       bannerJResultList[index]
-                                            //           .cBannerImage!,
-                                            //       fit: BoxFit.fitWidth,
-                                            //     ),
-                                            //   ),
-                                            ),
-                                      ),
-                                    );
+                child: Container(
+                  height: MediaQuery.of(context).size.height/1.5,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              name == "City Popup" || name == "City"
+                                  ? box.write("popupcityid", id).then(((value) {
+                                Navigator.pop(context);
+                              }))
+                                  : box.write("popuphomeid", id).then(((value) {
+                                Navigator.pop(context);
+                              }));
                             },
-                            options: CarouselOptions(
-                                autoPlay:
-                                    popupJResultList.isNotEmpty ? true : false,
-                                viewportFraction: 1.0,
-                                height: type == "2" ? 250 : 150,
-                                enlargeCenterPage: false,
-                                enableInfiniteScroll: false,
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    pageIndex = index;
-                                    // _current = index;
-                                  });
-                                }),
-                          )
-                        : Container(),
-                    popupJResultList.isNotEmpty
-                        ? Container(
-                            margin: const EdgeInsets.only(top: 5.0),
-                            child: CarouselIndicator(
-                              count: popupJResultList.length,
-                              index: pageIndex,
-                              color: Style.colors.grey.withOpacity(0.3),
-                              activeColor: Style.colors.logoRed,
-                              width: 10.0,
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      popupJResultList.isNotEmpty
+                          ? CarouselSlider.builder(
+                        itemCount: popupJResultList.length,
+                        itemBuilder:
+                            (BuildContext context, int index, int realIdx) {
+                          return popupJResultList[index].npopuptype ==
+                              "2" ||
+                              popupJResultList[index].npopuptype == 2
+                              ? SingleChildScrollView(
+                            child: HtmlWidget(
+                              popupJResultList[index].cdescription!,
                             ),
                           )
-                        : Container(),
-                  ],
+                              : Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(20)),
+                            clipBehavior: Clip.antiAlias,
+                            child: Expanded(
+                              flex: 2,
+                              // width: 300.0,
+                              // height:
+                              //     MediaQuery.of(context).size.height /
+                              //         3,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width,
+                                  child: Image.network(
+                                    popupJResultList[index]
+                                        .cBannerImage!,
+                                    fit: BoxFit.fill,
+                                  )
+                                // : InkWell(
+                                //     onTap: () async {
+                                //       // debugPrint(
+                                //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                //       // String
+                                //       //     url =
+                                //       //     bannerJResultList[index]
+                                //       //         .cBannerLink;
+                                //       // var url =
+                                //       //     bannerJResultList[index]
+                                //       //         .cBannerLink!;
+                                //       // if (await canLaunch(
+                                //       //     url)) {
+                                //       //   await launch(
+                                //       //       url);
+                                //       // } else {
+                                //       //   throw 'Could not launch $url';
+                                //       // }
+                                //       openbannerlaunchurl(
+                                //           bannerJResultList[index]
+                                //               .cBannerLink!);
+                                //     },
+                                //     child: Image.network(
+                                //       bannerJResultList[index]
+                                //           .cBannerImage!,
+                                //       fit: BoxFit.fitWidth,
+                                //     ),
+                                //   ),
+                              ),
+                            ),
+                          );
+                        },
+                        options: CarouselOptions(
+                            autoPlay:
+                            popupJResultList.isNotEmpty ? true : false,
+                            viewportFraction: 1.0,
+                            height: type == "2" ? 250 : 150,
+                            enlargeCenterPage: false,
+                            enableInfiniteScroll: false,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                pageIndex = index;
+                                // _current = index;
+                              });
+                            }),
+                      )
+                          : Container(),
+                      popupJResultList.isNotEmpty
+                          ? Container(
+                        margin: const EdgeInsets.only(top: 5.0),
+                        child: CarouselIndicator(
+                          count: popupJResultList.length,
+                          index: pageIndex,
+                          color: Style.colors.grey.withOpacity(0.3),
+                          activeColor: Style.colors.logoRed,
+                          width: 10.0,
+                        ),
+                      )
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
             );
