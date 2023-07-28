@@ -2,13 +2,9 @@
 
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:carousel_indicator/carousel_indicator.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:siamdealz/screens/StoreDetailsScreen.dart';
 import 'package:siamdealz/screens/categorylist.dart';
 import 'package:sizer/sizer.dart';
@@ -18,9 +14,9 @@ import '../ResponseModule/BannerModel.dart';
 import '../ResponseModule/CategoryModel.dart';
 import '../ResponseModule/DemographicModel/DemographicModel.dart';
 import '../ResponseModule/SearchVendorModule/SearchVendorModel.dart';
+import '../Utils/ProgressDialog.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLocalizations.dart';
-import '../utils/ProgressDialog.dart';
 import '../utils/check_internet.dart';
 import '../utils/fab_menu_package.dart';
 import '../utils/handler/toast_handler.dart';
@@ -936,7 +932,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                             categoryJResultList[
                                                                     index]
                                                                 .cCategory!,
-                                                            true)));
+                                                            true,0)));
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -1126,10 +1122,9 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   particularDemocracylist.isEmpty
                       ? Container()
                       : Container(
-                          height: MediaQuery.of(context).size.height/1,
                           // flex: 1,
                           child: ListView.builder(
-                              shrinkWrap: false,
+                              shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: particularDemocracylist.length,
                               itemBuilder: (BuildContext context, index) {
@@ -1225,50 +1220,24 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      margin:
-                                                          const EdgeInsets
-                                                                  .only(
-                                                              top: 15.0),
-                                                      child: Text(
-                                                        particularDemocracylist[
-                                                                index]
-                                                            .cName!,
-                                                        style: TextStyle(
-                                                            fontSize: 15.0,
-                                                            color: Style
-                                                                .colors
-                                                                .app_black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                      ),
-                                                    ),
-                                                    // Container(
-                                                    //   margin:
-                                                    //       const EdgeInsets
-                                                    //               .only(
-                                                    //           top:
-                                                    //               15.0),
-                                                    //   child: Text(
-                                                    //     "${particularDemocracylist[index].nkilometre}KM",
-                                                    //     style: TextStyle(
-                                                    //         fontSize:
-                                                    //             15.0,
-                                                    //         color: Style
-                                                    //             .colors
-                                                    //             .app_black,
-                                                    //         fontWeight:
-                                                    //             FontWeight
-                                                    //                 .w500),
-                                                    //   ),
-                                                    // ),
-                                                  ],
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets
+                                                              .only(
+                                                          top: 15.0),
+                                                  child: Text(
+                                                    particularDemocracylist[
+                                                            index]
+                                                        .cName!,
+                                                    style: TextStyle(
+                                                        fontSize: 15.0,
+                                                        color: Style
+                                                            .colors
+                                                            .app_black,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .w500),
+                                                  ),
                                                 ),
                                                 Container(
                                                   margin:
@@ -1276,38 +1245,44 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                           top: 5.0),
                                                   child: Row(
                                                     children: [
-                                                      Text(
-                                                        "${AppLocalizations.of(context)!.category!} : ",
-                                                        style: TextStyle(
-                                                            fontSize: 13.0,
-                                                            color: Style
-                                                                .colors
-                                                                .app_black,
-                                                            fontFamily: Style
-                                                                .montserrat,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                      Expanded(
+                                                        flex:1,
+                                                        child: Text(
+                                                          "${AppLocalizations.of(context)!.category!} : ",
+                                                          style: TextStyle(
+                                                              fontSize: 13.0,
+                                                              color: Style
+                                                                  .colors
+                                                                  .app_black,
+                                                              fontFamily: Style
+                                                                  .montserrat,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        ),
                                                       ),
-                                                      Text(
-                                                        particularDemocracylist[
-                                                                    index]
-                                                                .cCategory!
-                                                                .isNotEmpty
-                                                            ? particularDemocracylist[
-                                                                    index]
-                                                                .cCategory!
-                                                            : " - ",
-                                                        style: TextStyle(
-                                                            fontSize: 13.0,
-                                                            color: Style
-                                                                .colors
-                                                                .app_black,
-                                                            fontFamily: Style
-                                                                .montserrat,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                      Expanded(
+                                                        flex: 4,
+                                                        child: Text(
+                                                          particularDemocracylist[
+                                                                      index]
+                                                                  .cCategory!
+                                                                  .isNotEmpty
+                                                              ? particularDemocracylist[
+                                                                      index]
+                                                                  .cCategory!
+                                                              : " - ",
+                                                          style: TextStyle(
+                                                              fontSize: 13.0,
+                                                              color: Style
+                                                                  .colors
+                                                                  .app_black,
+                                                              fontFamily: Style
+                                                                  .montserrat,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -1315,7 +1290,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                 Container(
                                                   margin:
                                                       const EdgeInsets.only(
-                                                          top: 5.0),
+                                                          top: 5.0,bottom: 5.0),
                                                   child: Row(
                                                     children: [
                                                       Icon(

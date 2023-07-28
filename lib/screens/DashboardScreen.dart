@@ -30,6 +30,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../ResponseModule/CategoryModel.dart';
 import '../ResponseModule/CityModel.dart';
 import '../ResponseModule/DemographicModel/DemographicModel.dart';
+import '../Utils/ProgressDialog.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLanguage.dart';
 import '../helper/AppLocalizations.dart';
@@ -171,14 +172,21 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
   Future<void> checkpopupdata(id, name, type, description) async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      return await showDialog(
+
+      showDialog(
           context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: SingleChildScrollView(
-                child: Container(
-                  height: MediaQuery.of(context).size.height/1.5,
-                  child: Column(
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.grey[100],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)), //this right here
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2.2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: ListView(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -218,50 +226,43 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                 borderRadius:
                                 BorderRadius.circular(20)),
                             clipBehavior: Clip.antiAlias,
-                            child: Expanded(
-                              flex: 2,
-                              // width: 300.0,
-                              // height:
-                              //     MediaQuery.of(context).size.height /
-                              //         3,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width,
-                                  child: Image.network(
-                                    popupJResultList[index]
-                                        .cBannerImage!,
-                                    fit: BoxFit.fill,
-                                  )
-                                // : InkWell(
-                                //     onTap: () async {
-                                //       // debugPrint(
-                                //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                //       // String
-                                //       //     url =
-                                //       //     bannerJResultList[index]
-                                //       //         .cBannerLink;
-                                //       // var url =
-                                //       //     bannerJResultList[index]
-                                //       //         .cBannerLink!;
-                                //       // if (await canLaunch(
-                                //       //     url)) {
-                                //       //   await launch(
-                                //       //       url);
-                                //       // } else {
-                                //       //   throw 'Could not launch $url';
-                                //       // }
-                                //       openbannerlaunchurl(
-                                //           bannerJResultList[index]
-                                //               .cBannerLink!);
-                                //     },
-                                //     child: Image.network(
-                                //       bannerJResultList[index]
-                                //           .cBannerImage!,
-                                //       fit: BoxFit.fitWidth,
-                                //     ),
-                                //   ),
-                              ),
+                            child: SizedBox(
+                                width: MediaQuery.of(context)
+                                    .size
+                                    .width,
+                                child: Image.network(
+                                  popupJResultList[index]
+                                      .cBannerImage!,
+                                  fit: BoxFit.fill,
+                                )
+                              // : InkWell(
+                              //     onTap: () async {
+                              //       // debugPrint(
+                              //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                              //       // String
+                              //       //     url =
+                              //       //     bannerJResultList[index]
+                              //       //         .cBannerLink;
+                              //       // var url =
+                              //       //     bannerJResultList[index]
+                              //       //         .cBannerLink!;
+                              //       // if (await canLaunch(
+                              //       //     url)) {
+                              //       //   await launch(
+                              //       //       url);
+                              //       // } else {
+                              //       //   throw 'Could not launch $url';
+                              //       // }
+                              //       openbannerlaunchurl(
+                              //           bannerJResultList[index]
+                              //               .cBannerLink!);
+                              //     },
+                              //     child: Image.network(
+                              //       bannerJResultList[index]
+                              //           .cBannerImage!,
+                              //       fit: BoxFit.fitWidth,
+                              //     ),
+                              //   ),
                             ),
                           );
                         },
@@ -282,6 +283,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                           : Container(),
                       popupJResultList.isNotEmpty
                           ? Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.3),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(Radius.circular(10.0))),
                         margin: const EdgeInsets.only(top: 5.0),
                         child: CarouselIndicator(
                           count: popupJResultList.length,
@@ -298,6 +303,140 @@ class _DashBoardScreenState extends State<DashBoardScreen>
               ),
             );
           });
+
+        // await showDialog(
+        //   context: context,
+        //   builder: (context) {
+        //     return AlertDialog(
+        //       content: CustomScrollView(
+        //         physics: AlwaysScrollableScrollPhysics(),
+        //         slivers: [
+        //           SliverFillRemaining(
+        //             fillOverscroll: true,
+        //             child: Container(
+        //               height: MediaQuery.of(context).size.height/1.0,
+        //               child: Column(
+        //                 children: [
+        //                   Row(
+        //                     mainAxisAlignment: MainAxisAlignment.end,
+        //                     children: [
+        //                       IconButton(
+        //                         onPressed: () {
+        //                           name == "City Popup" || name == "City"
+        //                               ? box.write("popupcityid", id).then(((value) {
+        //                             Navigator.pop(context);
+        //                           }))
+        //                               : box.write("popuphomeid", id).then(((value) {
+        //                             Navigator.pop(context);
+        //                           }));
+        //                         },
+        //                         icon: const Icon(
+        //                           Icons.close,
+        //                           color: Colors.grey,
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   popupJResultList.isNotEmpty
+        //                       ? CarouselSlider.builder(
+        //                     itemCount: popupJResultList.length,
+        //                     itemBuilder:
+        //                         (BuildContext context, int index, int realIdx) {
+        //                       return popupJResultList[index].npopuptype ==
+        //                           "2" ||
+        //                           popupJResultList[index].npopuptype == 2
+        //                           ? SingleChildScrollView(
+        //                         child: HtmlWidget(
+        //                           popupJResultList[index].cdescription!,
+        //                         ),
+        //                       )
+        //                           : Card(
+        //                         shape: RoundedRectangleBorder(
+        //                             borderRadius:
+        //                             BorderRadius.circular(20)),
+        //                         clipBehavior: Clip.antiAlias,
+        //                         child: Expanded(
+        //                           flex: 2,
+        //                           // width: 300.0,
+        //                           // height:
+        //                           //     MediaQuery.of(context).size.height /
+        //                           //         3,
+        //                           child: SizedBox(
+        //                               width: MediaQuery.of(context)
+        //                                   .size
+        //                                   .width,
+        //                               child: Image.network(
+        //                                 popupJResultList[index]
+        //                                     .cBannerImage!,
+        //                                 fit: BoxFit.fill,
+        //                               )
+        //                             // : InkWell(
+        //                             //     onTap: () async {
+        //                             //       // debugPrint(
+        //                             //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+        //                             //       // String
+        //                             //       //     url =
+        //                             //       //     bannerJResultList[index]
+        //                             //       //         .cBannerLink;
+        //                             //       // var url =
+        //                             //       //     bannerJResultList[index]
+        //                             //       //         .cBannerLink!;
+        //                             //       // if (await canLaunch(
+        //                             //       //     url)) {
+        //                             //       //   await launch(
+        //                             //       //       url);
+        //                             //       // } else {
+        //                             //       //   throw 'Could not launch $url';
+        //                             //       // }
+        //                             //       openbannerlaunchurl(
+        //                             //           bannerJResultList[index]
+        //                             //               .cBannerLink!);
+        //                             //     },
+        //                             //     child: Image.network(
+        //                             //       bannerJResultList[index]
+        //                             //           .cBannerImage!,
+        //                             //       fit: BoxFit.fitWidth,
+        //                             //     ),
+        //                             //   ),
+        //                           ),
+        //                         ),
+        //                       );
+        //                     },
+        //                     options: CarouselOptions(
+        //                         autoPlay:
+        //                         popupJResultList.isNotEmpty ? true : false,
+        //                         viewportFraction: 1.0,
+        //                         height: type == "2" ? 250 : 150,
+        //                         enlargeCenterPage: false,
+        //                         enableInfiniteScroll: false,
+        //                         onPageChanged: (index, reason) {
+        //                           setState(() {
+        //                             pageIndex = index;
+        //                             // _current = index;
+        //                           });
+        //                         }),
+        //                   )
+        //                       : Container(),
+        //                   popupJResultList.isNotEmpty
+        //                       ? Container(
+        //                     margin: const EdgeInsets.only(top: 5.0),
+        //                     child: CarouselIndicator(
+        //                       count: popupJResultList.length,
+        //                       index: pageIndex,
+        //                       color: Style.colors.grey.withOpacity(0.3),
+        //                       activeColor: Style.colors.logoRed,
+        //                       width: 10.0,
+        //                     ),
+        //                   )
+        //                       : Container(),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     );
+        //   });
     });
     //   return Text('Hello, World!');
     // })
@@ -1425,7 +1564,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                                   categoryJResultList[
                                                                           index]
                                                                       .cCategory!,
-                                                                  true)));
+                                                                  true,0)));
                                                 },
                                                 child: Container(
                                                   decoration: BoxDecoration(
@@ -1510,7 +1649,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   : Container(),
                               bannerJResultList.isNotEmpty
                                   ? Container(
-                                      margin: const EdgeInsets.only(top: 15.0),
+                                      margin: const EdgeInsets.only(left:6.0,right:6,top: 15.0),
                                       child: CarouselSlider.builder(
                                         itemCount: bannerJResultList.length,
                                         itemBuilder: (BuildContext context,
@@ -1944,9 +2083,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   var dealztype;
   getDemoGraphicList() async {
     try {
-      //   ProgressDialog().showLoaderDialog(context);
-
       Dio dio = Dio();
+      // ProgressDialog().showLoaderDialog(context);
+
       // dio.options.connectTimeout = 5000; //5s
       // dio.options.receiveTimeout = 3000;
 
@@ -1967,7 +2106,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         DemographicModel demographicModel = DemographicModel.fromJson(map);
 
         if (demographicModel.nStatus == 1) {
-          //   ProgressDialog().dismissDialog(context);
+            // ProgressDialog().dismissDialog(context);
           // for (var i = 0; i < demographicModel.jResult!.length; i++) {
           //   if (demographicModel.jResult![i].cDemographic ==
           //       "DealZ Near Me     коло меня") {
@@ -1982,7 +2121,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           // }
           updateDemoGraphicList(demographicModel.jResult!);
         } else {
-          //  ProgressDialog().dismissDialog(context);
+           // ProgressDialog().dismissDialog(context);
         }
       } else {
         // ProgressDialog().dismissDialog(context);
@@ -1992,7 +2131,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
       // debugPrint(response);
     } catch (e) {
-      //  ProgressDialog().dismissDialog(context);
+       // ProgressDialog().dismissDialog(context);
       debugPrint("Response22: $e");
     }
   }

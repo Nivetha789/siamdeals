@@ -10,23 +10,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:siamdealz/ResponseModule/popupmodel.dart';
-import 'package:siamdealz/screens/categorylist.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/style.dart';
 import '../ResponseModule/BannerModel.dart';
 import '../ResponseModule/CategoryModel.dart';
+import '../Utils/ProgressDialog.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLocalizations.dart';
-import '../utils/ProgressDialog.dart';
 import '../utils/check_internet.dart';
 import '../utils/fab_menu_package.dart';
 import '../utils/handler/toast_handler.dart';
-import 'SearchStoreListScreen.dart';
+import 'SubCategoryListScreen.dart';
 
 class CategoryListScreen extends StatefulWidget {
   final cityid;
+
   CategoryListScreen(this.cityid, {super.key});
 
   CategoryListScreenState createState() => CategoryListScreenState();
@@ -131,6 +131,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
   }
 
   final box = GetStorage();
+
   Future<void> checkpopupdata(id, name, type, description) async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       return await showDialog(
@@ -270,6 +271,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
   }
 
   List<PopupJResult> popupJResultList = [];
+
   updateCategoryList(List<CategoryJResult> categoryJResultList1,
       List<CategoryJBanner> categoryJBannerList1) {
     categoryJResultList.clear();
@@ -386,7 +388,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                       fontFamily: Style.josefinsans)),
                             ),
                             Container(
-                              margin: EdgeInsets.only(top: 15.0),
+                              margin: EdgeInsets.only(top: 5.0,left:6.0,right: 6.0),
                               child: CarouselSlider.builder(
                                 itemCount: bannerJResultList.length,
                                 itemBuilder: (BuildContext context, int index,
@@ -459,7 +461,8 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left:15.0,right:15.0,top: 5.0),
+                              margin: EdgeInsets.only(
+                                  left: 15.0, right: 15.0, top: 5.0),
                               child: CarouselIndicator(
                                 count: bannerJResultList.length,
                                 index: pageIndex,
@@ -495,11 +498,25 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                   onTap: () {
                                     debugPrint(
                                         "asdfghjkl {categoryJResultList[index].nId!}");
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             CategoryStoreListScreen(
+                                    //                 int.parse(
+                                    //                     categoryJResultList[
+                                    //                             index]
+                                    //                         .nId!),
+                                    //                 widget.cityid,
+                                    //                 categoryJResultList[index]
+                                    //                     .cCategory!,
+                                    //                 true)));
+
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                CategoryStoreListScreen(
+                                                SubCategoryListScreen(
                                                     int.parse(
                                                         categoryJResultList[
                                                                 index]

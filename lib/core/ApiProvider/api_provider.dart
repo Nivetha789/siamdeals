@@ -1,7 +1,8 @@
 // ignore_for_file: constant_identifier_names
 
 class ApiProvider {
-  static const String BASE_URL = "http://beta.siamdealz.com/api/";
+  // static const String BASE_URL = "http://beta.siamdealz.com/api/";
+  static const String BASE_URL = "http://admin.siamdealz.com/api/";
 
   static const String sendotp = "${BASE_URL}customers/sendOTP";
 

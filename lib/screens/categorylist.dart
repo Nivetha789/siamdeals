@@ -19,9 +19,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../ResponseModule/BannerModel.dart';
 import '../ResponseModule/CategoryModel.dart';
 import '../ResponseModule/SearchVendorModule/SearchVendorModel.dart';
+import '../Utils/ProgressDialog.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLocalizations.dart';
-// import '../utils/ProgressDialog.dart';
 import '../utils/check_internet.dart';
 import '../utils/fab_menu_package.dart';
 import '../utils/handler/toast_handler.dart';
@@ -31,10 +31,11 @@ class CategoryStoreListScreen extends StatefulWidget {
   int categoryId = 0;
   final cityid;
   String categoryName = "";
+  int subCategoryId = 0;
   bool checkCategory = false;
 
-  CategoryStoreListScreen(
-      this.categoryId, this.cityid, this.categoryName, this.checkCategory);
+  CategoryStoreListScreen(this.categoryId, this.cityid, this.categoryName,
+      this.checkCategory, this.subCategoryId);
 
   SearchStoreListScreenState createState() => SearchStoreListScreenState();
 }
@@ -82,12 +83,10 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
     super.initState();
     getpopupList("category", widget.categoryId.toString());
     categoryId = widget.categoryId;
-    getSubCategoryList();
+    // getSubCategoryList();
     if (widget.checkCategory) {
       categoryName = widget.categoryName;
       searchHint = "Search";
@@ -98,15 +97,18 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
     check().then((intenet) {
       if (intenet) {
-        if (widget.checkCategory) {
-          getSubCategoryList();
-
-          categoryName = widget.categoryName;
-          searchHint = "Search";
-        } else {
-          categoryName = "Search";
-          searchHint = "Search for stores ,products,brands,dishes..";
-        }
+        Future.delayed(Duration.zero, () {
+          if (widget.checkCategory) {
+            this.getSubCategoryList();
+            this.getBannerList("category");
+            this.searchVendorListApi(searchTxt, "Search");
+            categoryName = widget.categoryName;
+            searchHint = "Search";
+          } else {
+            categoryName = "Search";
+            searchHint = "Search for stores ,products,brands,dishes..";
+          }
+        });
 
         // searchVendorListApi(searchTxt, "Search");
       } else {
@@ -325,9 +327,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                     height: 30,
                                                     width: 30),
                                                 Container(
-                                                  margin: EdgeInsets.only(left:7.0),
+                                                  margin: EdgeInsets.only(
+                                                      left: 7.0),
                                                   child: Text(
-                                                    searchSubCategoryList[postion]
+                                                    searchSubCategoryList[
+                                                                postion]
                                                             .cCategory!
                                                             .isNotEmpty
                                                         ? searchSubCategoryList[
@@ -339,8 +343,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                         fontSize: 14.0,
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        fontFamily:
-                                                            Style.sfproddisplay),
+                                                        fontFamily: Style
+                                                            .sfproddisplay),
                                                   ),
                                                 ),
                                               ],
@@ -385,13 +389,13 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       subCategoryDataList.addAll(subCategoryDataList1);
     });
     categoryId = int.parse(subCategoryDataList[0].nId!);
-    searchVendorListApi(searchTxt, "Search");
-    if (!checkSubCategoryListFirst) {
-      SubCategoryBottomList(context);
-    }
+    // if (!checkSubCategoryListFirst) {
+    //   SubCategoryBottomList(context);
+    // }
   }
 
   updateVendorList(List<SearchVendorJResult> searchVendorJResultList1) {
+    searchVendorJResultList.clear();
     setState(() {
       searchVendorJResultList.addAll(searchVendorJResultList1);
     });
@@ -405,7 +409,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
   }
 
   getpopupList(String type, String actionId) async {
-    try {
       Dio dio = Dio();
       debugPrint(
           "vsfdsfsdfdsf ${type}  actionid${widget.categoryId} ${widget.cityid}");
@@ -424,11 +427,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
 
-        debugPrint("vsfdsfsdsf12333 ${map["j_result"][0]}");
+        // debugPrint("vsfdsfsdsf12333 ${map["j_result"][0].toString()}");
         PopupModel popupModel = PopupModel.fromJson(map);
         debugPrint("PAvithramanoharan123444 ${popupModel.jResult}");
-        if (popuphomeid != map["j_result"][0]["n_id"]) {
-          if (popupModel.nStatus == 1) {
+        if (popupModel.nStatus == 1) {
+          if (popuphomeid != map["j_result"][0]["n_id"]) {
             updatePopupList(
                 popupModel.jResult!,
                 map["j_result"][0]["n_id"],
@@ -436,6 +439,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                 map["j_result"][0]["n_popup_type"],
                 map["j_result"][0]["c_description"]);
           }
+        }else{
+
         }
         // if (popupModel.nStatus == 1) {
         //   updatePopupList(popupModel.jResult!);
@@ -444,13 +449,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         // bannerJResultList.clear();
         ToastHandler.showToast(message: "Bad Network Connection try again..");
       }
-
-      // debugPrint(response);
-    } catch (e) {
-      // bannerJResultList.clear();
-      //  ProgressDialog().dismissDialog(context);
-      debugPrint("Response55: $e");
-    }
   }
 
   updatePopupList(
@@ -473,130 +471,138 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       return await showDialog(
           context: context,
           builder: (context) {
-            return AlertDialog(
-              content: SingleChildScrollView(
-                // height: MediaQuery.of(context).size.height / 2,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            box.write("categoryid", id).then(((value) {
-                              Navigator.pop(context);
-                            }));
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                    popupJResultList.isNotEmpty
-                        ? CarouselSlider.builder(
-                            itemCount: popupJResultList.length,
-                            itemBuilder:
-                                (BuildContext context, int index, int realIdx) {
-                              return popupJResultList[index].npopuptype ==
-                                          "2" ||
-                                      popupJResultList[index].npopuptype == 2
-                                  ? Expanded(
-                                      flex: 5,
-                                      // width: 300.0,
-                                      // height:
-                                      //     MediaQuery.of(context).size.height /
-                                      //         3,
-
-                                      // height: 100.0,
-                                      child: SingleChildScrollView(
-                                        child: HtmlWidget(
-                                          popupJResultList[index].cdescription!,
-                                        ),
-                                      ),
-                                    )
-                                  : Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: Expanded(
-                                        flex: 2,
-                                        // width: 300.0,
-                                        // height:
-                                        //     MediaQuery.of(context).size.height /
-                                        //         3,
-                                        child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Image.network(
-                                              popupJResultList[index]
-                                                  .cBannerImage!,
-                                              fit: BoxFit.fitWidth,
-                                            )
-                                            // : InkWell(
-                                            //     onTap: () async {
-                                            //       // debugPrint(
-                                            //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                            //       // String
-                                            //       //     url =
-                                            //       //     bannerJResultList[index]
-                                            //       //         .cBannerLink;
-                                            //       // var url =
-                                            //       //     bannerJResultList[index]
-                                            //       //         .cBannerLink!;
-                                            //       // if (await canLaunch(
-                                            //       //     url)) {
-                                            //       //   await launch(
-                                            //       //       url);
-                                            //       // } else {
-                                            //       //   throw 'Could not launch $url';
-                                            //       // }
-                                            //       openbannerlaunchurl(
-                                            //           bannerJResultList[index]
-                                            //               .cBannerLink!);
-                                            //     },
-                                            //     child: Image.network(
-                                            //       bannerJResultList[index]
-                                            //           .cBannerImage!,
-                                            //       fit: BoxFit.fitWidth,
-                                            //     ),
-                                            //   ),
-                                            ),
-                                      ),
-                                    );
+            return Dialog(
+              backgroundColor: Colors.grey[100],
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)), //this right here
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2.2,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: ListView(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              box.write("categoryid", id).then(((value) {
+                                Navigator.pop(context);
+                              }));
                             },
-                            options: CarouselOptions(
-                                autoPlay:
-                                    popupJResultList.isNotEmpty ? true : false,
-                                viewportFraction: 1.0,
-                                height: type == "2" ? 250 : 150,
-                                enlargeCenterPage: false,
-                                enableInfiniteScroll: false,
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    pageIndex = index;
-                                    // _current = index;
-                                  });
-                                }),
-                          )
-                        : Container(),
-                    popupJResultList.isNotEmpty
-                        ? Container(
-                            margin: const EdgeInsets.only(top: 5.0),
-                            child: CarouselIndicator(
-                              count: popupJResultList.length,
-                              index: pageIndex,
-                              color: Style.colors.grey.withOpacity(0.3),
-                              activeColor: Style.colors.logoRed,
-                              width: 10.0,
+                            icon: const Icon(
+                              Icons.close,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      popupJResultList.isNotEmpty
+                          ? CarouselSlider.builder(
+                        itemCount: popupJResultList.length,
+                        itemBuilder:
+                            (BuildContext context, int index, int realIdx) {
+                          return popupJResultList[index].npopuptype ==
+                              "2" ||
+                              popupJResultList[index].npopuptype == 2
+                              ? Expanded(
+                            flex: 5,
+                            // width: 300.0,
+                            // height:
+                            //     MediaQuery.of(context).size.height /
+                            //         3,
+
+                            // height: 100.0,
+                            child: SingleChildScrollView(
+                              child: HtmlWidget(
+                                popupJResultList[index].cdescription!,
+                              ),
                             ),
                           )
-                        : Container(),
-                  ],
+                              : Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(20)),
+                            clipBehavior: Clip.antiAlias,
+                            child: Expanded(
+                              flex: 2,
+                              // width: 300.0,
+                              // height:
+                              //     MediaQuery.of(context).size.height /
+                              //         3,
+                              child: SizedBox(
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width,
+                                  child: Image.network(
+                                    popupJResultList[index]
+                                        .cBannerImage!,
+                                    fit: BoxFit.cover,
+                                  )
+                                // : InkWell(
+                                //     onTap: () async {
+                                //       // debugPrint(
+                                //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                //       // String
+                                //       //     url =
+                                //       //     bannerJResultList[index]
+                                //       //         .cBannerLink;
+                                //       // var url =
+                                //       //     bannerJResultList[index]
+                                //       //         .cBannerLink!;
+                                //       // if (await canLaunch(
+                                //       //     url)) {
+                                //       //   await launch(
+                                //       //       url);
+                                //       // } else {
+                                //       //   throw 'Could not launch $url';
+                                //       // }
+                                //       openbannerlaunchurl(
+                                //           bannerJResultList[index]
+                                //               .cBannerLink!);
+                                //     },
+                                //     child: Image.network(
+                                //       bannerJResultList[index]
+                                //           .cBannerImage!,
+                                //       fit: BoxFit.fitWidth,
+                                //     ),
+                                //   ),
+                              ),
+                            ),
+                          );
+                        },
+                        options: CarouselOptions(
+                            autoPlay:
+                            popupJResultList.isNotEmpty ? true : false,
+                            viewportFraction: 1.0,
+                            height: type == "2" ? 250 : 150,
+                            enlargeCenterPage: false,
+                            enableInfiniteScroll: false,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                pageIndex = index;
+                                // _current = index;
+                              });
+                            }),
+                      )
+                          : Container(),
+                      popupJResultList.isNotEmpty
+                          ? Container(
+                        margin: const EdgeInsets.only(top: 5.0),
+                        child: CarouselIndicator(
+                          count: popupJResultList.length,
+                          index: pageIndex,
+                          color: Style.colors.grey.withOpacity(0.3),
+                          activeColor: Style.colors.logoRed,
+                          width: 10.0,
+                        ),
+                      )
+                          : Container(),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -751,7 +757,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                               fontFamily: Style.josefinsans)),
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.only(top: 15.0),
+                                      margin: const EdgeInsets.only(left: 6.0,right:6.0,top: 5.0),
                                       child: CarouselSlider.builder(
                                         itemCount: bannerJResultList.length,
                                         itemBuilder: (BuildContext context,
@@ -800,7 +806,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                       child: Image.network(
                                                         bannerJResultList[index]
                                                             .cBannerImage!,
-                                                        fit: BoxFit.fitWidth,
+                                                        fit: BoxFit.fill,
                                                       ),
                                                     ),
                                             ),
@@ -825,7 +831,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                     ),
                                     Container(
                                       alignment: Alignment.center,
-                                      margin: const EdgeInsets.only(top: 5.0),
+                                      margin: const EdgeInsets.only(left:10.0,right:10.0,top: 5.0),
                                       child: CarouselIndicator(
                                         count: bannerJResultList.length,
                                         index: pageIndex,
@@ -840,44 +846,47 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                               )
                             : Container(),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(
-                            top: 15.0, left: 16.0, right: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(AppLocalizations.of(context)!.sub_category!,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: Style.josefinsans)),
-                            Visibility(
-                              visible: subCategoryDataList.length > 10,
-                              child: InkWell(
-                                onTap: () {
-                                  searchSubCategoryList.clear();
-                                  setState(() {
-                                    searchSubCategoryList
-                                        .addAll(subCategoryDataList);
-                                  });
-                                  SubCategoryBottomList(context);
-                                },
-                                child: Container(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                      AppLocalizations.of(context)!.view_all!,
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Style.colors.logoRed,
-                                          fontFamily: Style.josefinsans)),
+                      Visibility(
+                        visible: false,
+                        child: Container(
+                          margin: const EdgeInsets.only(
+                              top: 15.0, left: 16.0, right: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(AppLocalizations.of(context)!.sub_category!,
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: Style.josefinsans)),
+                              Visibility(
+                                visible: false,
+                                child: InkWell(
+                                  onTap: () {
+                                    searchSubCategoryList.clear();
+                                    setState(() {
+                                      searchSubCategoryList
+                                          .addAll(subCategoryDataList);
+                                    });
+                                    SubCategoryBottomList(context);
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                        AppLocalizations.of(context)!.view_all!,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: Style.colors.logoRed,
+                                            fontFamily: Style.josefinsans)),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      subCategoryDataList.isNotEmpty
+                      /*subCategoryDataList.isNotEmpty
                           ? Container(
                               width: MediaQuery.of(context).size.width,
                               height: 60,
@@ -1038,7 +1047,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                 ),
                               ),
                             )
-                          : Container(),
+                          : Container(),*/
                       Expanded(
                         flex: 5,
                         child: Stack(
@@ -1186,38 +1195,42 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                       top: 5.0),
                                                               child: Row(
                                                                 children: [
-                                                                  Text(
-                                                                    "${AppLocalizations.of(context)!.category!} : ",
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13.0,
-                                                                        color: Style
-                                                                            .colors
-                                                                            .app_black,
-                                                                        fontFamily:
-                                                                            Style
-                                                                                .montserrat,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child: Text(
+                                                                      "${AppLocalizations.of(context)!.category!} : ",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13.0,
+                                                                          color: Style
+                                                                              .colors
+                                                                              .app_black,
+                                                                          fontFamily: Style
+                                                                              .montserrat,
+                                                                          fontWeight:
+                                                                              FontWeight.w400),
+                                                                    ),
                                                                   ),
-                                                                  Text(
-                                                                    searchVendorJResultList[index]
-                                                                            .cCategory!
-                                                                            .isNotEmpty
-                                                                        ? searchVendorJResultList[index]
-                                                                            .cCategory!
-                                                                        : " - ",
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            13.0,
-                                                                        color: Style
-                                                                            .colors
-                                                                            .app_black,
-                                                                        fontFamily:
-                                                                            Style
-                                                                                .montserrat,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
+                                                                  Expanded(
+                                                                    flex: 4,
+                                                                    child: Text(
+                                                                      searchVendorJResultList[index]
+                                                                              .cCategory!
+                                                                              .isNotEmpty
+                                                                          ? searchVendorJResultList[index]
+                                                                              .cCategory!
+                                                                          : " - ",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13.0,
+                                                                          color: Style
+                                                                              .colors
+                                                                              .app_black,
+                                                                          fontFamily: Style
+                                                                              .montserrat,
+                                                                          fontWeight:
+                                                                              FontWeight.w400),
+                                                                    ),
                                                                   ),
                                                                 ],
                                                               ),
@@ -1345,9 +1358,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
   }
 
   getSubCategoryList() async {
-    // ProgressDialog().showLoaderDialog(context);
-
     try {
+      ProgressDialog().showLoaderDialog(context);
+
       Dio dio = Dio();
       // dio.options.connectTimeout = 5000; //5s
       // dio.options.receiveTimeout = 3000;
@@ -1358,13 +1371,14 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       //     ApiProvider.getCity,
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
-
+      print("paramsssss ${parameters}");
+      dio.options.contentType = Headers.formUrlEncodedContentType;
       final response = await dio.post(ApiProvider.getCategory,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
       if (response.statusCode == 200) {
-        print("asdfghjkl ${response.data}");
+        print("resssssss ${response.data}");
         Map<String, dynamic> map = jsonDecode(response.toString());
         CategoryModel categoryModel = CategoryModel.fromJson(map);
 
@@ -1375,18 +1389,22 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
           updateSubCategoryList(categoryModel.jResult!);
 
-          getBannerList("category");
-
-          // ProgressDialog().dismissDialog(context);
+          if(mounted){
+            ProgressDialog().dismissDialog(context);
+          }
         } else {
           setState(() {
             checkSubCategoryEmpty = true;
             emptySubCategoryTxt = categoryModel.cMessage!;
           });
-          // ProgressDialog().dismissDialog(context);
+          if(mounted) {
+            ProgressDialog().dismissDialog(context);
+          }
         }
       } else {
-        // ProgressDialog().dismissDialog(context);
+        if(mounted) {
+          ProgressDialog().dismissDialog(context);
+        }
         setState(() {
           checkSubCategoryEmpty = true;
           emptySubCategoryTxt = "Bad Network Connection try again..";
@@ -1395,7 +1413,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
       // print(response);
     } catch (e) {
-      // ProgressDialog().dismissDialog(context);
+      if(mounted) {
+        ProgressDialog().dismissDialog(context);
+      }
       setState(() {
         checkSubCategoryEmpty = true;
         emptySubCategoryTxt = "Bad Network Connection try again..";
@@ -1405,6 +1425,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
   getBannerList(String type) async {
     try {
+      // ProgressDialog().showLoaderDialog(context);
       Dio dio = Dio();
       // dio.options.connectTimeout = 5000; //5s
       // dio.options.receiveTimeout = 3000;
@@ -1428,15 +1449,19 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         BannerModel bannerModel = BannerModel.fromJson(map);
-
         if (bannerModel.nStatus == 1) {
+          // if(mounted) {
+          //   ProgressDialog().dismissDialog(context);
+          // }
           setState(() {
             checkBanner = true;
           });
-
           updateBannerList(bannerModel.jResult!);
         }
       } else {
+        // if(mounted) {
+        //   ProgressDialog().dismissDialog(context);
+        // }
         setState(() {
           checkBanner = false;
         });
@@ -1451,15 +1476,15 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       setState(() {
         checkBanner = false;
       });
-      // ProgressDialog().dismissDialog(context);
+      // if(mounted) {
+      //   ProgressDialog().dismissDialog(context);
+      // }
       print("Response: $e");
     }
   }
 
   searchVendorListApi(String searchTxt, String loadmore) async {
-    if (progressbar) {
-      // ProgressDialog().showLoaderDialog(context);
-    }
+    // ProgressDialog().showLoaderDialog(context);
 
     // BaseOptions options =  BaseOptions(
     //   baseUrl: ApiProvider().Baseurl,
@@ -1475,9 +1500,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     var parameters = {
       "n_limit": limit,
       "c_search": searchTxt,
-      "n_category_id": categoryId
+      "n_category_id": widget.categoryId
     };
-    debugPrint("request : $parameters");
+    debugPrint("request777 : $parameters");
 
     final response = await dio.post(ApiProvider.getSearchVendor,
         options: Options(
@@ -1492,27 +1517,33 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       SearchVendorModel searchVendorModel = SearchVendorModel.fromJson(map);
 
       if (searchVendorModel.nStatus == 1) {
-        // ProgressDialog().dismissDialog(context);
-        setState(() {
-          checkInbox = true;
-          inboxNoData = false;
-          if (searchVendorModel.jResult!.length > 0) {
-            offset = offset + limit;
-            limit = limit;
-            total = searchVendorModel.nTotalRecords!;
-          } else {
-            checkInbox = false;
-            inboxNoData = true;
-            noDataText = "Record Not Found";
-          }
-        });
+        // if(mounted) {
+        //   ProgressDialog().dismissDialog(context);
+        // }
+        if(mounted) {
+          setState(() {
+            checkInbox = true;
+            inboxNoData = false;
+            if (searchVendorModel.jResult!.length > 0) {
+              offset = offset + limit;
+              limit = limit;
+              total = searchVendorModel.nTotalRecords!;
+            } else {
+              checkInbox = false;
+              inboxNoData = true;
+              noDataText = "Record Not Found";
+            }
+          });
+        }
         if (loadmore == "Search") {
           searchVendorJResultList.clear();
         }
 
         updateVendorList(searchVendorModel.jResult!);
       } else {
-        // ProgressDialog().dismissDialog(context);
+        // if(mounted) {
+        //   ProgressDialog().dismissDialog(context);
+        // }
         setState(() {
           checkInbox = false;
           inboxNoData = true;
@@ -1520,7 +1551,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         });
       }
     } else {
-      // ProgressDialog().dismissDialog(context);
+      // if(mounted) {
+      //   ProgressDialog().dismissDialog(context);
+      // }
       setState(() {
         checkInbox = false;
         inboxNoData = true;
