@@ -483,13 +483,16 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                     // mainAxisAlignment: MainAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           IconButton(
                             onPressed: () {
-                              box.write("categoryid", id).then(((value) {
+                              name == "City Popup" || name == "City"
+                                  ? box.write("popupcityid", id).then(((value) {
+                                Navigator.pop(context);
+                              }))
+                                  : box.write("popuphomeid", id).then(((value) {
                                 Navigator.pop(context);
                               }));
                             },
@@ -508,18 +511,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                           return popupJResultList[index].npopuptype ==
                               "2" ||
                               popupJResultList[index].npopuptype == 2
-                              ? Expanded(
-                            flex: 5,
-                            // width: 300.0,
-                            // height:
-                            //     MediaQuery.of(context).size.height /
-                            //         3,
-
-                            // height: 100.0,
-                            child: SingleChildScrollView(
-                              child: HtmlWidget(
-                                popupJResultList[index].cdescription!,
-                              ),
+                              ? SingleChildScrollView(
+                            child: HtmlWidget(
+                              popupJResultList[index].cdescription!,
                             ),
                           )
                               : Card(
@@ -527,50 +521,43 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                 borderRadius:
                                 BorderRadius.circular(20)),
                             clipBehavior: Clip.antiAlias,
-                            child: Expanded(
-                              flex: 2,
-                              // width: 300.0,
-                              // height:
-                              //     MediaQuery.of(context).size.height /
-                              //         3,
-                              child: SizedBox(
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width,
-                                  child: Image.network(
-                                    popupJResultList[index]
-                                        .cBannerImage!,
-                                    fit: BoxFit.cover,
-                                  )
-                                // : InkWell(
-                                //     onTap: () async {
-                                //       // debugPrint(
-                                //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                //       // String
-                                //       //     url =
-                                //       //     bannerJResultList[index]
-                                //       //         .cBannerLink;
-                                //       // var url =
-                                //       //     bannerJResultList[index]
-                                //       //         .cBannerLink!;
-                                //       // if (await canLaunch(
-                                //       //     url)) {
-                                //       //   await launch(
-                                //       //       url);
-                                //       // } else {
-                                //       //   throw 'Could not launch $url';
-                                //       // }
-                                //       openbannerlaunchurl(
-                                //           bannerJResultList[index]
-                                //               .cBannerLink!);
-                                //     },
-                                //     child: Image.network(
-                                //       bannerJResultList[index]
-                                //           .cBannerImage!,
-                                //       fit: BoxFit.fitWidth,
-                                //     ),
-                                //   ),
-                              ),
+                            child: SizedBox(
+                                width: MediaQuery.of(context)
+                                    .size
+                                    .width,
+                                child: Image.network(
+                                  popupJResultList[index]
+                                      .cBannerImage!,
+                                  fit: BoxFit.fill,
+                                )
+                              // : InkWell(
+                              //     onTap: () async {
+                              //       // debugPrint(
+                              //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                              //       // String
+                              //       //     url =
+                              //       //     bannerJResultList[index]
+                              //       //         .cBannerLink;
+                              //       // var url =
+                              //       //     bannerJResultList[index]
+                              //       //         .cBannerLink!;
+                              //       // if (await canLaunch(
+                              //       //     url)) {
+                              //       //   await launch(
+                              //       //       url);
+                              //       // } else {
+                              //       //   throw 'Could not launch $url';
+                              //       // }
+                              //       openbannerlaunchurl(
+                              //           bannerJResultList[index]
+                              //               .cBannerLink!);
+                              //     },
+                              //     child: Image.network(
+                              //       bannerJResultList[index]
+                              //           .cBannerImage!,
+                              //       fit: BoxFit.fitWidth,
+                              //     ),
+                              //   ),
                             ),
                           );
                         },
@@ -591,6 +578,10 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                           : Container(),
                       popupJResultList.isNotEmpty
                           ? Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.3),
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.all(Radius.circular(10.0))),
                         margin: const EdgeInsets.only(top: 5.0),
                         child: CarouselIndicator(
                           count: popupJResultList.length,
@@ -1416,10 +1407,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       if(mounted) {
         ProgressDialog().dismissDialog(context);
       }
-      setState(() {
-        checkSubCategoryEmpty = true;
-        emptySubCategoryTxt = "Bad Network Connection try again..";
-      });
     }
   }
 

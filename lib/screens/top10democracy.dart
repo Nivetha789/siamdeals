@@ -895,7 +895,9 @@ getDistancefilterList() async {
       DemographicModel.fromJson(map);
 
       if (demographicModel.nStatus == 1) {
-        ProgressDialog().dismissDialog(context);
+        if(mounted) {
+          ProgressDialog().dismissDialog(context);
+        }
         distancelist =
         List<Map<String, dynamic>>.from(map["data"]["distance_list"]);
         setState(() {
@@ -906,7 +908,9 @@ getDistancefilterList() async {
               map["data"]["distance_list"][i]["distance_id"].toString();
         }
       } else {
-        ProgressDialog().dismissDialog(context);
+        if(mounted) {
+          ProgressDialog().dismissDialog(context);
+        }
 
         Fluttertoast.showToast(
             msg: map["message"].toString(),
@@ -917,7 +921,9 @@ getDistancefilterList() async {
             timeInSecForIosWeb: 1);
       }
     } else {
-      ProgressDialog().dismissDialog(context);
+      if(mounted) {
+        ProgressDialog().dismissDialog(context);
+      }
 
       Fluttertoast.showToast(
           msg: "Bad Network Connection try again..",
@@ -930,36 +936,10 @@ getDistancefilterList() async {
 
     // print(response);
   } catch (e) {
-    ProgressDialog().dismissDialog(context);
-    print("Response: " + e.toString());
-  }
-
-
-  // ProgressDialog().showLoaderDialog(context);
-  Dio dio = Dio();
-  var parameters = {"n_city": widget.cityid};
-  final response = await dio.post(ApiProvider.getfilterList,
-      options: Options(contentType: Headers.formUrlEncodedContentType),
-      data: parameters);
-
-  if (response.statusCode == 200) {
-    Map<String, dynamic> map = jsonDecode(response.toString());
-    // debugPrint("PAVITHRAMMMM ${map["data"]["town_list"]}");
-    distancelist =
-    List<Map<String, dynamic>>.from(map["data"]["distance_list"]);
-    // setState(() {
-    distancelist = distancelist;
-    // });
-    for (var i = 0; i < map["data"]["distance_list"].length; i++) {
-      selectedOption =
-          map["data"]["distance_list"][i]["distance_id"].toString();
+    if(mounted) {
+      ProgressDialog().dismissDialog(context);
     }
-    // ProgressDialog().dismissDialog(context);
-
-    print("selectedOption $selectedOption");
-  } else {
-    // ProgressDialog().dismissDialog(context);
-    ToastHandler.showToast(message: "Bad Network Connection try again..");
+    print("Response: " + e.toString());
   }
 }
 
