@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:carousel_indicator/carousel_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Utils/ProgressDialog.dart';
+import '../ResponseModule/BannerModel.dart';
 import '../ResponseModule/CategoryModel.dart';
 import '../Utils/check_internet.dart';
 import '../core/ApiProvider/api_provider.dart';
@@ -50,17 +53,29 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
 
   StateSetter? stateSetter;
 
+  bool checkBanner = false;
+  List<BannerJResult> bannerJResultList = [];
+  int pageIndex = 0;
+
   @override
   void initState() {
     super.initState();
     check().then((intenet) {
       if (intenet) {
+        getBannerList("category");
         getSubCategoryList();
         // searchVendorListApi(searchTxt, "Search");
       } else {
         ToastHandler.showToast(
             message: "Please check your internet connection");
       }
+    });
+  }
+
+  updateBannerList(List<BannerJResult> bannerJResultList1) {
+    bannerJResultList.clear();
+    setState(() {
+      bannerJResultList.addAll(bannerJResultList1);
     });
   }
 
@@ -114,7 +129,7 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
               )),
           centerTitle: true,
           title: Text(
-            AppLocalizations.of(context)!.sub_category!,
+            widget.categoryName,
             textAlign: TextAlign.start,
             style: TextStyle(
                 color: Style.colors.logoRed,
@@ -167,6 +182,114 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
+                        Visibility(
+                          visible: checkBanner,
+                          child: bannerJResultList.isNotEmpty
+                              ? Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 15.0, left: 16.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                      AppLocalizations.of(context)!
+                                          .city_spotLight!,
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: Style.josefinsans)),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(left: 6.0,right:6.0,top: 5.0),
+                                  child: CarouselSlider.builder(
+                                    itemCount: bannerJResultList.length,
+                                    itemBuilder: (BuildContext context,
+                                        int index, int realIdx) {
+                                      return Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(20)),
+                                        clipBehavior: Clip.antiAlias,
+                                        child: SizedBox(
+                                          width: MediaQuery.of(context)
+                                              .size
+                                              .width,
+                                          height: 160,
+                                          child: bannerJResultList[index]
+                                              .cBannerLink ==
+                                              null
+                                              ? Image.network(
+                                            bannerJResultList[index]
+                                                .cBannerImage!,
+                                            fit: BoxFit.fill,
+                                          )
+                                              : InkWell(
+                                            onTap: () async {
+                                              // debugPrint(
+                                              //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                              // String
+                                              //     url =
+                                              //     bannerJResultList[index]
+                                              //         .cBannerLink;
+                                              // var url =
+                                              //     bannerJResultList[index]
+                                              //         .cBannerLink!;
+                                              // if (await canLaunch(
+                                              //     url)) {
+                                              //   await launch(
+                                              //       url);
+                                              // } else {
+                                              //   throw 'Could not launch $url';
+                                              // }
+                                              openbannerlaunchurl(
+                                                  bannerJResultList[
+                                                  index]
+                                                      .cBannerLink!);
+                                            },
+                                            child: Image.network(
+                                              bannerJResultList[index]
+                                                  .cBannerImage!,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    options: CarouselOptions(
+                                        autoPlay:
+                                        bannerJResultList.length > 0
+                                            ? true
+                                            : false,
+                                        viewportFraction: 1.0,
+                                        height: 200,
+                                        enlargeCenterPage: false,
+                                        enableInfiniteScroll: false,
+                                        onPageChanged: (index, reason) {
+                                          setState(() {
+                                            pageIndex = index;
+                                            // _current = index;
+                                          });
+                                        }),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.only(left:10.0,right:10.0,top: 5.0),
+                                  child: CarouselIndicator(
+                                    count: bannerJResultList.length,
+                                    index: pageIndex,
+                                    color:
+                                    Style.colors.grey.withOpacity(0.3),
+                                    activeColor: Style.colors.logoRed,
+                                    width: 10.0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                              : Container(),
+                        ),
                         Container(
                           decoration: BoxDecoration(
                             borderRadius:
@@ -281,6 +404,21 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
             )));
   }
 
+  openbannerlaunchurl(url) async {
+    print("dsfjhsdgfhsfsdf $url");
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+      await launchUrl(
+        Uri.parse("http://" + url),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+
   openWhatsapp() async {
     var whatsapp = "+66810673747";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
@@ -301,6 +439,56 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
       }
+    }
+  }
+
+  getBannerList(String type) async {
+    try {
+      Dio dio = new Dio();
+      // dio.options.connectTimeout = 5000; //5s
+      // dio.options.receiveTimeout = 3000;
+
+      // var parameters = {"LoginRegNo": regno, "UserRegNo": toRegNo};
+      // dio.options.contentType = Headers.formUrlEncodedContentType;
+      // final response = await dio.post(
+      //     ApiProvider.getCity,
+      //     options: Options(contentType: Headers.formUrlEncodedContentType),
+      //     data: parameters);
+
+      var parameters = {"c_type": type, "n_actionid": widget.categoryId};
+
+      final response = await dio.post(ApiProvider.getBanner,
+          options: Options(contentType: Headers.formUrlEncodedContentType),
+          data: parameters);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> map = jsonDecode(response.toString());
+        BannerModel bannerModel = BannerModel.fromJson(map);
+
+        if (bannerModel.nStatus == 1) {
+          setState(() {
+            checkBanner = true;
+          });
+
+          updateBannerList(bannerModel.jResult!);
+        }
+      } else {
+        setState(() {
+          checkBanner = false;
+        });
+        // bannerJResultList.clear();
+        debugPrint("Response: " + "Bad Network Connection try again..");
+        // ToastHandler.showToast(message: "Bad Network Connection try again..");
+      }
+
+      // debugPrint(response);
+    } catch (e) {
+      // bannerJResultList.clear();
+      setState(() {
+        checkBanner = false;
+      });
+      ProgressDialog().dismissDialog(context);
+      debugPrint("Response: $e");
     }
   }
 

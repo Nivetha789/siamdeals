@@ -408,49 +408,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     });
   }
 
-  getpopupList(String type, String actionId) async {
-      Dio dio = Dio();
-      debugPrint(
-          "vsfdsfsdfdsf ${type}  actionid${widget.categoryId} ${widget.cityid}");
-      var parameters = {
-        "c_type": type,
-        "n_city": widget.cityid.toString(),
-        "n_category": widget.categoryId.toString(),
-      };
-      print(parameters);
-      final response = await dio.post(ApiProvider.getPopup,
-          options: Options(contentType: Headers.formUrlEncodedContentType),
-          data: parameters);
-      debugPrint("vsfdsfsdsf12333 ${response.data}");
-      var popuphomeid = await box.read('categoryid');
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> map = jsonDecode(response.toString());
-
-        // debugPrint("vsfdsfsdsf12333 ${map["j_result"][0].toString()}");
-        PopupModel popupModel = PopupModel.fromJson(map);
-        debugPrint("PAvithramanoharan123444 ${popupModel.jResult}");
-        if (popupModel.nStatus == 1) {
-          if (popuphomeid != map["j_result"][0]["n_id"]) {
-            updatePopupList(
-                popupModel.jResult!,
-                map["j_result"][0]["n_id"],
-                map["j_result"][0]["c_title"],
-                map["j_result"][0]["n_popup_type"],
-                map["j_result"][0]["c_description"]);
-          }
-        }else{
-
-        }
-        // if (popupModel.nStatus == 1) {
-        //   updatePopupList(popupModel.jResult!);
-        // }
-      } else {
-        // bannerJResultList.clear();
-        ToastHandler.showToast(message: "Bad Network Connection try again..");
-      }
-  }
-
   updatePopupList(
       List<PopupJResult> popupJResultList1, id, name, type, description) {
     debugPrint("PAvithramanoharan ${popupJResultList1.toString()}");
@@ -490,11 +447,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                             onPressed: () {
                               name == "City Popup" || name == "City"
                                   ? box.write("popupcityid", id).then(((value) {
-                                Navigator.pop(context);
-                              }))
+                                      Navigator.pop(context);
+                                    }))
                                   : box.write("popuphomeid", id).then(((value) {
-                                Navigator.pop(context);
-                              }));
+                                      Navigator.pop(context);
+                                    }));
                             },
                             icon: const Icon(
                               Icons.close,
@@ -505,92 +462,94 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                       ),
                       popupJResultList.isNotEmpty
                           ? CarouselSlider.builder(
-                        itemCount: popupJResultList.length,
-                        itemBuilder:
-                            (BuildContext context, int index, int realIdx) {
-                          return popupJResultList[index].npopuptype ==
-                              "2" ||
-                              popupJResultList[index].npopuptype == 2
-                              ? SingleChildScrollView(
-                            child: HtmlWidget(
-                              popupJResultList[index].cdescription!,
-                            ),
-                          )
-                              : Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(20)),
-                            clipBehavior: Clip.antiAlias,
-                            child: SizedBox(
-                                width: MediaQuery.of(context)
-                                    .size
-                                    .width,
-                                child: Image.network(
-                                  popupJResultList[index]
-                                      .cBannerImage!,
-                                  fit: BoxFit.fill,
-                                )
-                              // : InkWell(
-                              //     onTap: () async {
-                              //       // debugPrint(
-                              //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                              //       // String
-                              //       //     url =
-                              //       //     bannerJResultList[index]
-                              //       //         .cBannerLink;
-                              //       // var url =
-                              //       //     bannerJResultList[index]
-                              //       //         .cBannerLink!;
-                              //       // if (await canLaunch(
-                              //       //     url)) {
-                              //       //   await launch(
-                              //       //       url);
-                              //       // } else {
-                              //       //   throw 'Could not launch $url';
-                              //       // }
-                              //       openbannerlaunchurl(
-                              //           bannerJResultList[index]
-                              //               .cBannerLink!);
-                              //     },
-                              //     child: Image.network(
-                              //       bannerJResultList[index]
-                              //           .cBannerImage!,
-                              //       fit: BoxFit.fitWidth,
-                              //     ),
-                              //   ),
-                            ),
-                          );
-                        },
-                        options: CarouselOptions(
-                            autoPlay:
-                            popupJResultList.isNotEmpty ? true : false,
-                            viewportFraction: 1.0,
-                            height: type == "2" ? 250 : 150,
-                            enlargeCenterPage: false,
-                            enableInfiniteScroll: false,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                pageIndex = index;
-                                // _current = index;
-                              });
-                            }),
-                      )
+                              itemCount: popupJResultList.length,
+                              itemBuilder: (BuildContext context, int index,
+                                  int realIdx) {
+                                return popupJResultList[index].npopuptype ==
+                                            "2" ||
+                                        popupJResultList[index].npopuptype == 2
+                                    ? SingleChildScrollView(
+                                        child: HtmlWidget(
+                                          popupJResultList[index].cdescription!,
+                                        ),
+                                      )
+                                    : Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        clipBehavior: Clip.antiAlias,
+                                        child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Image.network(
+                                              popupJResultList[index]
+                                                  .cBannerImage!,
+                                              fit: BoxFit.fill,
+                                            )
+                                            // : InkWell(
+                                            //     onTap: () async {
+                                            //       // debugPrint(
+                                            //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                            //       // String
+                                            //       //     url =
+                                            //       //     bannerJResultList[index]
+                                            //       //         .cBannerLink;
+                                            //       // var url =
+                                            //       //     bannerJResultList[index]
+                                            //       //         .cBannerLink!;
+                                            //       // if (await canLaunch(
+                                            //       //     url)) {
+                                            //       //   await launch(
+                                            //       //       url);
+                                            //       // } else {
+                                            //       //   throw 'Could not launch $url';
+                                            //       // }
+                                            //       openbannerlaunchurl(
+                                            //           bannerJResultList[index]
+                                            //               .cBannerLink!);
+                                            //     },
+                                            //     child: Image.network(
+                                            //       bannerJResultList[index]
+                                            //           .cBannerImage!,
+                                            //       fit: BoxFit.fitWidth,
+                                            //     ),
+                                            //   ),
+                                            ),
+                                      );
+                              },
+                              options: CarouselOptions(
+                                  autoPlay: popupJResultList.isNotEmpty
+                                      ? true
+                                      : false,
+                                  viewportFraction: 1.0,
+                                  height: type == "2" ? 250 : 150,
+                                  enlargeCenterPage: false,
+                                  enableInfiniteScroll: false,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      pageIndex = index;
+                                      // _current = index;
+                                    });
+                                  }),
+                            )
                           : Container(),
                       popupJResultList.isNotEmpty
                           ? Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.3),
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                        margin: const EdgeInsets.only(top: 5.0),
-                        child: CarouselIndicator(
-                          count: popupJResultList.length,
-                          index: pageIndex,
-                          color: Style.colors.grey.withOpacity(0.3),
-                          activeColor: Style.colors.logoRed,
-                          width: 10.0,
-                        ),
-                      )
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  shape: BoxShape.rectangle,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0))),
+                              margin: const EdgeInsets.only(top: 5.0),
+                              child: CarouselIndicator(
+                                count: popupJResultList.length,
+                                index: pageIndex,
+                                color: Style.colors.grey.withOpacity(0.3),
+                                activeColor: Style.colors.logoRed,
+                                width: 10.0,
+                              ),
+                            )
                           : Container(),
                     ],
                   ),
@@ -748,7 +707,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                               fontFamily: Style.josefinsans)),
                                     ),
                                     Container(
-                                      margin: const EdgeInsets.only(left: 6.0,right:6.0,top: 5.0),
+                                      margin: const EdgeInsets.only(
+                                          left: 6.0, right: 6.0, top: 5.0),
                                       child: CarouselSlider.builder(
                                         itemCount: bannerJResultList.length,
                                         itemBuilder: (BuildContext context,
@@ -822,7 +782,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                     ),
                                     Container(
                                       alignment: Alignment.center,
-                                      margin: const EdgeInsets.only(left:10.0,right:10.0,top: 5.0),
+                                      margin: const EdgeInsets.only(
+                                          left: 10.0, right: 10.0, top: 5.0),
                                       child: CarouselIndicator(
                                         count: bannerJResultList.length,
                                         index: pageIndex,
@@ -1136,7 +1097,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                         10.sp)),
                                                             image: DecorationImage(
                                                                 fit: BoxFit
-                                                                    .cover,
+                                                                    .fill,
                                                                 image: NetworkImage(searchVendorJResultList[index]
                                                                         .jImages!
                                                                         .isNotEmpty
@@ -1350,7 +1311,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
   getSubCategoryList() async {
     try {
-      ProgressDialog().showLoaderDialog(context);
+      // ProgressDialog().showLoaderDialog(context);
 
       Dio dio = Dio();
       // dio.options.connectTimeout = 5000; //5s
@@ -1374,28 +1335,27 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         CategoryModel categoryModel = CategoryModel.fromJson(map);
 
         if (categoryModel.nStatus == 1) {
+          // if(mounted){
+          //   ProgressDialog().dismissDialog(context);
+          // }
           setState(() {
             checkSubCategoryEmpty = false;
           });
 
           updateSubCategoryList(categoryModel.jResult!);
-
-          if(mounted){
-            ProgressDialog().dismissDialog(context);
-          }
         } else {
+          // if(mounted) {
+          //   ProgressDialog().dismissDialog(context);
+          // }
           setState(() {
             checkSubCategoryEmpty = true;
             emptySubCategoryTxt = categoryModel.cMessage!;
           });
-          if(mounted) {
-            ProgressDialog().dismissDialog(context);
-          }
         }
       } else {
-        if(mounted) {
-          ProgressDialog().dismissDialog(context);
-        }
+        // if(mounted) {
+        //   ProgressDialog().dismissDialog(context);
+        // }
         setState(() {
           checkSubCategoryEmpty = true;
           emptySubCategoryTxt = "Bad Network Connection try again..";
@@ -1404,9 +1364,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
 
       // print(response);
     } catch (e) {
-      if(mounted) {
-        ProgressDialog().dismissDialog(context);
-      }
+      // if(mounted) {
+      //   ProgressDialog().dismissDialog(context);
+      // }
     }
   }
 
@@ -1432,23 +1392,19 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       final response = await dio.post(ApiProvider.getBanner,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
-
+      print("bannerResponse " + response.toString());
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         BannerModel bannerModel = BannerModel.fromJson(map);
         if (bannerModel.nStatus == 1) {
-          // if(mounted) {
-          //   ProgressDialog().dismissDialog(context);
-          // }
+          // ProgressDialog().dismissDialog(context);
           setState(() {
             checkBanner = true;
           });
           updateBannerList(bannerModel.jResult!);
         }
       } else {
-        // if(mounted) {
-        //   ProgressDialog().dismissDialog(context);
-        // }
+        // ProgressDialog().dismissDialog(context);
         setState(() {
           checkBanner = false;
         });
@@ -1463,9 +1419,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       setState(() {
         checkBanner = false;
       });
-      // if(mounted) {
-      //   ProgressDialog().dismissDialog(context);
-      // }
+      // ProgressDialog().dismissDialog(context);
       print("Response: $e");
     }
   }
@@ -1483,13 +1437,13 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     Dio dio = Dio();
     // dio.options.connectTimeout = 5000; //5s
     // dio.options.receiveTimeout = 3000;
-    print("response123232  $categoryId, $searchTxt");
+    // print("response123232  $categoryId, $searchTxt");
     var parameters = {
       "n_limit": limit,
       "c_search": searchTxt,
-      "n_category_id": widget.categoryId
+      "n_category_id": widget.subCategoryId
     };
-    debugPrint("request777 : $parameters");
+    debugPrint("vendorListParams : $parameters");
 
     final response = await dio.post(ApiProvider.getSearchVendor,
         options: Options(
@@ -1498,7 +1452,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         ),
         data: parameters);
 
-    print("response123232 : $response");
+    print("vendorListRes : $response");
     if (response.statusCode == 200) {
       Map<String, dynamic> map = jsonDecode(response.toString());
       SearchVendorModel searchVendorModel = SearchVendorModel.fromJson(map);
@@ -1507,7 +1461,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         // if(mounted) {
         //   ProgressDialog().dismissDialog(context);
         // }
-        if(mounted) {
+        if (mounted) {
           setState(() {
             checkInbox = true;
             inboxNoData = false;
@@ -1580,6 +1534,47 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
       }
+    }
+  }
+
+  getpopupList(String type, String actionId) async {
+    Dio dio = Dio();
+    debugPrint(
+        "vsfdsfsdfdsf ${type}  actionid${widget.categoryId} ${widget.cityid}");
+    var parameters = {
+      "c_type": type,
+      "n_city": widget.cityid.toString(),
+      "n_category": widget.categoryId.toString(),
+    };
+    print(parameters);
+    final response = await dio.post(ApiProvider.getPopup,
+        options: Options(contentType: Headers.formUrlEncodedContentType),
+        data: parameters);
+    debugPrint("vsfdsfsdsf12333 ${response.data}");
+    var popuphomeid = await box.read('categoryid');
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> map = jsonDecode(response.toString());
+
+      // debugPrint("vsfdsfsdsf12333 ${map["j_result"][0].toString()}");
+      PopupModel popupModel = PopupModel.fromJson(map);
+      debugPrint("PAvithramanoharan123444 ${popupModel.jResult}");
+      if (popupModel.nStatus == 1) {
+        if (popuphomeid != map["j_result"][0]["n_id"]) {
+          updatePopupList(
+              popupModel.jResult!,
+              map["j_result"][0]["n_id"],
+              map["j_result"][0]["c_title"],
+              map["j_result"][0]["n_popup_type"],
+              map["j_result"][0]["c_description"]);
+        }
+      } else {}
+      // if (popupModel.nStatus == 1) {
+      //   updatePopupList(popupModel.jResult!);
+      // }
+    } else {
+      // bannerJResultList.clear();
+      ToastHandler.showToast(message: "Bad Network Connection try again..");
     }
   }
 }

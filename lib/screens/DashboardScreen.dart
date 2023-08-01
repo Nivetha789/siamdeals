@@ -20,6 +20,7 @@ import 'package:siamdealz/screens/HtmlScreen.dart';
 import 'package:siamdealz/screens/LoginScreen.dart';
 import 'package:siamdealz/screens/ProfileScreen.dart';
 import 'package:siamdealz/screens/SearchStoreListScreen.dart';
+import 'package:siamdealz/screens/SubCategoryListScreen.dart';
 import 'package:siamdealz/screens/categorylist.dart';
 import 'package:siamdealz/screens/top10democracy.dart';
 import 'package:siamdealz/utils/CustomAlertDialog.dart';
@@ -233,7 +234,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                 child: Image.network(
                                   popupJResultList[index]
                                       .cBannerImage!,
-                                  fit: BoxFit.fill,
+                                  // fit: BoxFit.fill
+                                  filterQuality: FilterQuality.high,
                                 )
                               // : InkWell(
                               //     onTap: () async {
@@ -1555,7 +1557,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              CategoryStoreListScreen(
+                                                              SubCategoryListScreen(
                                                                   int.parse(
                                                                       categoryJResultList[
                                                                               index]
@@ -1564,7 +1566,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                                   categoryJResultList[
                                                                           index]
                                                                       .cCategory!,
-                                                                  true,0)));
+                                                                  true)));
                                                 },
                                                 child: Container(
                                                   decoration: BoxDecoration(
@@ -1591,8 +1593,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                                     Radius.circular(
                                                                         30.sp)),
                                                             image: DecorationImage(
-                                                                fit: BoxFit
-                                                                    .cover,
+                                                                // fit: BoxFit
+                                                                //     .cover,
                                                                 image: NetworkImage(
                                                                     categoryJResultList[
                                                                             index]
@@ -1601,18 +1603,21 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                       SizedBox(
                                                         height: 1.h,
                                                       ),
-                                                      Text(
-                                                          categoryJResultList[
-                                                                  index]
-                                                              .cCategory!,
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                              fontSize: 12.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              fontFamily: Style
-                                                                  .montserrat)),
+                                                      Container(
+                                                        padding:EdgeInsets.only(left:5.0,right:5.0),
+                                                        child: Text(
+                                                            categoryJResultList[
+                                                                    index]
+                                                                .cCategory!,
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(
+                                                                fontSize: 12.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                fontFamily: Style
+                                                                    .montserrat)),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),

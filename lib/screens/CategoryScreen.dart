@@ -551,7 +551,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                                     topRight:
                                                         Radius.circular(10.sp)),
                                                 image: DecorationImage(
-                                                    fit: BoxFit.fill,
+
                                                     image: NetworkImage(
                                                         categoryJResultList[
                                                                 index]
