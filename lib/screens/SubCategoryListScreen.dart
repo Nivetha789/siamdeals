@@ -91,6 +91,7 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
       //     }
       //   }
       // });
+      print("subcateIDD "+subCategoryId.toString());
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -455,12 +456,13 @@ class _SubCategoryListScreen extends State<SubCategoryListScreen> {
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
 
-      var parameters = {"c_type": type, "n_actionid": widget.categoryId};
+      var parameters = {"c_type": type,"n_city":widget.cityid, "n_category": widget.categoryId};
 
       final response = await dio.post(ApiProvider.getBanner,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
+      print("getBannerParamss "+parameters.toString());
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         BannerModel bannerModel = BannerModel.fromJson(map);

@@ -1387,8 +1387,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       var parameters = {
         "c_type": type,
         "n_city": widget.cityid.toString(),
-        "n_category": widget.categoryId.toString(),
+        "n_category": widget.subCategoryId.toString(),
       };
+      print("subcategoryIDDDparams "+parameters.toString());
       final response = await dio.post(ApiProvider.getBanner,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);

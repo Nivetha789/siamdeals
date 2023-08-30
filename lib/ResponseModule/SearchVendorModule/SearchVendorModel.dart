@@ -4,17 +4,21 @@ class SearchVendorModel {
   int? nPrePage;
   int? nTotalRecords;
   int? nTotalPage;
+  int? offset;
+  int? limit;
   List<SearchVendorJResult>? jResult;
   String? cMessage;
 
   SearchVendorModel(
       {this.nStatus,
-      this.nNextPage,
-      this.nPrePage,
-      this.nTotalRecords,
-      this.nTotalPage,
-      this.jResult,
-      this.cMessage});
+        this.nNextPage,
+        this.nPrePage,
+        this.nTotalRecords,
+        this.nTotalPage,
+        this.offset,
+        this.limit,
+        this.jResult,
+        this.cMessage});
 
   SearchVendorModel.fromJson(Map<String, dynamic> json) {
     nStatus = json['n_status'];
@@ -22,6 +26,8 @@ class SearchVendorModel {
     nPrePage = json['n_pre_page'];
     nTotalRecords = json['n_total_records'];
     nTotalPage = json['n_total_page'];
+    offset = json['offset'];
+    limit = json['limit'];
     if (json['j_result'] != null) {
       jResult = <SearchVendorJResult>[];
       json['j_result'].forEach((v) {
@@ -38,6 +44,8 @@ class SearchVendorModel {
     data['n_pre_page'] = this.nPrePage;
     data['n_total_records'] = this.nTotalRecords;
     data['n_total_page'] = this.nTotalPage;
+    data['offset'] = this.offset;
+    data['limit'] = this.limit;
     if (this.jResult != null) {
       data['j_result'] = this.jResult!.map((v) => v.toJson()).toList();
     }
@@ -50,6 +58,7 @@ class SearchVendorJResult {
   String? nId;
   String? nLatitude;
   String? nLongitude;
+  String? nKilometre;
   String? cPlaceType;
   String? cSinceType;
   String? nCityId;
@@ -66,37 +75,44 @@ class SearchVendorJResult {
   String? cEmailids;
   String? cAddress;
   String? cTerms;
-  String? nkilometre;
-  List<JImages>? jImages;
+  String? nDormant;
   JCurrentDay? jCurrentDay;
+  List<JOpeningHours>? jOpeningHours;
+  List<JImages>? jImages;
+  List<Null>? jAlbums;
 
   SearchVendorJResult(
       {this.nId,
-      this.nLatitude,
-      this.nLongitude,
-      this.cPlaceType,
-      this.cSinceType,
-      this.nCityId,
-      this.cCity,
-      this.nDistrictId,
-      this.cDistrict,
-      this.nTownId,
-      this.cTown,
-      this.nCategoryId,
-      this.cCategory,
-      this.cName,
-      this.cNameInThai,
-      this.cMobileNumbers,
-      this.cEmailids,
-      this.cAddress,
-      this.cTerms,
-      this.nkilometre,
-      this.jImages});
+        this.nLatitude,
+        this.nLongitude,
+        this.nKilometre,
+        this.cPlaceType,
+        this.cSinceType,
+        this.nCityId,
+        this.cCity,
+        this.nDistrictId,
+        this.cDistrict,
+        this.nTownId,
+        this.cTown,
+        this.nCategoryId,
+        this.cCategory,
+        this.cName,
+        this.cNameInThai,
+        this.cMobileNumbers,
+        this.cEmailids,
+        this.cAddress,
+        this.cTerms,
+        this.nDormant,
+        this.jCurrentDay,
+        this.jOpeningHours,
+        this.jImages,
+        this.jAlbums});
 
   SearchVendorJResult.fromJson(Map<String, dynamic> json) {
     nId = json['n_id'];
     nLatitude = json['n_latitude'];
     nLongitude = json['n_longitude'];
+    nKilometre = json['n_kilometre'];
     cPlaceType = json['c_place_type'];
     cSinceType = json['c_since_type'];
     nCityId = json['n_city_id'];
@@ -113,16 +129,27 @@ class SearchVendorJResult {
     cEmailids = json['c_emailids'];
     cAddress = json['c_address'];
     cTerms = json['c_terms'];
-    nkilometre = json['n_kilometre'];
+    nDormant = json['n_dormant'];
+    jCurrentDay = json['j_current_day'] != null
+        ? new JCurrentDay.fromJson(json['j_current_day'])
+        : null;
+    if (json['j_opening_hours'] != null) {
+      jOpeningHours = <JOpeningHours>[];
+      json['j_opening_hours'].forEach((v) {
+        jOpeningHours!.add(new JOpeningHours.fromJson(v));
+      });
+    }
     if (json['j_images'] != null) {
       jImages = <JImages>[];
       json['j_images'].forEach((v) {
         jImages!.add(new JImages.fromJson(v));
       });
     }
-    jCurrentDay = json['j_current_day'] != null
-        ? new JCurrentDay.fromJson(json['j_current_day'])
-        : null;
+    if (json['j_albums'] != null) {
+      jAlbums = <Null>[];
+      json['j_albums'].forEach((v) {
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -130,6 +157,7 @@ class SearchVendorJResult {
     data['n_id'] = this.nId;
     data['n_latitude'] = this.nLatitude;
     data['n_longitude'] = this.nLongitude;
+    data['n_kilometre'] = this.nKilometre;
     data['c_place_type'] = this.cPlaceType;
     data['c_since_type'] = this.cSinceType;
     data['n_city_id'] = this.nCityId;
@@ -146,13 +174,63 @@ class SearchVendorJResult {
     data['c_emailids'] = this.cEmailids;
     data['c_address'] = this.cAddress;
     data['c_terms'] = this.cTerms;
-    data['n_kilometre'] = this.nkilometre;
-    if (this.jImages != null) {
-      data['j_images'] = this.jImages!.map((v) => v.toJson()).toList();
-    }
+    data['n_dormant'] = this.nDormant;
     if (this.jCurrentDay != null) {
       data['j_current_day'] = this.jCurrentDay!.toJson();
     }
+    if (this.jOpeningHours != null) {
+      data['j_opening_hours'] =
+          this.jOpeningHours!.map((v) => v.toJson()).toList();
+    }
+    if (this.jImages != null) {
+      data['j_images'] = this.jImages!.map((v) => v.toJson()).toList();
+    }
+    if (this.jAlbums != null) {
+    }
+    return data;
+  }
+}
+
+class JOpeningHours {
+  String? days;
+  String? open;
+  String? close;
+
+  JOpeningHours({this.days, this.open, this.close});
+
+  JOpeningHours.fromJson(Map<String, dynamic> json) {
+    days = json['days'];
+    open = json['open'];
+    close = json['close'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['days'] = this.days;
+    data['open'] = this.open;
+    data['close'] = this.close;
+    return data;
+  }
+}
+
+class JCurrentDay {
+  String? days;
+  String? open;
+  String? close;
+
+  JCurrentDay({this.days, this.open, this.close});
+
+  JCurrentDay.fromJson(Map<String, dynamic> json) {
+    days = json['days'];
+    open = json['open'];
+    close = json['close'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['days'] = this.days;
+    data['open'] = this.open;
+    data['close'] = this.close;
     return data;
   }
 }
@@ -171,24 +249,4 @@ class JImages {
     data['c_listing_img'] = this.cListingImg;
     return data;
   }
-}
-
-class JCurrentDay {
-  String? days;
-  String? open;
-  String? close;
-
-  JCurrentDay({this.days, this.open, this.close});
-
-  JCurrentDay.fromJson(Map<String, dynamic> json) {
-    days = json['days'];
-    open = json['open'];
-    close = json['close'];
-  }
-
-  Map<String, dynamic> toJson() => {
-        "days": days,
-        "open": open,
-        "close": close,
-      };
 }

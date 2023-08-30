@@ -2231,18 +2231,16 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       //     ApiProvider.getCity,
       //     options: Options(contentType: Headers.formUrlEncodedContentType),
       //     data: parameters);
-      debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
       var parameters = {"c_type": type, "n_city": actionId};
 
       final response = await dio.post(ApiProvider.getBanner,
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
+      print("responseBanner "+response.toString());
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
-        debugPrint("vsfdsfsdsf ${response.toString()}");
         BannerModel bannerModel = BannerModel.fromJson(map);
-        debugPrint("PAvithramanoharan ${bannerModel.jResult}");
         if (bannerModel.nStatus == 1) {
           updateBannerList(bannerModel.jResult!);
         }
@@ -2262,7 +2260,6 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   getpopupList(String type, String actionId) async {
     try {
       Dio dio = Dio();
-      debugPrint("vsfdsfsdfdsf ${type}  actionid${actionId}");
       var parameters = {"c_type": type, "n_city": actionId};
 
       final response = await dio.post(ApiProvider.getPopup,

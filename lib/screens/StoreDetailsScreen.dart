@@ -76,6 +76,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
   bool callUs = false;
   bool mailUs = false;
+  bool whatsapp = false;
   bool navigateRoot = false;
 
   @override
@@ -330,39 +331,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
           backgroundColor: Colors.white,
           //brightness: Brightness.light,
         ),
-        body: HawkFabMenu(
-          icon: Image.asset("images/help.png", color: const Color(0xffFB595D)),
-          fabColor: const Color(0xffFB595D),
-          iconColor: const Color(0xffFB595D),
-          hawkFabMenuController: hawkFabMenuController,
-          items: [
-            HawkFabMenuItem(
-              label: 'Whatsapp',
-              ontap: () {
-                openWhatsapp();
-              },
-              icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
-              color: Style.colors.white,
-              labelColor: Style.colors.white,
-              labelBackgroundColor: Colors.green,
-            ),
-            HawkFabMenuItem(
-              label: 'Map',
-              ontap: () {
-                double latitude = double.parse(
-                    nLatitude!); // Replace with your desired latitude
-                double longitude = double.parse(
-                    nLongitude!); // Replace with your desired longitude
-
-                launchGoogleMaps(latitude, longitude);
-              },
-              icon: Image.asset("images/map.png", height: 30, width: 30),
-              color: Style.colors.white,
-              labelColor: Style.colors.white,
-              labelBackgroundColor: Colors.blue,
-            ),
-          ],
-          body: Container(
+        body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Stack(
@@ -1366,6 +1335,28 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                 ),
                               ),
                               Visibility(
+                                visible: whatsapp,
+                                child: InkWell(
+                                  onTap: () {
+                                    openWhatsapp();
+                                  },
+                                  child: Tooltip(
+                                    message: "Connect with Whatsapp",
+                                    child: Container(
+                                      margin: EdgeInsets.only(right: 8.0),
+                                      child: CircleAvatar(
+                                        child: Image.asset(
+                                          "images/whatsapp.png",
+                                          height: 30,
+                                        ),
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.3),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Visibility(
                                 visible: navigateRoot,
                                 child: InkWell(
                                   onTap: () {
@@ -1415,7 +1406,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                   )
                 ],
               )),
-        ));
+        );
   }
 
   storeDetailsApi() async {
@@ -1468,7 +1459,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             cTerms = storeDetailsModel.jResult!.cTerms;
             nVendorType =storeDetailsModel.jResult!.nVendorType;
             nNavigate =storeDetailsModel.jResult!.nNavigate;
-
+            print("latlonggg "+nLatitude.toString()+", "+nLongitude.toString()+", "+nNavigate.toString());
             if (cMobileNumbers != "" && nVendorType=="1") {
               callUs = true;
             } else {
@@ -1478,6 +1469,11 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
               mailUs = true;
             }else{
               mailUs = false;
+            }
+            if (nVendorType=="1") {
+              whatsapp = true;
+            }else{
+              whatsapp = false;
             }
             if (nLatitude != "" && nLongitude !="" && nNavigate=="1") {
               navigateRoot = true;
