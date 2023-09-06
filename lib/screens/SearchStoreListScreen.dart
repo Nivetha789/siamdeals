@@ -204,7 +204,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                       color: const Color(0xff495271),
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
-                                      fontFamily: Style.sfproddisplay),
+                                      fontFamily: MyStyle.sfproddisplay),
                                 ),
                               ),
                               InkWell(
@@ -261,7 +261,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                               ),
                               style: TextStyle(
                                   color: const Color(0xff495271),
-                                  fontFamily: Style.sfproddisplay),
+                                  fontFamily: MyStyle.sfproddisplay),
                               onChanged: (text) {
                                 setState(() {
                                   subCategoryListener(text);
@@ -358,7 +358,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                   fontSize: 14.0,
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily:
-                                                      Style.sfproddisplay),
+                                                      MyStyle.sfproddisplay),
                                             ),
                                           ),
                                         ),
@@ -422,7 +422,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Style.colors.white,
+        backgroundColor: MyStyle.colors.white,
         appBar: AppBar(
           elevation: 0.0,
           leading: const BackButton(),
@@ -433,18 +433,18 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   ? Text(
                       categoryName,
                       style: TextStyle(
-                          color: Style.colors.logoRed,
+                          color: MyStyle.colors.logoRed,
                           fontSize: 17.0,
-                          fontFamily: Style.montserrat),
+                          fontFamily: MyStyle.montserrat),
                     )
                   : Text(
                       "$categoryName($subCategoryName)",
                       style: TextStyle(
-                          color: Style.colors.logoRed,
+                          color: MyStyle.colors.logoRed,
                           fontSize: 17.0,
-                          fontFamily: Style.montserrat),
+                          fontFamily: MyStyle.montserrat),
                     )),
-          iconTheme: IconThemeData(color: Style.colors.logoRed),
+          iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
           backgroundColor: Colors.white,
           //    brightness: Brightness.light,
         ),
@@ -460,8 +460,8 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                 openWhatsapp();
               },
               icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
-              color: Style.colors.white,
-              labelColor: Style.colors.white,
+              color: MyStyle.colors.white,
+              labelColor: MyStyle.colors.white,
               labelBackgroundColor: Colors.green,
             ),
             // HawkFabMenuItem(
@@ -470,8 +470,8 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
             //     launch(('tel://${"+66810673747"}'));
             //   },
             //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
-            //   color: Style.colors.white,
-            //   labelColor: Style.colors.white,
+            //   color: MyStyle.colors.white,
+            //   labelColor: MyStyle.colors.white,
             //   labelBackgroundColor: Colors.blue,
             // ),
           ],
@@ -529,7 +529,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                         hintText: searchHint,
                                         hintStyle: TextStyle(
                                             fontSize: 14.0,
-                                            fontFamily: Style.montserrat,
+                                            fontFamily: MyStyle.montserrat,
                                             fontWeight: FontWeight.w500),
                                         border: InputBorder.none,
                                       ),
@@ -602,7 +602,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                               right: 10.0),
                                           child: Icon(
                                             Icons.cancel_outlined,
-                                            color: Style.colors.grey,
+                                            color: MyStyle.colors.grey,
                                           ),
                                         ),
                                       ),
@@ -648,7 +648,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                             )
                                           : Icon(
                                               Icons.search_rounded,
-                                              color: Style.colors.logoRed,
+                                              color: MyStyle.colors.logoRed,
                                             )),
                                 )),
                           ],
@@ -671,7 +671,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   //                       style: TextStyle(
                   //                           fontSize: 16.0,
                   //                           fontWeight: FontWeight.w600,
-                  //                           fontFamily: Style.josefinsans)),
+                  //                           fontFamily: MyStyle.josefinsans)),
                   //                   margin: const EdgeInsets.only(
                   //                       top: 15.0, left: 16.0),
                   //                   alignment: Alignment.centerLeft,
@@ -725,8 +725,8 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   //                     count: bannerJResultList.length,
                   //                     index: pageIndex,
                   //                     color:
-                  //                         Style.colors.grey.withOpacity(0.3),
-                  //                     activeColor: Style.colors.logoRed,
+                  //                         MyStyle.colors.grey.withOpacity(0.3),
+                  //                     activeColor: MyStyle.colors.logoRed,
                   //                     width: 10.0,
                   //                   ),
                   //                   margin: const EdgeInsets.only(top: 5.0),
@@ -766,7 +766,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                     itemBuilder: (context, postion) {
                                       return Card(
                                         elevation: 2,
-                                        color: Style.colors.logoRed,
+                                        color: MyStyle.colors.logoRed,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(5.sp),
@@ -831,7 +831,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                                     .w600,
                                                             color: Colors
                                                                 .black,
-                                                            fontFamily: Style
+                                                            fontFamily: MyStyle
                                                                 .montserrat)),
                                                   ),
                                                 ),
@@ -864,7 +864,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
                                               fontFamily:
-                                                  Style.josefinsans)),
+                                                  MyStyle.josefinsans)),
                                     ),
                                     Expanded(
                                       flex: 1,
@@ -887,9 +887,9 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                   fontWeight:
                                                       FontWeight.w600,
                                                   color:
-                                                      Style.colors.logoRed,
+                                                      MyStyle.colors.logoRed,
                                                   fontFamily:
-                                                      Style.josefinsans)),
+                                                      MyStyle.josefinsans)),
                                         ),
                                       ),
                                     ),
@@ -941,7 +941,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                         7.sp),
                                                 color: Colors.white,
                                                 border: Border.all(
-                                                    color: Style.colors.grey
+                                                    color: MyStyle.colors.grey
                                                         .withOpacity(.2))),
                                             child: Column(
                                               mainAxisAlignment:
@@ -974,7 +974,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                         fontSize: 12.0,
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                        fontFamily: Style
+                                                        fontFamily: MyStyle
                                                             .montserrat)),
                                               ],
                                             ),
@@ -1000,7 +1000,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                               //                       fontSize: 16.0,
                               //                       fontWeight: FontWeight.w600,
                               //                       fontFamily:
-                              //                           Style.josefinsans)),
+                              //                           MyStyle.josefinsans)),
                               //             )
                               //           : Container(),
                               //       bannerJResultList.isNotEmpty
@@ -1099,9 +1099,9 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                               //               child: CarouselIndicator(
                               //                 count: bannerJResultList.length,
                               //                 index: pageIndex,
-                              //                 color: Style.colors.grey
+                              //                 color: MyStyle.colors.grey
                               //                     .withOpacity(0.3),
-                              //                 activeColor: Style.colors.logoRed,
+                              //                 activeColor: MyStyle.colors.logoRed,
                               //                 width: 10.0,
                               //               ),
                               //             )
@@ -1231,7 +1231,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                         .cName!,
                                                     style: TextStyle(
                                                         fontSize: 15.0,
-                                                        color: Style
+                                                        color: MyStyle
                                                             .colors
                                                             .app_black,
                                                         fontWeight:
@@ -1251,10 +1251,10 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                           "${AppLocalizations.of(context)!.category!} : ",
                                                           style: TextStyle(
                                                               fontSize: 13.0,
-                                                              color: Style
+                                                              color: MyStyle
                                                                   .colors
                                                                   .app_black,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -1274,10 +1274,10 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                               : " - ",
                                                           style: TextStyle(
                                                               fontSize: 13.0,
-                                                              color: Style
+                                                              color: MyStyle
                                                                   .colors
                                                                   .app_black,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -1297,7 +1297,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                         Icons.access_time,
                                                         color: checkLeave
                                                             ? Colors.red
-                                                            : Style.colors
+                                                            : MyStyle.colors
                                                                 .green,
                                                         size: 18.0,
                                                       ),
@@ -1318,10 +1318,10 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                               color: checkLeave
                                                                   ? Colors
                                                                       .red
-                                                                  : Style
+                                                                  : MyStyle
                                                                       .colors
                                                                       .green,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -1345,10 +1345,10 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                                                               color: checkLeave
                                                                   ? Colors
                                                                       .red
-                                                                  : Style
+                                                                  : MyStyle
                                                                       .colors
                                                                       .green,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -1453,7 +1453,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   //                                               .addRemove!
                   //                                           ? Border.all(
                   //                                               color:
-                  //                                                   Style.colors
+                  //                                                   MyStyle.colors
                   //                                                       .logoRed)
                   //                                           : Border.all(
                   //                                               color: Style
@@ -1462,7 +1462,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   //                                   color: subCategoryDataList[
                   //                                               index]
                   //                                           .addRemove!
-                  //                                       ? Style.colors.logoRed
+                  //                                       ? MyStyle.colors.logoRed
                   //                                           .withOpacity(0.2)
                   //                                       : Colors.white,
                   //                                   borderRadius:
@@ -1517,10 +1517,10 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                   //                         AppLocalizations.of(context)!
                   //                             .view_all!,
                   //                         style: TextStyle(
-                  //                             color: Style.colors.logoRed,
+                  //                             color: MyStyle.colors.logoRed,
                   //                             fontSize: 12.0,
                   //                             fontWeight: FontWeight.w500,
-                  //                             fontFamily: Style.montserrat),
+                  //                             fontFamily: MyStyle.montserrat),
                   //                         textAlign: TextAlign.center,
                   //                       ),
                   //                       alignment: Alignment.center,
@@ -1562,7 +1562,7 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
                               style: TextStyle(
                                   fontSize: 15.0,
                                   fontWeight: FontWeight.w600,
-                                  color: Style.colors.grey),
+                                  color: MyStyle.colors.grey),
                             ),
                           ),
                         ],
@@ -1829,16 +1829,18 @@ class SearchStoreListScreenState extends State<SearchStoreListScreen> {
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
       if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
+        await launchUrl(Uri.parse(whatsappURl_android),
+          mode: LaunchMode.externalApplication,
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     }
   }

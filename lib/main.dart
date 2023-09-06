@@ -170,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Text(
                           "The Best DealZ of Thailand",
                           style: TextStyle(
-                              color: Style.colors.app_black,
+                              color: MyStyle.colors.app_black,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 1,
                               fontSize: 14.0),

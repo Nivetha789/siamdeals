@@ -241,18 +241,18 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                 }),
                           )
                         : Container(),
-                    popupJResultList.isNotEmpty
-                        ? Container(
-                            margin: const EdgeInsets.only(top: 5.0),
-                            child: CarouselIndicator(
-                              count: popupJResultList.length,
-                              index: pageIndex,
-                              color: Style.colors.grey.withOpacity(0.3),
-                              activeColor: Style.colors.logoRed,
-                              width: 10.0,
-                            ),
-                          )
-                        : Container(),
+                    // popupJResultList.isNotEmpty
+                    //     ? Container(
+                    //         margin: const EdgeInsets.only(top: 5.0),
+                    //         child: CarouselIndicator(
+                    //           count: popupJResultList.length,
+                    //           index: pageIndex,
+                    //           color: MyStyle.colors.grey.withOpacity(0.3),
+                    //           activeColor: MyStyle.colors.logoRed,
+                    //           width: 10.0,
+                    //         ),
+                    //       )
+                    //     : Container(),
                   ],
                 ),
               ),
@@ -291,7 +291,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Style.colors.white,
+      backgroundColor: MyStyle.colors.white,
       appBar: AppBar(
         elevation: 0.0,
         leading: BackButton(),
@@ -300,11 +300,11 @@ class CategoryListScreenState extends State<CategoryListScreen> {
           AppLocalizations.of(context)!.categories!,
           textAlign: TextAlign.start,
           style: TextStyle(
-              color: Style.colors.logoRed,
+              color: MyStyle.colors.logoRed,
               fontSize: 17.0,
-              fontFamily: Style.montserrat),
+              fontFamily: MyStyle.montserrat),
         ),
-        iconTheme: IconThemeData(color: Style.colors.logoRed),
+        iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
         backgroundColor: Colors.white,
         // brightness: Brightness.light,
       ),
@@ -320,8 +320,8 @@ class CategoryListScreenState extends State<CategoryListScreen> {
               openWhatsapp();
             },
             icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
-            color: Style.colors.white,
-            labelColor: Style.colors.white,
+            color: MyStyle.colors.white,
+            labelColor: MyStyle.colors.white,
             labelBackgroundColor: Colors.green,
           ),
           // HawkFabMenuItem(
@@ -330,8 +330,8 @@ class CategoryListScreenState extends State<CategoryListScreen> {
           //     launch(('tel://${"+66810673747"}'));
           //   },
           //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
-          //   color: Style.colors.white,
-          //   labelColor: Style.colors.white,
+          //   color: MyStyle.colors.white,
+          //   labelColor: MyStyle.colors.white,
           //   labelBackgroundColor: Colors.blue,
           // ),
         ],
@@ -362,7 +362,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                         prefixIcon: Icon(
                           Icons.search,
                           size: 20.sp,
-                          color: Style.colors.logoRed,
+                          color: MyStyle.colors.logoRed,
                         )),
                     style: TextStyle(fontSize: 15.sp),
                     textAlign: TextAlign.left,
@@ -385,7 +385,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: Style.josefinsans)),
+                                      fontFamily: MyStyle.josefinsans)),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 5.0,left:6.0,right: 6.0),
@@ -466,8 +466,8 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                               child: CarouselIndicator(
                                 count: bannerJResultList.length,
                                 index: pageIndex,
-                                color: Style.colors.grey.withOpacity(0.3),
-                                activeColor: Style.colors.logoRed,
+                                color: MyStyle.colors.grey.withOpacity(0.3),
+                                activeColor: MyStyle.colors.logoRed,
                                 width: 10.0,
                               ),
                             )
@@ -536,7 +536,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                               BorderRadius.circular(10.sp),
 //  color: Colors.green,
                                           border: Border.all(
-                                              color: Style.colors.grey
+                                              color: MyStyle.colors.grey
                                                   .withOpacity(.2))),
                                       child: Column(
                                         crossAxisAlignment:
@@ -573,7 +573,7 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                                                   categoryJResultList[index]
                                                       .cCategory!,
                                                   style: TextStyle(
-                                                      color: Style
+                                                      color: MyStyle
                                                           .colors.app_black,
                                                       fontSize: 15.0,
                                                       fontWeight:
@@ -598,9 +598,9 @@ class CategoryListScreenState extends State<CategoryListScreen> {
                         child: Text(
                           emptyTxt,
                           style: TextStyle(
-                              color: Style.colors.grey,
+                              color: MyStyle.colors.grey,
                               fontSize: 15.0,
-                              fontFamily: Style.montserrat,
+                              fontFamily: MyStyle.montserrat,
                               fontWeight: FontWeight.w500),
                         ),
                       ),
@@ -672,23 +672,25 @@ class CategoryListScreenState extends State<CategoryListScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
       if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
+        await launchUrl(Uri.parse(whatsappURl_android),
+          mode: LaunchMode.externalApplication,
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     }
   }

@@ -309,7 +309,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           style: TextStyle(
               color: const Color(0xff495271),
               fontSize: 18,
-              fontFamily: Style.montserrat,
+              fontFamily: MyStyle.montserrat,
               fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
@@ -923,11 +923,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                               top: 30, left: 16, right: 16),
                           decoration: BoxDecoration(
                             border: Border.all(
-                                color: Style.colors.white.withOpacity(0.3),
+                                color: MyStyle.colors.white.withOpacity(0.3),
                                 width: 1),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8.0)),
-                            color: Style.colors.logoRed,
+                            color: MyStyle.colors.logoRed,
                           ),
                           child: Padding(
                             padding:
@@ -939,7 +939,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                               ),
                               child: Text("Send OTP",
                                   style: TextStyle(
-                                      fontFamily: Style.montserrat,
+                                      fontFamily: MyStyle.montserrat,
                                       fontSize: 15.0,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white)),
@@ -999,7 +999,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyle(
                             color: const Color(0xff495271),
                             fontSize: 18,
-                            fontFamily: Style.montserrat,
+                            fontFamily: MyStyle.montserrat,
                             fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(
@@ -1010,7 +1010,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyle(
                             color: const Color(0xff495271),
                             fontSize: 13,
-                            fontFamily: Style.montserrat,
+                            fontFamily: MyStyle.montserrat,
                             fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(
@@ -1024,7 +1024,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
-                              fontFamily: Style.montserrat,
+                              fontFamily: MyStyle.montserrat,
                               fontWeight: FontWeight.w500),
                           textFieldAlignment: MainAxisAlignment.spaceAround,
                           onCompleted: (pin) {
@@ -1052,7 +1052,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 style: TextStyle(
                                   color: Colors.red,
                                   fontSize: 13,
-                                  fontFamily: Style.montserrat,
+                                  fontFamily: MyStyle.montserrat,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -1067,11 +1067,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                                   top: 30, left: 16, right: 16),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Style.colors.white.withOpacity(0.3),
+                                    color: MyStyle.colors.white.withOpacity(0.3),
                                     width: 1),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(8.0)),
-                                color: Style.colors.logoRed,
+                                color: MyStyle.colors.logoRed,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -1083,7 +1083,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                   child: Text("Verify OTP",
                                       style: TextStyle(
-                                          fontFamily: Style.montserrat,
+                                          fontFamily: MyStyle.montserrat,
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w600,
                                           color: Colors.white)),

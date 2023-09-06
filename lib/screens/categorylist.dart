@@ -1,25 +1,20 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
-
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_load_more/easy_load_more.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:siamdealz/ResponseModule/popupmodel.dart';
 import 'package:siamdealz/screens/SearchStoreListScreen.dart';
 import 'package:siamdealz/screens/StoreDetailsScreen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../ResponseModule/BannerModel.dart';
 import '../ResponseModule/CategoryModel.dart';
 import '../ResponseModule/SearchVendorModule/SearchVendorModel.dart';
-import '../Utils/ProgressDialog.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLocalizations.dart';
 import '../utils/check_internet.dart';
@@ -224,7 +219,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                       color: const Color(0xff495271),
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500,
-                                      fontFamily: Style.sfproddisplay),
+                                      fontFamily:MyStyle.sfproddisplay),
                                 ),
                               ),
                               InkWell(
@@ -343,7 +338,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                         fontSize: 14.0,
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        fontFamily: Style
+                                                        fontFamily: MyStyle
                                                             .sfproddisplay),
                                                   ),
                                                 ),
@@ -395,7 +390,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
   }
 
   updateVendorList(List<SearchVendorJResult> searchVendorJResultList1) {
-    searchVendorJResultList.clear();
+    // searchVendorJResultList.clear();
     setState(() {
       searchVendorJResultList.addAll(searchVendorJResultList1);
     });
@@ -478,44 +473,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(20)),
                                         clipBehavior: Clip.antiAlias,
-                                        child: SizedBox(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
-                                            child: Image.network(
-                                              popupJResultList[index]
-                                                  .cBannerImage!,
-                                              fit: BoxFit.fill,
-                                            )
-                                            // : InkWell(
-                                            //     onTap: () async {
-                                            //       // debugPrint(
-                                            //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                                            //       // String
-                                            //       //     url =
-                                            //       //     bannerJResultList[index]
-                                            //       //         .cBannerLink;
-                                            //       // var url =
-                                            //       //     bannerJResultList[index]
-                                            //       //         .cBannerLink!;
-                                            //       // if (await canLaunch(
-                                            //       //     url)) {
-                                            //       //   await launch(
-                                            //       //       url);
-                                            //       // } else {
-                                            //       //   throw 'Could not launch $url';
-                                            //       // }
-                                            //       openbannerlaunchurl(
-                                            //           bannerJResultList[index]
-                                            //               .cBannerLink!);
-                                            //     },
-                                            //     child: Image.network(
-                                            //       bannerJResultList[index]
-                                            //           .cBannerImage!,
-                                            //       fit: BoxFit.fitWidth,
-                                            //     ),
-                                            //   ),
-                                            ),
+                                        child: Image.network(
+                                          popupJResultList[index]
+                                              .cBannerImage!,
+                                          fit: BoxFit.fill,
+                                        ),
                                       );
                               },
                               options: CarouselOptions(
@@ -523,7 +485,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                       ? true
                                       : false,
                                   viewportFraction: 1.0,
-                                  height: type == "2" ? 250 : 150,
+                                  height: type == "2" ? 250 : 170,
                                   enlargeCenterPage: false,
                                   enableInfiniteScroll: false,
                                   onPageChanged: (index, reason) {
@@ -534,23 +496,23 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                   }),
                             )
                           : Container(),
-                      popupJResultList.isNotEmpty
-                          ? Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  shape: BoxShape.rectangle,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0))),
-                              margin: const EdgeInsets.only(top: 5.0),
-                              child: CarouselIndicator(
-                                count: popupJResultList.length,
-                                index: pageIndex,
-                                color: Style.colors.grey.withOpacity(0.3),
-                                activeColor: Style.colors.logoRed,
-                                width: 10.0,
-                              ),
-                            )
-                          : Container(),
+                      // popupJResultList.isNotEmpty
+                      //     ? Container(
+                      //         decoration: BoxDecoration(
+                      //             color: Colors.grey.withOpacity(0.3),
+                      //             shape: BoxShape.rectangle,
+                      //             borderRadius:
+                      //                 BorderRadius.all(Radius.circular(10.0))),
+                      //         margin: const EdgeInsets.only(top: 5.0),
+                      //         child: CarouselIndicator(
+                      //           count: popupJResultList.length,
+                      //           index: pageIndex,
+                      //           color:MyStyle.colors.grey.withOpacity(0.3),
+                      //           activeColor:MyStyle.colors.logoRed,
+                      //           width: 10.0,
+                      //         ),
+                      //       )
+                      //     : Container(),
                     ],
                   ),
                 ),
@@ -575,7 +537,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Style.colors.white,
+        backgroundColor:MyStyle.colors.white,
         appBar: AppBar(
           elevation: 0.0,
           leading: const BackButton(),
@@ -586,18 +548,18 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                   ? Text(
                       categoryName,
                       style: TextStyle(
-                          color: Style.colors.logoRed,
+                          color:MyStyle.colors.logoRed,
                           fontSize: 17.0,
-                          fontFamily: Style.montserrat),
+                          fontFamily:MyStyle.montserrat),
                     )
                   : Text(
                       "$categoryName($subCategoryName)",
                       style: TextStyle(
-                          color: Style.colors.logoRed,
+                          color:MyStyle.colors.logoRed,
                           fontSize: 17.0,
-                          fontFamily: Style.montserrat),
+                          fontFamily:MyStyle.montserrat),
                     )),
-          iconTheme: IconThemeData(color: Style.colors.logoRed),
+          iconTheme: IconThemeData(color:MyStyle.colors.logoRed),
           backgroundColor: Colors.white,
           //    brightness: Brightness.light,
         ),
@@ -613,8 +575,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                 openWhatsapp();
               },
               icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
-              color: Style.colors.white,
-              labelColor: Style.colors.white,
+              color:MyStyle.colors.white,
+              labelColor:MyStyle.colors.white,
               labelBackgroundColor: Colors.green,
             ),
             // HawkFabMenuItem(
@@ -623,8 +585,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
             //     launch(('tel://${"+66810673747"}'));
             //   },
             //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
-            //   color: Style.colors.white,
-            //   labelColor: Style.colors.white,
+            //   color:MyStyle.colors.white,
+            //   labelColor:MyStyle.colors.white,
             //   labelBackgroundColor: Colors.blue,
             // ),
           ],
@@ -663,7 +625,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                   child: Icon(
                                     Icons.search,
                                     size: 20.0,
-                                    color: Style.colors.logoRed,
+                                    color:MyStyle.colors.logoRed,
                                   ),
                                 ),
                                 Flexible(
@@ -676,9 +638,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                       maxLines: 1,
                                       softWrap: false,
                                       style: TextStyle(
-                                          color: Style.colors.app_black,
+                                          color:MyStyle.colors.app_black,
                                           fontWeight: FontWeight.w400,
-                                          fontFamily: Style.montserrat,
+                                          fontFamily:MyStyle.montserrat,
                                           fontSize: 15.0),
                                     ),
                                   ),
@@ -704,7 +666,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
-                                              fontFamily: Style.josefinsans)),
+                                              fontFamily:MyStyle.josefinsans)),
                                     ),
                                     Container(
                                       margin: const EdgeInsets.only(
@@ -769,7 +731,6 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                     ? true
                                                     : false,
                                             viewportFraction: 1.0,
-                                            height: 200,
                                             enlargeCenterPage: false,
                                             enableInfiniteScroll: false,
                                             onPageChanged: (index, reason) {
@@ -780,19 +741,19 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                             }),
                                       ),
                                     ),
-                                    Container(
-                                      alignment: Alignment.center,
-                                      margin: const EdgeInsets.only(
-                                          left: 10.0, right: 10.0, top: 5.0),
-                                      child: CarouselIndicator(
-                                        count: bannerJResultList.length,
-                                        index: pageIndex,
-                                        color:
-                                            Style.colors.grey.withOpacity(0.3),
-                                        activeColor: Style.colors.logoRed,
-                                        width: 10.0,
-                                      ),
-                                    )
+                                    // Container(
+                                    //   alignment: Alignment.center,
+                                    //   margin: const EdgeInsets.only(
+                                    //       left: 10.0, right: 10.0, top: 5.0),
+                                    //   child: CarouselIndicator(
+                                    //     count: bannerJResultList.length,
+                                    //     index: pageIndex,
+                                    //     color:
+                                    //        MyStyle.colors.grey.withOpacity(0.3),
+                                    //     activeColor:MyStyle.colors.logoRed,
+                                    //     width: 10.0,
+                                    //   ),
+                                    // )
                                   ],
                                 ),
                               )
@@ -810,7 +771,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: Style.josefinsans)),
+                                      fontFamily:MyStyle.josefinsans)),
                               Visibility(
                                 visible: false,
                                 child: InkWell(
@@ -829,8 +790,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                         style: TextStyle(
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w600,
-                                            color: Style.colors.logoRed,
-                                            fontFamily: Style.josefinsans)),
+                                            color:MyStyle.colors.logoRed,
+                                            fontFamily:MyStyle.josefinsans)),
                                   ),
                                 ),
                               ),
@@ -919,7 +880,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                 .addRemove!
                                                             ? Border.all(
                                                                 color:
-                                                                    Style.colors
+                                                                   MyStyle.colors
                                                                         .logoRed)
                                                             : Border.all(
                                                                 color: Style
@@ -928,7 +889,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                     color: subCategoryDataList[
                                                                 index]
                                                             .addRemove!
-                                                        ? Style.colors.logoRed
+                                                        ?MyStyle.colors.logoRed
                                                             .withOpacity(0.2)
                                                         : Colors.white,
                                                     borderRadius:
@@ -1007,14 +968,11 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                             Visibility(
                               visible: checkInbox,
                               child: Container(
-                                child: LoadMore(
-                                  isFinish:
+                                child: EasyLoadMore(
+                                  isFinished:
                                       searchVendorJResultList.length >= total,
                                   onLoadMore: _loadMore,
-                                  whenEmptyLoad: false,
-                                  delegate: const DefaultLoadMoreDelegate(),
-                                  textBuilder:
-                                      DefaultLoadMoreTextBuilder.english,
+                                  runOnEmptyResult: true,
                                   child: ListView(
                                     children: [
                                       ListView.builder(
@@ -1132,7 +1090,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         15.0,
-                                                                    color: Style
+                                                                    color: MyStyle
                                                                         .colors
                                                                         .app_black,
                                                                     fontWeight:
@@ -1154,10 +1112,10 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                       style: TextStyle(
                                                                           fontSize:
                                                                               13.0,
-                                                                          color: Style
+                                                                          color: MyStyle
                                                                               .colors
                                                                               .app_black,
-                                                                          fontFamily: Style
+                                                                          fontFamily: MyStyle
                                                                               .montserrat,
                                                                           fontWeight:
                                                                               FontWeight.w400),
@@ -1175,10 +1133,10 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                       style: TextStyle(
                                                                           fontSize:
                                                                               13.0,
-                                                                          color: Style
+                                                                          color: MyStyle
                                                                               .colors
                                                                               .app_black,
-                                                                          fontFamily: Style
+                                                                          fontFamily: MyStyle
                                                                               .montserrat,
                                                                           fontWeight:
                                                                               FontWeight.w400),
@@ -1200,7 +1158,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                     color: checkLeave
                                                                         ? Colors
                                                                             .red
-                                                                        : Style
+                                                                        : MyStyle
                                                                             .colors
                                                                             .green,
                                                                     size: 18.0,
@@ -1221,9 +1179,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                           color: checkLeave
                                                                               ? Colors
                                                                                   .red
-                                                                              : Style
+                                                                              : MyStyle
                                                                                   .colors.green,
-                                                                          fontFamily: Style
+                                                                          fontFamily: MyStyle
                                                                               .montserrat,
                                                                           fontWeight:
                                                                               FontWeight.w400),
@@ -1242,9 +1200,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                                                           color: checkLeave
                                                                               ? Colors
                                                                                   .red
-                                                                              : Style
+                                                                              : MyStyle
                                                                                   .colors.green,
-                                                                          fontFamily: Style
+                                                                          fontFamily: MyStyle
                                                                               .montserrat,
                                                                           fontWeight:
                                                                               FontWeight.w400),
@@ -1262,6 +1220,9 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                               ),
                                             );
                                           }),
+                                      const SizedBox(
+                                        height: 40.0,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1291,7 +1252,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
                                       style: TextStyle(
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w600,
-                                          color: Style.colors.grey),
+                                          color:MyStyle.colors.grey),
                                     ),
                                   ),
                                 ],
@@ -1442,7 +1403,8 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     var parameters = {
       "n_limit": limit,
       "c_search": searchTxt,
-      "n_category_id": widget.subCategoryId
+      "n_category_id": widget.subCategoryId,
+      "n_city_id":widget.cityid
     };
     debugPrint("vendorListParams : $parameters");
 
@@ -1514,18 +1476,17 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
     searchVendorListApi(searchTxt, "loadmore");
     return false;
   }
-
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
-    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
+    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
@@ -1533,7 +1494,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
         await launch(whatsappURl_android);
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("whatsapp no installed")));
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     }
   }
@@ -1547,7 +1508,7 @@ class SearchStoreListScreenState extends State<CategoryStoreListScreen> {
       "n_city": widget.cityid.toString(),
       "n_category": widget.categoryId.toString(),
     };
-    print(parameters);
+    print("vendorlistparamforbanner "+parameters.toString());
     final response = await dio.post(ApiProvider.getPopup,
         options: Options(contentType: Headers.formUrlEncodedContentType),
         data: parameters);

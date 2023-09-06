@@ -9,7 +9,7 @@ class ProgressDialog {
     alert = AlertDialog(
       content: Row(
         children: [
-          CircularProgressIndicator(color: Style.colors.logoRed),
+          CircularProgressIndicator(color: MyStyle.colors.logoRed),
         ],
         mainAxisAlignment: MainAxisAlignment.center,
       ),
@@ -30,7 +30,7 @@ class ProgressDialog {
     alert = AlertDialog(
       content: Row(
         children: [
-          CircularProgressIndicator(color: Style.colors.logoRed),
+          CircularProgressIndicator(color: MyStyle.colors.logoRed),
         ],
         mainAxisAlignment: MainAxisAlignment.center,
       ),

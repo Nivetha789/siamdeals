@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:easy_load_more/easy_load_more.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:siamdealz/ResponseModule/DownloadedCouponListModel.dart';
 import 'package:siamdealz/Utils/SharedPreference.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -68,7 +68,7 @@ class DownloadedCouponListScreenState
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Style.colors.white,
+        backgroundColor: MyStyle.colors.white,
         appBar: AppBar(
           elevation: 4.0,
           leading: BackButton(),
@@ -76,11 +76,11 @@ class DownloadedCouponListScreenState
           title: Text(
             "Downloaded Coupon",
             style: TextStyle(
-                color: Style.colors.logoRed,
+                color: MyStyle.colors.logoRed,
                 fontSize: 17.0,
-                fontFamily: Style.montserrat),
+                fontFamily: MyStyle.montserrat),
           ),
-          iconTheme: IconThemeData(color: Style.colors.logoRed),
+          iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
           backgroundColor: Colors.white,
           //  brightness: Brightness.light,
         ),
@@ -96,8 +96,8 @@ class DownloadedCouponListScreenState
                 openWhatsapp();
               },
               icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
-              color: Style.colors.white,
-              labelColor: Style.colors.white,
+              color: MyStyle.colors.white,
+              labelColor: MyStyle.colors.white,
               labelBackgroundColor: Colors.green,
             ),
             // HawkFabMenuItem(
@@ -106,19 +106,17 @@ class DownloadedCouponListScreenState
             //     launch(('tel://${"+66810673747"}'));
             //   },
             //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
-            //   color: Style.colors.white,
-            //   labelColor: Style.colors.white,
+            //   color: MyStyle.colors.white,
+            //   labelColor: MyStyle.colors.white,
             //   labelBackgroundColor: Colors.blue,
             // ),
           ],
           body: Container(
             height: MediaQuery.of(context).size.height,
-            child: LoadMore(
-              isFinish: downloadCouponJResultList.length >= total,
+            child: EasyLoadMore(
+              isFinished: downloadCouponJResultList.length >= total,
               onLoadMore: _loadMore,
-              whenEmptyLoad: false,
-              delegate: DefaultLoadMoreDelegate(),
-              textBuilder: DefaultLoadMoreTextBuilder.english,
+              runOnEmptyResult: true,
               child: ListView(
                 children: [
                   Container(
@@ -157,7 +155,7 @@ class DownloadedCouponListScreenState
                                               // decoration:
                                               // BoxDecoration(
                                               //   border: Border.all(
-                                              //       color: Style.colors.white.withOpacity(0.3), width: 1),
+                                              //       color: MyStyle.colors.white.withOpacity(0.3), width: 1),
                                               //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                               // ),
                                               child: ClipRRect(
@@ -206,10 +204,10 @@ class DownloadedCouponListScreenState
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
-                                                                color: Style
+                                                                color: MyStyle
                                                                     .colors
                                                                     .app_black,
-                                                                fontFamily: Style
+                                                                fontFamily: MyStyle
                                                                     .josefinsans),
                                                           ),
                                                         ),
@@ -221,7 +219,7 @@ class DownloadedCouponListScreenState
                                                   margin: EdgeInsets.only(
                                                       top: 8.0, right: 5.0),
                                                   height: 1.0,
-                                                  color: Style.colors.app_black
+                                                  color: MyStyle.colors.app_black
                                                       .withOpacity(0.1),
                                                 ),
                                                 // Container(
@@ -298,7 +296,7 @@ class DownloadedCouponListScreenState
                                                         fontSize: 14.0,
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        color: Style
+                                                        color: MyStyle
                                                             .colors.app_black),
                                                   ),
                                                 ),
@@ -307,7 +305,7 @@ class DownloadedCouponListScreenState
                                                 // ),
                                                 // Text(
                                                 //   offerMessage,
-                                                //   style: Style.textStyles.poppins(
+                                                //   style: MyStyle.textStyles.poppins(
                                                 //     fontWeight: FontWeight.w600,
                                                 //     color: Colors.green,
                                                 //   ),
@@ -489,7 +487,7 @@ class DownloadedCouponListScreenState
                               // decoration:
                               // BoxDecoration(
                               //   border: Border.all(
-                              //       color: Style.colors.white.withOpacity(0.3), width: 1),
+                              //       color: MyStyle.colors.white.withOpacity(0.3), width: 1),
                               //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                               // ),
                               child: ClipRRect(
@@ -549,14 +547,14 @@ class DownloadedCouponListScreenState
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           color: Colors.black,
-                                                          fontFamily: Style
+                                                          fontFamily: MyStyle
                                                               .josefinsans),
                                                     ),
                                                   ),
                                                   Container(
                                                     decoration: BoxDecoration(
                                                       border: Border.all(
-                                                          color: Style
+                                                          color: MyStyle
                                                               .colors.white,
                                                           width: 1.5),
                                                       borderRadius:
@@ -580,9 +578,9 @@ class DownloadedCouponListScreenState
                                                             fontSize: 14.0,
                                                             fontWeight:
                                                                 FontWeight.w600,
-                                                            color: Style
+                                                            color: MyStyle
                                                                 .colors.white,
-                                                            fontFamily: Style
+                                                            fontFamily: MyStyle
                                                                 .josefinsans),
                                                       ),
                                                     ),
@@ -606,7 +604,7 @@ class DownloadedCouponListScreenState
                                           TextSpan(
                                               text: "Add: ",
                                               style: TextStyle(
-                                                  color: Style.colors.logoRed,
+                                                  color: MyStyle.colors.logoRed,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w500)),
                                           TextSpan(
@@ -631,7 +629,7 @@ class DownloadedCouponListScreenState
                                           TextSpan(
                                               text: "Tel: ",
                                               style: TextStyle(
-                                                  color: Style.colors.logoRed,
+                                                  color: MyStyle.colors.logoRed,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w500)),
                                           TextSpan(
@@ -646,7 +644,7 @@ class DownloadedCouponListScreenState
                                               text:
                                                   " (Must call to validate this coupon)",
                                               style: TextStyle(
-                                                  color: Style.colors.onHold,
+                                                  color: MyStyle.colors.onHold,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w500)),
                                         ],
@@ -665,7 +663,7 @@ class DownloadedCouponListScreenState
                       margin:
                           EdgeInsets.only(top: 8.0, left: 10.0, right: 10.0),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Style.colors.green, width: 3),
+                        border: Border.all(color: MyStyle.colors.green, width: 3),
                         borderRadius: BorderRadius.all(Radius.circular(2.0)),
                       ),
                       child: Padding(
@@ -701,7 +699,7 @@ class DownloadedCouponListScreenState
                             TextSpan(
                                 text: "Description:",
                                 style: TextStyle(
-                                    color: Style.colors.logoRed,
+                                    color: MyStyle.colors.logoRed,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w500)),
                             TextSpan(
@@ -724,7 +722,7 @@ class DownloadedCouponListScreenState
                             TextSpan(
                                 text: "T&C:",
                                 style: TextStyle(
-                                    color: Style.colors.logoRed,
+                                    color: MyStyle.colors.logoRed,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w500)),
                             TextSpan(
@@ -749,23 +747,25 @@ class DownloadedCouponListScreenState
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
       if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
+        await launchUrl(Uri.parse(whatsappURl_android),
+          mode: LaunchMode.externalApplication,
+        );
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     }
   }

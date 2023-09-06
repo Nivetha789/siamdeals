@@ -29,7 +29,7 @@ class _Widgets {
       width: 5.sp,
       height: 5.sp,
       decoration:
-          BoxDecoration(color: Style.colors.primary, shape: BoxShape.circle),
+          BoxDecoration(color: MyStyle.colors.primary, shape: BoxShape.circle),
     );
   }
 
@@ -40,7 +40,7 @@ class _Widgets {
       child: Platform.isIOS
           ? CircularProgressIndicator.adaptive()
           : LoadingAnimationWidget.fallingDot(
-              color: Style.colors.primary,
+              color: MyStyle.colors.primary,
               size: 30.sp,
             ),
     ),

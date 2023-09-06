@@ -223,10 +223,10 @@ class LoginScreenState extends State<LoginScreen> {
                         margin: EdgeInsets.only(top: 20, left: 30, right: 30),
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: Style.colors.white.withOpacity(0.3),
+                              color: MyStyle.colors.white.withOpacity(0.3),
                               width: 1),
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          color: Style.colors.logoRed,
+                          color: MyStyle.colors.logoRed,
                         ),
                         child: Padding(
                           padding:
@@ -238,7 +238,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ),
                             child: Text("Login",
                                 style: TextStyle(
-                                    fontFamily: Style.montserrat,
+                                    fontFamily: MyStyle.montserrat,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.white)),
@@ -255,7 +255,7 @@ class LoginScreenState extends State<LoginScreen> {
                             fontSize: 15.0,
                             fontWeight: FontWeight.w400,
                             color: Color(0xff495271),
-                            fontFamily: Style.josefinsans),
+                            fontFamily: MyStyle.josefinsans),
                       ),
                     ),
                     InkWell(
@@ -283,7 +283,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w400,
                                 color: Color(0xff00d3b4),
-                                fontFamily: Style.josefinsans),
+                                fontFamily: MyStyle.josefinsans),
                           ),
                         ),
                       ),

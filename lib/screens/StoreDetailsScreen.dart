@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -158,7 +159,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                         color: const Color(0xff495271),
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w500,
-                                        fontFamily: Style.sfproddisplay),
+                                        fontFamily: MyStyle.sfproddisplay),
                                   ),
                                 ),
                                 InkWell(
@@ -235,7 +236,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                 fontSize: 14.0,
                                                 fontWeight: FontWeight.w400,
                                                 fontFamily:
-                                                    Style.sfproddisplay),
+                                                    MyStyle.sfproddisplay),
                                           ),
                                         ),
                                       ),
@@ -316,597 +317,363 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
     final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Style.colors.white,
-        appBar: AppBar(
-          elevation: 0.0,
-          leading: const BackButton(),
-          title: Text(widget.storeName,
-              style: TextStyle(
-                  color: Style.colors.logoRed,
-                  fontSize: 17.0,
-                  fontFamily: Style.montserrat)),
-          centerTitle: false,
-          iconTheme: IconThemeData(color: Style.colors.logoRed),
-          backgroundColor: Colors.white,
-          //brightness: Brightness.light,
-        ),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: MyStyle.colors.white,
+      appBar: AppBar(
+        elevation: 0.0,
+        leading: const BackButton(),
+        title: Text(widget.storeName,
+            style: TextStyle(
+                color: MyStyle.colors.logoRed,
+                fontSize: 17.0,
+                fontFamily: MyStyle.montserrat)),
+        centerTitle: false,
+        iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
+        backgroundColor: Colors.white,
+        //brightness: Brightness.light,
+      ),
+      body: HawkFabMenu(
+        icon: Image.asset("images/help.png", color: const Color(0xffFB595D)),
+        fabColor: const Color(0xffFB595D),
+        iconColor: const Color(0xffFB595D),
+        hawkFabMenuController: hawkFabMenuController,
+        items: [
+          HawkFabMenuItem(
+            label: 'Whatsapp',
+            ontap: () {
+              openWhatsapp();
+            },
+            icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
+            color: MyStyle.colors.white,
+            labelColor: MyStyle.colors.white,
+            labelBackgroundColor: Colors.green,
+          ),
+          // nLatitude != "" && nLongitude != "" && nNavigate == "1"
+          //     ? HawkFabMenuItem(
+          //         label: 'Map',
+          //         ontap: () {
+          //           double latitude = double.parse(
+          //               nLatitude!); // Replace with your desired latitude
+          //           double longitude = double.parse(
+          //               nLongitude!); // Replace with your desired longitude
+          //
+          //           launchGoogleMaps(latitude, longitude);
+          //         },
+          //         icon: Image.asset("images/map.png", height: 30, width: 30),
+          //         color: MyStyle.colors.white,
+          //         labelColor: MyStyle.colors.white,
+          //         labelBackgroundColor: Colors.blue,
+          //       )
+          //     : HawkFabMenuItem(
+          //         label: '',
+          //         ontap: () {},
+          //         icon: Image.asset("images/circle.png",
+          //             color: Colors.transparent, height: 30, width: 30),
+          //         color: MyStyle.colors.transparent,
+          //         labelColor: MyStyle.colors.smoothWhite,
+          //         labelBackgroundColor: Colors.transparent,
+          //       ),
+        ],
         body: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: Stack(
-                children: [
-                  Visibility(
-                    visible: !checkEmpty,
-                    child: ListView(
-                      children: [
-                        Container(
-                          color: Colors.black,
-                          child: Container(
-                            color: const Color(0xfffafafa),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 350,
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    color: Colors.black,
-                                    foregroundDecoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                            begin: Alignment.topCenter,
-                                            end: Alignment.bottomCenter,
-                                            colors: [
-                                          Colors.black.withOpacity(0.3),
-                                          const Color(0x00000000),
-                                          const Color(0x00000000),
-                                          const Color(0x00000000),
-                                          const Color(0xCC000000),
-                                        ])),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Image.network(
-                                              profilePicture,
-                                              // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHBppM7IlnKJ5J66tUvw19f0S4MsajUI3mYCrZLnVGidUp7Xy7yLXHHKy-wqcbxh6BvCo&usqp=CAU",
-                                              filterQuality: FilterQuality.high,
-                                              height: 350,
-                                              width: 350,
-                                            ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              children: [
+                Visibility(
+                  visible: !checkEmpty,
+                  child: ListView(
+                    children: [
+                      Container(
+                        color: Colors.black,
+                        child: Container(
+                          color: const Color(0xfffafafa),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 350,
+                                alignment: Alignment.center,
+                                child: Container(
+                                  color: Colors.black,
+                                  foregroundDecoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                        Colors.black.withOpacity(0.3),
+                                        const Color(0x00000000),
+                                        const Color(0x00000000),
+                                        const Color(0x00000000),
+                                        const Color(0xCC000000),
+                                      ])),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Image.network(
+                                            profilePicture,
+                                            // "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHBppM7IlnKJ5J66tUvw19f0S4MsajUI3mYCrZLnVGidUp7Xy7yLXHHKy-wqcbxh6BvCo&usqp=CAU",
+                                            filterQuality: FilterQuality.high,
+                                            height: 350,
+                                            width: 350,
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 15.0, left: 16.0, right: 16.0),
+                        child: Text(
+                          cName!,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: MyStyle.colors.app_black,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${AppLocalizations.of(context)!.place_type!} : ",
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  color: MyStyle.colors.grey,
+                                  fontFamily: MyStyle.montserrat,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Text(
+                              cPlaceType!,
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: MyStyle.colors.grey,
+                                  fontFamily: MyStyle.montserrat,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          OpenHoursBottomList(context);
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.grey.withOpacity(0.2),
+                          margin: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                left: 10.0,
+                                right: 16.0,
+                                top: 10.0,
+                                bottom: 10.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.access_time,
+                                  color: checkCurrentLeave
+                                      ? Colors.red
+                                      : MyStyle.colors.green,
+                                  size: 18.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Text(
+                                    currentOpenTime,
+                                    style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: checkCurrentLeave
+                                            ? Colors.red
+                                            : MyStyle.colors.app_black,
+                                        fontFamily: MyStyle.montserrat,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 2.0),
+                                  child: Text(
+                                    currentCloseTime,
+                                    style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: checkCurrentLeave
+                                            ? Colors.red
+                                            : MyStyle.colors.app_black,
+                                        fontFamily: MyStyle.montserrat,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 5.0),
+                                  child: Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    color: Colors.grey,
+                                    size: 20.0,
                                   ),
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              top: 15.0, left: 16.0, right: 16.0),
-                          child: Text(
-                            cName!,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w600,
-                              color: Style.colors.app_black,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 16.0, right: 16.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${AppLocalizations.of(context)!.place_type!} : ",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Text(
-                                cPlaceType!,
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            OpenHoursBottomList(context);
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.grey.withOpacity(0.2),
-                            margin: const EdgeInsets.only(top: 5.0),
-                            child: Container(
+                      ),
+                      // Container(
+                      //   margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                      //   child: Wrap(
+                      //     children: [
+                      //       Chip(
+                      //         avatar: Icon(
+                      //           Icons.done,
+                      //           color: Colors.green,
+                      //           size: 15.0,
+                      //         ),
+                      //         label: Text(
+                      //           "Dine-in",
+                      //           style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             color: MyStyle.colors.app_black,
+                      //           ),
+                      //         ),
+                      //         backgroundColor:
+                      //             MyStyle.colors.grey.withOpacity(0.1),
+                      //         elevation: 1.0,
+                      //         shadowColor: MyStyle.colors.grey.withOpacity(0.1),
+                      //         labelPadding: EdgeInsets.only(left: 1.0),
+                      //         padding: EdgeInsets.only(right: 12.0, left: 6.0),
+                      //       ),
+                      //       SizedBox(
+                      //         width: 10.sp,
+                      //       ),
+                      //       Chip(
+                      //         avatar: Icon(
+                      //           Icons.done,
+                      //           color: Colors.green,
+                      //           size: 15.sp,
+                      //         ),
+                      //         label: Text(
+                      //           'Takeaway',
+                      //           style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             color: MyStyle.colors.app_black,
+                      //           ),
+                      //         ),
+                      //         backgroundColor:
+                      //             MyStyle.colors.grey.withOpacity(0.1),
+                      //         elevation: 1.0,
+                      //         shadowColor: MyStyle.colors.grey.withOpacity(0.1),
+                      //         labelPadding: EdgeInsets.only(left: 1.0),
+                      //         padding: EdgeInsets.only(right: 12.0, left: 6.0),
+                      //       ),
+                      //       SizedBox(
+                      //         width: 10.sp,
+                      //       ),
+                      //       Chip(
+                      //         avatar: Icon(
+                      //           Icons.done,
+                      //           color: Colors.green,
+                      //           size: 15.0,
+                      //         ),
+                      //         label: Text(
+                      //           'Delivery',
+                      //           style: TextStyle(
+                      //             fontSize: 13.0,
+                      //             color: MyStyle.colors.app_black,
+                      //           ),
+                      //         ),
+                      //         backgroundColor:
+                      //             MyStyle.colors.grey.withOpacity(0.1),
+                      //         elevation: 1.0,
+                      //         shadowColor: MyStyle.colors.grey.withOpacity(0.1),
+                      //         labelPadding: EdgeInsets.only(left: 1.0),
+                      //         padding: EdgeInsets.only(right: 12.0, left: 6.0),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+
+                      storeDetailsJImagesList.isNotEmpty
+                          ? Container(
                               margin: const EdgeInsets.only(
-                                  left: 10.0,
-                                  right: 16.0,
-                                  top: 10.0,
-                                  bottom: 10.0),
+                                  top: 15.0, left: 16.0, right: 16.0),
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.access_time,
-                                    color: checkCurrentLeave
-                                        ? Colors.red
-                                        : Style.colors.green,
-                                    size: 18.0,
+                                  Text(
+                                    AppLocalizations.of(context)!.photos!,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: MyStyle.colors.app_black,
+                                        fontFamily: MyStyle.josefinsans),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 2.0),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (storeDetailsJImagesList.length > 0) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ViewAllImagesScreen(
+                                                        storeDetailsJImagesList)));
+                                      }
+                                    },
                                     child: Text(
-                                      currentOpenTime,
+                                      AppLocalizations.of(context)!.view_all!,
                                       style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: checkCurrentLeave
-                                              ? Colors.red
-                                              : Style.colors.app_black,
-                                          fontFamily: Style.montserrat,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 2.0),
-                                    child: Text(
-                                      currentCloseTime,
-                                      style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: checkCurrentLeave
-                                              ? Colors.red
-                                              : Style.colors.app_black,
-                                          fontFamily: Style.montserrat,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    child: Icon(
-                                      Icons.arrow_drop_down_outlined,
-                                      color: Colors.grey,
-                                      size: 20.0,
+                                          fontSize: 16.0,
+                                          color: MyStyle.colors.logoRed,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: MyStyle.josefinsans),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
-                        ),
-                        // Container(
-                        //   margin: EdgeInsets.only(left: 10.0, right: 10.0),
-                        //   child: Wrap(
-                        //     children: [
-                        //       Chip(
-                        //         avatar: Icon(
-                        //           Icons.done,
-                        //           color: Colors.green,
-                        //           size: 15.0,
-                        //         ),
-                        //         label: Text(
-                        //           "Dine-in",
-                        //           style: TextStyle(
-                        //             fontSize: 13.0,
-                        //             color: Style.colors.app_black,
-                        //           ),
-                        //         ),
-                        //         backgroundColor:
-                        //             Style.colors.grey.withOpacity(0.1),
-                        //         elevation: 1.0,
-                        //         shadowColor: Style.colors.grey.withOpacity(0.1),
-                        //         labelPadding: EdgeInsets.only(left: 1.0),
-                        //         padding: EdgeInsets.only(right: 12.0, left: 6.0),
-                        //       ),
-                        //       SizedBox(
-                        //         width: 10.sp,
-                        //       ),
-                        //       Chip(
-                        //         avatar: Icon(
-                        //           Icons.done,
-                        //           color: Colors.green,
-                        //           size: 15.sp,
-                        //         ),
-                        //         label: Text(
-                        //           'Takeaway',
-                        //           style: TextStyle(
-                        //             fontSize: 13.0,
-                        //             color: Style.colors.app_black,
-                        //           ),
-                        //         ),
-                        //         backgroundColor:
-                        //             Style.colors.grey.withOpacity(0.1),
-                        //         elevation: 1.0,
-                        //         shadowColor: Style.colors.grey.withOpacity(0.1),
-                        //         labelPadding: EdgeInsets.only(left: 1.0),
-                        //         padding: EdgeInsets.only(right: 12.0, left: 6.0),
-                        //       ),
-                        //       SizedBox(
-                        //         width: 10.sp,
-                        //       ),
-                        //       Chip(
-                        //         avatar: Icon(
-                        //           Icons.done,
-                        //           color: Colors.green,
-                        //           size: 15.0,
-                        //         ),
-                        //         label: Text(
-                        //           'Delivery',
-                        //           style: TextStyle(
-                        //             fontSize: 13.0,
-                        //             color: Style.colors.app_black,
-                        //           ),
-                        //         ),
-                        //         backgroundColor:
-                        //             Style.colors.grey.withOpacity(0.1),
-                        //         elevation: 1.0,
-                        //         shadowColor: Style.colors.grey.withOpacity(0.1),
-                        //         labelPadding: EdgeInsets.only(left: 1.0),
-                        //         padding: EdgeInsets.only(right: 12.0, left: 6.0),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-
-                        storeDetailsJImagesList.isNotEmpty
-                            ? Container(
-                                margin: const EdgeInsets.only(
-                                    top: 15.0, left: 16.0, right: 16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.photos!,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Style.colors.app_black,
-                                          fontFamily: Style.josefinsans),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (storeDetailsJImagesList.length >
-                                            0) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      ViewAllImagesScreen(
-                                                          storeDetailsJImagesList)));
-                                        }
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!.view_all!,
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Style.colors.logoRed,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: Style.josefinsans),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: 10.sp,
-                        ),
-                        storeDetailsJImagesList.isNotEmpty
-                            ? Container(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 80,
-                                      margin: const EdgeInsets.only(
-                                          top: 10.0, left: 10.0, right: 10.0),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              flex: 4,
-                                              child: Container(
-                                                child: ListView.builder(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    itemCount:
-                                                        storeDetailsJImagesList
-                                                            .length,
-                                                    shrinkWrap: true,
-                                                    itemBuilder:
-                                                        (context, postion) {
-                                                      return InkWell(
-                                                        onTap: () {
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 10.sp,
+                      ),
+                      storeDetailsJImagesList.isNotEmpty
+                          ? Container(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    margin: const EdgeInsets.only(
+                                        top: 10.0, left: 10.0, right: 10.0),
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 4,
+                                            child: Container(
+                                              child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      storeDetailsJImagesList
+                                                          .length,
+                                                  shrinkWrap: true,
+                                                  itemBuilder:
+                                                      (context, postion) {
+                                                    return InkWell(
+                                                      onTap: () {
 //
-                                                        },
-                                                        child: Container(
-                                                          child: Stack(
-                                                            alignment: Alignment
-                                                                .bottomCenter,
-                                                            children: [
-                                                              Visibility(
-                                                                visible: true,
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    setState(
-                                                                        () {
-                                                                      profilePicture =
-                                                                          storeDetailsJImagesList[postion]
-                                                                              .cListingImg!;
-                                                                    });
-                                                                  },
-                                                                  child: Container(
-                                                                      margin: const EdgeInsets.only(left: 3.0, right: 3.0, bottom: 8.0),
-                                                                      height: 80,
-                                                                      width: 80,
-                                                                      decoration: BoxDecoration(
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Style.colors.app_black.withOpacity(0.3),
-                                                                            width: 1),
-                                                                        borderRadius:
-                                                                            const BorderRadius.all(Radius.circular(10.0)),
-                                                                      ),
-                                                                      child: ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                        child:
-                                                                            AspectRatio(
-                                                                          aspectRatio:
-                                                                              1 / 1,
-                                                                          child:
-                                                                              Image.network(
-                                                                            storeDetailsJImagesList[postion].cListingImg!,
-                                                                            filterQuality:
-                                                                                FilterQuality.high,
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          ),
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        storeDetailsJAlbumsList.isNotEmpty
-                            ? Container(
-                                margin: const EdgeInsets.only(
-                                    top: 15.0, left: 16.0, right: 16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Reviews",
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Style.colors.app_black,
-                                          fontFamily: Style.josefinsans),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (storeDetailsJAlbumsList.length >
-                                            0) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      ViewAllReviewImagesScreen(
-                                                          storeDetailsJAlbumsList)));
-                                        }
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!.view_all!,
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Style.colors.logoRed,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: Style.josefinsans),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: 10.sp,
-                        ),
-                        storeDetailsJAlbumsList.isNotEmpty
-                            ? Container(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 80,
-                                      margin: const EdgeInsets.only(
-                                          top: 10.0, left: 10.0, right: 10.0),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              flex: 4,
-                                              child: Container(
-                                                child: ListView.builder(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    itemCount:
-                                                        storeDetailsJAlbumsList
-                                                            .length,
-                                                    shrinkWrap: true,
-                                                    itemBuilder:
-                                                        (context, postion1) {
-                                                      return InkWell(
-                                                        onTap: () {
-//
-                                                        },
-                                                        child: Container(
-                                                          child: Stack(
-                                                            alignment: Alignment
-                                                                .bottomCenter,
-                                                            children: [
-                                                              Visibility(
-                                                                visible: true,
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    // setState(
-                                                                    //     () {
-                                                                    //   profilePicture =
-                                                                    //       storeDetailsJImagesList[postion]
-                                                                    //           .cListingImg!;
-                                                                    // });
-                                                                  },
-                                                                  child: Container(
-                                                                      margin: const EdgeInsets.only(left: 3.0, right: 3.0, bottom: 8.0),
-                                                                      height: 80,
-                                                                      width: 80,
-                                                                      decoration: BoxDecoration(
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Style.colors.app_black.withOpacity(0.3),
-                                                                            width: 1),
-                                                                        borderRadius:
-                                                                            const BorderRadius.all(Radius.circular(10.0)),
-                                                                      ),
-                                                                      child: ClipRRect(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10.0),
-                                                                        child:
-                                                                            AspectRatio(
-                                                                          aspectRatio:
-                                                                              1 / 1,
-                                                                          child:
-                                                                              Image.network(
-                                                                            storeDetailsJAlbumsList[postion1].cListingImg!,
-                                                                            filterQuality:
-                                                                                FilterQuality.high,
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          ),
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-
-                        storeDetailsJCoupons.isNotEmpty
-                            ? Container(
-                                margin: const EdgeInsets.only(
-                                    top: 15.0, left: 16.0, right: 16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.coupons!,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Style.colors.app_black,
-                                          fontFamily: Style.josefinsans),
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (storeDetailsJCoupons.length > 0) {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      CouponListScreen(
-                                                          nId!,
-                                                          storeDetailsJImagesList[
-                                                                  0]
-                                                              .cListingImg!,
-                                                          cName!,
-                                                          cAddress!,
-                                                          cMobileNumbers!,
-                                                          storeDetailsJCoupons)));
-                                        }
-                                      },
-                                      child: Text(
-                                        AppLocalizations.of(context)!.view_all!,
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Style.colors.logoRed,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: Style.josefinsans),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: 10.sp,
-                        ),
-                        storeDetailsJCoupons.isNotEmpty
-                            ? Container(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 80,
-                                      margin: const EdgeInsets.only(
-                                          top: 10.0, left: 10.0, right: 10.0),
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        child: Row(
-                                          children: [
-                                            Flexible(
-                                              flex: 4,
-                                              child: Container(
-                                                child: ListView.builder(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    itemCount:
-                                                        storeDetailsJCoupons
-                                                                    .length >
-                                                                9
-                                                            ? 10
-                                                            : storeDetailsJCoupons
-                                                                .length,
-                                                    shrinkWrap: true,
-                                                    itemBuilder:
-                                                        (context, postion) {
-                                                      return Container(
+                                                      },
+                                                      child: Container(
                                                         child: Stack(
                                                           alignment: Alignment
                                                               .bottomCenter,
@@ -916,14 +683,15 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                               child: InkWell(
                                                                 onTap: () {
                                                                   setState(() {
-                                                                    _showAlert(
-                                                                        context,
-                                                                        postion);
+                                                                    profilePicture =
+                                                                        storeDetailsJImagesList[postion]
+                                                                            .cListingImg!;
                                                                   });
                                                                 },
                                                                 child:
                                                                     Container(
-                                                                        margin: const EdgeInsets.only(
+                                                                        margin: const EdgeInsets
+                                                                            .only(
                                                                             left:
                                                                                 3.0,
                                                                             right:
@@ -937,10 +705,11 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           border: Border.all(
-                                                                              color: Style.colors.app_black.withOpacity(0.3),
+                                                                              color: MyStyle.colors.app_black.withOpacity(0.3),
                                                                               width: 1),
-                                                                          borderRadius:
-                                                                              const BorderRadius.all(Radius.circular(10.0)),
+                                                                          borderRadius: const BorderRadius
+                                                                              .all(
+                                                                              Radius.circular(10.0)),
                                                                         ),
                                                                         child:
                                                                             ClipRRect(
@@ -952,8 +721,9 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                                                 1 / 1,
                                                                             child:
                                                                                 Image.network(
-                                                                              storeDetailsJCoupons[postion].cImage!,
+                                                                              storeDetailsJImagesList[postion].cListingImg!,
                                                                               filterQuality: FilterQuality.high,
+                                                                              fit: BoxFit.cover,
                                                                             ),
                                                                           ),
                                                                         )),
@@ -961,452 +731,756 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                             )
                                                           ],
                                                         ),
-                                                      );
-                                                    }),
-                                              ),
+                                                      ),
+                                                    );
+                                                  }),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              )
-                            : Container(),
-                        cIntroduction == ""
-                            ? Container()
-                            : Container(
-                                margin: const EdgeInsets.only(
-                                    top: 15.0, left: 16.0, right: 16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Introduction",
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      storeDetailsJAlbumsList.isNotEmpty
+                          ? Container(
+                              margin: const EdgeInsets.only(
+                                  top: 15.0, left: 16.0, right: 16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Reviews",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: MyStyle.colors.app_black,
+                                        fontFamily: MyStyle.josefinsans),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (storeDetailsJAlbumsList.length > 0) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ViewAllReviewImagesScreen(
+                                                        storeDetailsJAlbumsList)));
+                                      }
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.view_all!,
                                       style: TextStyle(
                                           fontSize: 16.0,
+                                          color: MyStyle.colors.logoRed,
                                           fontWeight: FontWeight.w600,
-                                          color: Style.colors.app_black,
-                                          fontFamily: Style.josefinsans),
+                                          fontFamily: MyStyle.josefinsans),
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      child: Text(
-                                        cIntroduction.toString(),
-                                        style: TextStyle(
-                                            fontSize: 13.0,
-                                            color: Style.colors.grey,
-                                            fontFamily: Style.montserrat,
-                                            fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 10.sp,
+                      ),
+                      storeDetailsJAlbumsList.isNotEmpty
+                          ? Container(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    margin: const EdgeInsets.only(
+                                        top: 10.0, left: 10.0, right: 10.0),
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 4,
+                                            child: Container(
+                                              child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      storeDetailsJAlbumsList
+                                                          .length,
+                                                  shrinkWrap: true,
+                                                  itemBuilder:
+                                                      (context, postion1) {
+                                                    return InkWell(
+                                                      onTap: () {
+//
+                                                      },
+                                                      child: Container(
+                                                        child: Stack(
+                                                          alignment: Alignment
+                                                              .bottomCenter,
+                                                          children: [
+                                                            Visibility(
+                                                              visible: true,
+                                                              child: InkWell(
+                                                                onTap: () {
+                                                                  // setState(
+                                                                  //     () {
+                                                                  //   profilePicture =
+                                                                  //       storeDetailsJImagesList[postion]
+                                                                  //           .cListingImg!;
+                                                                  // });
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                        margin: const EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                                3.0,
+                                                                            right:
+                                                                                3.0,
+                                                                            bottom:
+                                                                                8.0),
+                                                                        height:
+                                                                            80,
+                                                                        width:
+                                                                            80,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          border: Border.all(
+                                                                              color: MyStyle.colors.app_black.withOpacity(0.3),
+                                                                              width: 1),
+                                                                          borderRadius: const BorderRadius
+                                                                              .all(
+                                                                              Radius.circular(10.0)),
+                                                                        ),
+                                                                        child:
+                                                                            ClipRRect(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(10.0),
+                                                                          child:
+                                                                              AspectRatio(
+                                                                            aspectRatio:
+                                                                                1 / 1,
+                                                                            child:
+                                                                                Image.network(
+                                                                              storeDetailsJAlbumsList[postion1].cListingImg!,
+                                                                              filterQuality: FilterQuality.high,
+                                                                              fit: BoxFit.cover,
+                                                                            ),
+                                                                          ),
+                                                                        )),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                              top: 15.0, left: 16.0, right: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.info!,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                    color: Style.colors.app_black,
-                                    fontFamily: Style.josefinsans),
+                            )
+                          : Container(),
+
+                      storeDetailsJCoupons.isNotEmpty
+                          ? Container(
+                              margin: const EdgeInsets.only(
+                                  top: 15.0, left: 16.0, right: 16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.coupons!,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: MyStyle.colors.app_black,
+                                        fontFamily: MyStyle.josefinsans),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (storeDetailsJCoupons.length > 0) {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    CouponListScreen(
+                                                        nId!,
+                                                        storeDetailsJImagesList[
+                                                                0]
+                                                            .cListingImg!,
+                                                        cName!,
+                                                        cAddress!,
+                                                        cMobileNumbers!,
+                                                        storeDetailsJCoupons)));
+                                      }
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.view_all!,
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: MyStyle.colors.logoRed,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: MyStyle.josefinsans),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 10.sp,
+                      ),
+                      storeDetailsJCoupons.isNotEmpty
+                          ? Container(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 80,
+                                    margin: const EdgeInsets.only(
+                                        top: 10.0, left: 10.0, right: 10.0),
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 4,
+                                            child: Container(
+                                              child: ListView.builder(
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount:
+                                                      storeDetailsJCoupons
+                                                                  .length >
+                                                              9
+                                                          ? 10
+                                                          : storeDetailsJCoupons
+                                                              .length,
+                                                  shrinkWrap: true,
+                                                  itemBuilder:
+                                                      (context, postion) {
+                                                    return Container(
+                                                      child: Stack(
+                                                        alignment: Alignment
+                                                            .bottomCenter,
+                                                        children: [
+                                                          Visibility(
+                                                            visible: true,
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _showAlert(
+                                                                      context,
+                                                                      postion);
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                  margin: const EdgeInsets
+                                                                      .only(
+                                                                      left: 3.0,
+                                                                      right:
+                                                                          3.0,
+                                                                      bottom:
+                                                                          8.0),
+                                                                  height: 80,
+                                                                  width: 80,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    border: Border.all(
+                                                                        color: MyStyle
+                                                                            .colors
+                                                                            .app_black
+                                                                            .withOpacity(
+                                                                                0.3),
+                                                                        width:
+                                                                            1),
+                                                                    borderRadius:
+                                                                        const BorderRadius
+                                                                            .all(
+                                                                            Radius.circular(10.0)),
+                                                                  ),
+                                                                  child:
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10.0),
+                                                                    child:
+                                                                        AspectRatio(
+                                                                      aspectRatio:
+                                                                          1 / 1,
+                                                                      child: Image
+                                                                          .network(
+                                                                        storeDetailsJCoupons[postion]
+                                                                            .cImage!,
+                                                                        filterQuality:
+                                                                            FilterQuality.high,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      cIntroduction == ""
+                          ? Container()
+                          : Container(
+                              margin: const EdgeInsets.only(
+                                  top: 15.0, left: 16.0, right: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Introduction",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: MyStyle.colors.app_black,
+                                        fontFamily: MyStyle.josefinsans),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Text(
+                                      cIntroduction.toString(),
+                                      style: TextStyle(
+                                          fontSize: 13.0,
+                                          color: MyStyle.colors.grey,
+                                          fontFamily: MyStyle.montserrat,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 15.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.info!,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: MyStyle.colors.app_black,
+                                  fontFamily: MyStyle.josefinsans),
+                            ),
+                          ],
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 16.0, right: 16.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Text(
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 16.0, right: 16.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
                                       "${AppLocalizations.of(context)!.category!} : ",
                                       style: TextStyle(
                                           fontSize: 13.0,
-                                          color: Style.colors.grey,
-                                          fontFamily: Style.montserrat,
+                                          color: MyStyle.colors.grey,
+                                          fontFamily: MyStyle.montserrat,
                                           fontWeight: FontWeight.w400),
                                     ),
-                                    Text(
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Text(
                                       cCategory!,
                                       style: TextStyle(
                                           fontSize: 14.0,
-                                          color: Style.colors.grey,
-                                          fontFamily: Style.montserrat,
+                                          color: MyStyle.colors.grey,
+                                          fontFamily: MyStyle.montserrat,
                                           fontWeight: FontWeight.w400),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              Container(
-                                margin: const EdgeInsets.only(top: 5.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "${AppLocalizations.of(context)!.place_type!} : ",
-                                      style: TextStyle(
-                                          fontSize: 13.0,
-                                          color: Style.colors.grey,
-                                          fontFamily: Style.montserrat,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    Text(
-                                      cPlaceType!,
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: Style.colors.grey,
-                                          fontFamily: Style.montserrat,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Container(
-                          margin: const EdgeInsets.only(
-                              top: 15.0, left: 16.0, right: 16.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.contacts!,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: Style.josefinsans),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 16.0, right: 16.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${AppLocalizations.of(context)!.ph_no!} : ",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  // cPlaceType == "Public places"
-                                  //     ? null
-                                  //     : redirectToCall(cMobileNumbers!);
-                                },
-                                child: Text(
-                                  cMobileNumbers!,
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Style.colors.grey,
-                                      fontFamily: Style.montserrat,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 16.0, right: 16.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${AppLocalizations.of(context)!.email_id!} : ",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  // cPlaceType == "Public places"
-                                  //     ? null
-                                  //     : redirectMailPage(cEmailids!);
-                                },
-                                child: Text(
-                                  cEmailids!,
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Style.colors.grey,
-                                      fontFamily: Style.montserrat,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          margin: const EdgeInsets.only(
-                              top: 5.0, left: 16.0, right: 16.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                "${AppLocalizations.of(context)!.address!} : ",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    color: Style.colors.grey,
-                                    fontFamily: Style.montserrat,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              Flexible(
-                                child: InkWell(
-                                  onTap: () {
-                                    // double latitude = double.parse(
-                                    //     nLatitude!); // Replace with your desired latitude
-                                    // double longitude = double.parse(
-                                    //     nLongitude!); // Replace with your desired longitude
-                                    // cPlaceType == "Public places"
-                                    //     ? null
-                                    //     : launchGoogleMaps(latitude, longitude);
-                                  },
-                                  child: Text(
-                                    cAddress!,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "${AppLocalizations.of(context)!.place_type!} : ",
                                     style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Style.colors.grey,
-                                        fontFamily: Style.montserrat,
+                                        fontSize: 13.0,
+                                        color: MyStyle.colors.grey,
+                                        fontFamily: MyStyle.montserrat,
                                         fontWeight: FontWeight.w400),
                                   ),
-                                ),
+                                  Text(
+                                    cPlaceType!,
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        color: MyStyle.colors.grey,
+                                        fontFamily: MyStyle.montserrat,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                      ),
 
-                        // InkWell(
-                        //   onTap: (){
-                        //
-                        //   },
-                        //   child: Container(
-                        //     margin: EdgeInsets.only(left: 60, right: 60, top: 30),
-                        //     width: MediaQuery.of(context).size.width / 2,
-                        //     decoration: BoxDecoration(
-                        //         gradient: LinearGradient(
-                        //             begin: Alignment.centerLeft,
-                        //             end: Alignment.centerRight,
-                        //             colors: [Style.colors.logoRed,Style.colors.logoRed.withOpacity(0.6)]),
-                        //         borderRadius:
-                        //         BorderRadius.all(Radius.circular(10.0))),
-                        //     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                        //     child: const Text('GET COUPON',
-                        //         textAlign: TextAlign.center,
-                        //         style: TextStyle(
-                        //             fontSize: 16,
-                        //             color: Colors.white,
-                        //             fontWeight: FontWeight.w500)),
-                        //   ),
-                        // ),
-
-                        // SizedBox(
-                        //   height: 15.sp,
-                        // ),
-                        // Container(
-                        //   margin:
-                        //       EdgeInsets.only(top: 15.0, left: 16.0, right: 16.0),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       Text(
-                        //         'Reviews',
-                        //         style: TextStyle(
-                        //             fontSize: 16.0,
-                        //             color: Style.colors.app_black,
-                        //             fontWeight: FontWeight.w600,
-                        //             fontFamily: Style.josefinsans),
-                        //       ),
-                        //       GestureDetector(
-                        //         onTap: () {
-                        //           Navigator.push(
-                        //               context,
-                        //               MaterialPageRoute(
-                        //                   builder: (context) =>
-                        //                       ReviewsListScreen()));
-                        //         },
-                        //         child: Text(
-                        //           'See all',
-                        //           style: TextStyle(
-                        //               fontSize: 16.0,
-                        //               color: Style.colors.logoRed,
-                        //               fontWeight: FontWeight.w600,
-                        //               fontFamily: Style.josefinsans),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   height: 10.sp,
-                        // ),
-                        // ListView.builder(
-                        //     shrinkWrap: true,
-                        //     physics: NeverScrollableScrollPhysics(),
-                        //     itemCount: 3,
-                        //     itemBuilder: (BuildContext context, index) {
-                        //       return Padding(
-                        //         padding: EdgeInsets.only(
-                        //           top: index == 0 ? 0 : 10.sp,
-                        //         ),
-                        //         child: Container(
-                        //           width: double.infinity,
-                        //           height: MediaQuery.of(context).size.height * .2,
-                        //           decoration: BoxDecoration(
-                        //               image: DecorationImage(
-                        //                   fit: BoxFit.cover,
-                        //                   image: AssetImage(
-                        //                       Resources.assets.review))),
-                        //         ),
-                        //       );
-                        //     }),
-
-                        Container(
-                          margin: EdgeInsets.only(top: 15.0, left: 16.0),
-                          child: Row(
-                            children: [
-                              Visibility(
-                                visible: callUs,
-                                child: InkWell(
-                                  onTap: () {
-                                    redirectToCall(cMobileNumbers!);
-                                  },
-                                  child: Tooltip(
-                                    message: "Contact us",
-                                    child: Container(
-                                      margin: EdgeInsets.only(right: 8.0),
-                                      child: CircleAvatar(
-                                        child: Image.asset(
-                                          "images/telephone.png",
-                                          height: 30,
-                                        ),
-                                        backgroundColor:
-                                            Colors.blue.withOpacity(0.3),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: mailUs,
-                                child: InkWell(
-                                  onTap: () {
-                                    redirectMailPage(cEmailids!);
-                                  },
-                                  child: Tooltip(
-                                    message: "Connect with Gmail",
-                                    child: Container(
-                                      margin: EdgeInsets.only(right: 8.0),
-                                      child: CircleAvatar(
-                                        child: Image.asset(
-                                          "images/gmail.png",
-                                          color: Colors.red,
-                                          height: 30,
-                                        ),
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.3),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: whatsapp,
-                                child: InkWell(
-                                  onTap: () {
-                                    openWhatsapp();
-                                  },
-                                  child: Tooltip(
-                                    message: "Connect with Whatsapp",
-                                    child: Container(
-                                      margin: EdgeInsets.only(right: 8.0),
-                                      child: CircleAvatar(
-                                        child: Image.asset(
-                                          "images/whatsapp.png",
-                                          height: 30,
-                                        ),
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.3),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: navigateRoot,
-                                child: InkWell(
-                                  onTap: () {
-                                    double latitude = double.parse(
-                                        nLatitude!); // Replace with your desired latitude
-                                    double longitude = double.parse(
-                                        nLongitude!); // Replace with your desired longitude
-                                    launchGoogleMaps(latitude, longitude);
-                                  },
-                                  child: Tooltip(
-                                    message: "Navigate to Map",
-                                    child: Container(
-                                      child: CircleAvatar(
-                                        backgroundColor:
-                                            Colors.grey.withOpacity(0.3),
-                                        child: Image.asset(
-                                          "images/map.png",
-                                          height: 30,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: 15.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.contacts!,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: MyStyle.josefinsans),
+                            ),
+                          ],
                         ),
-                        const SizedBox(
-                          height: 100.0,
-                        )
-                      ],
+                      ),
+
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${AppLocalizations.of(context)!.ph_no!} : ",
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  color: MyStyle.colors.grey,
+                                  fontFamily: MyStyle.montserrat,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                // cPlaceType == "Public places"
+                                //     ? null
+                                //     : redirectToCall(cMobileNumbers!);
+                              },
+                              child: Text(
+                                cMobileNumbers!,
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: MyStyle.colors.grey,
+                                    fontFamily: MyStyle.montserrat,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${AppLocalizations.of(context)!.email_id!} : ",
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  color: MyStyle.colors.grey,
+                                  fontFamily: MyStyle.montserrat,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                // cPlaceType == "Public places"
+                                //     ? null
+                                //     : redirectMailPage(cEmailids!);
+                              },
+                              child: Text(
+                                cEmailids!,
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: MyStyle.colors.grey,
+                                    fontFamily: MyStyle.montserrat,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            top: 5.0, left: 16.0, right: 16.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "${AppLocalizations.of(context)!.address!} : ",
+                              style: TextStyle(
+                                  fontSize: 13.0,
+                                  color: MyStyle.colors.grey,
+                                  fontFamily: MyStyle.montserrat,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Flexible(
+                              child: InkWell(
+                                onTap: () {
+                                  // double latitude = double.parse(
+                                  //     nLatitude!); // Replace with your desired latitude
+                                  // double longitude = double.parse(
+                                  //     nLongitude!); // Replace with your desired longitude
+                                  // cPlaceType == "Public places"
+                                  //     ? null
+                                  //     : launchGoogleMaps(latitude, longitude);
+                                },
+                                child: Text(
+                                  cAddress!,
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: MyStyle.colors.grey,
+                                      fontFamily: MyStyle.montserrat,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // InkWell(
+                      //   onTap: (){
+                      //
+                      //   },
+                      //   child: Container(
+                      //     margin: EdgeInsets.only(left: 60, right: 60, top: 30),
+                      //     width: MediaQuery.of(context).size.width / 2,
+                      //     decoration: BoxDecoration(
+                      //         gradient: LinearGradient(
+                      //             begin: Alignment.centerLeft,
+                      //             end: Alignment.centerRight,
+                      //             colors: [MyStyle.colors.logoRed,MyStyle.colors.logoRed.withOpacity(0.6)]),
+                      //         borderRadius:
+                      //         BorderRadius.all(Radius.circular(10.0))),
+                      //     padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      //     child: const Text('GET COUPON',
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             fontSize: 16,
+                      //             color: Colors.white,
+                      //             fontWeight: FontWeight.w500)),
+                      //   ),
+                      // ),
+
+                      // SizedBox(
+                      //   height: 15.sp,
+                      // ),
+                      // Container(
+                      //   margin:
+                      //       EdgeInsets.only(top: 15.0, left: 16.0, right: 16.0),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Text(
+                      //         'Reviews',
+                      //         style: TextStyle(
+                      //             fontSize: 16.0,
+                      //             color: MyStyle.colors.app_black,
+                      //             fontWeight: FontWeight.w600,
+                      //             fontFamily: MyStyle.josefinsans),
+                      //       ),
+                      //       GestureDetector(
+                      //         onTap: () {
+                      //           Navigator.push(
+                      //               context,
+                      //               MaterialPageRoute(
+                      //                   builder: (context) =>
+                      //                       ReviewsListScreen()));
+                      //         },
+                      //         child: Text(
+                      //           'See all',
+                      //           style: TextStyle(
+                      //               fontSize: 16.0,
+                      //               color: MyStyle.colors.logoRed,
+                      //               fontWeight: FontWeight.w600,
+                      //               fontFamily: MyStyle.josefinsans),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   height: 10.sp,
+                      // ),
+                      // ListView.builder(
+                      //     shrinkWrap: true,
+                      //     physics: NeverScrollableScrollPhysics(),
+                      //     itemCount: 3,
+                      //     itemBuilder: (BuildContext context, index) {
+                      //       return Padding(
+                      //         padding: EdgeInsets.only(
+                      //           top: index == 0 ? 0 : 10.sp,
+                      //         ),
+                      //         child: Container(
+                      //           width: double.infinity,
+                      //           height: MediaQuery.of(context).size.height * .2,
+                      //           decoration: BoxDecoration(
+                      //               image: DecorationImage(
+                      //                   fit: BoxFit.cover,
+                      //                   image: AssetImage(
+                      //                       Resources.assets.review))),
+                      //         ),
+                      //       );
+                      //     }),
+
+                      Container(
+                        margin: EdgeInsets.only(top: 15.0, left: 16.0),
+                        child: Row(
+                          children: [
+                            Visibility(
+                              visible: callUs,
+                              child: InkWell(
+                                onTap: () {
+                                  redirectToCall(cMobileNumbers!);
+                                },
+                                child: Tooltip(
+                                  message: "Contact us",
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 8.0),
+                                    child: CircleAvatar(
+                                      child: Image.asset(
+                                        "images/telephone.png",
+                                        height: 30,
+                                      ),
+                                      backgroundColor:
+                                          Colors.blue.withOpacity(0.3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: mailUs,
+                              child: InkWell(
+                                onTap: () {
+                                  redirectMailPage(cEmailids!);
+                                },
+                                child: Tooltip(
+                                  message: "Connect with Gmail",
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 8.0),
+                                    child: CircleAvatar(
+                                      child: Image.asset(
+                                        "images/gmail.png",
+                                        color: Colors.red,
+                                        height: 30,
+                                      ),
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: whatsapp,
+                              child: InkWell(
+                                onTap: () {
+                                  openWhatsapp();
+                                },
+                                child: Tooltip(
+                                  message: "Connect with Whatsapp",
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 8.0),
+                                    child: CircleAvatar(
+                                      child: Image.asset(
+                                        "images/whatsapp.png",
+                                        height: 30,
+                                      ),
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: navigateRoot,
+                              child: InkWell(
+                                onTap: () {
+                                  double latitude = double.parse(
+                                      nLatitude!); // Replace with your desired latitude
+                                  double longitude = double.parse(
+                                      nLongitude!); // Replace with your desired longitude
+                                  launchGoogleMaps(latitude, longitude);
+                                },
+                                child: Tooltip(
+                                  message: "Navigate to Map",
+                                  child: Container(
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Colors.grey.withOpacity(0.3),
+                                      child: Image.asset(
+                                        "images/map.png",
+                                        height: 30,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 100.0,
+                      )
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: checkEmpty,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      emptyTxt,
+                      style: TextStyle(
+                          color: MyStyle.colors.grey,
+                          fontSize: 15.0,
+                          fontFamily: MyStyle.montserrat,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
-                  Visibility(
-                    visible: checkEmpty,
-                    child: Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        emptyTxt,
-                        style: TextStyle(
-                            color: Style.colors.grey,
-                            fontSize: 15.0,
-                            fontFamily: Style.montserrat,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  )
-                ],
-              )),
-        );
+                )
+              ],
+            )),
+      ),
+    );
   }
 
   storeDetailsApi() async {
@@ -1457,27 +1531,32 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             cEmailids = storeDetailsModel.jResult!.cEmailids;
             cAddress = storeDetailsModel.jResult!.cAddress;
             cTerms = storeDetailsModel.jResult!.cTerms;
-            nVendorType =storeDetailsModel.jResult!.nVendorType;
-            nNavigate =storeDetailsModel.jResult!.nNavigate;
-            print("latlonggg "+nLatitude.toString()+", "+nLongitude.toString()+", "+nNavigate.toString());
-            if (cMobileNumbers != "" && nVendorType=="1") {
+            nVendorType = storeDetailsModel.jResult!.nVendorType;
+            nNavigate = storeDetailsModel.jResult!.nNavigate;
+            print("latlonggg " +
+                nLatitude.toString() +
+                ", " +
+                nLongitude.toString() +
+                ", " +
+                nNavigate.toString());
+            if (cMobileNumbers != "" && nVendorType == "1") {
               callUs = true;
             } else {
               callUs = false;
             }
-            if (cEmailids != "" && nVendorType=="1") {
+            if (cEmailids != "" && nVendorType == "1") {
               mailUs = true;
-            }else{
+            } else {
               mailUs = false;
             }
-            if (nVendorType=="1") {
+            if (nVendorType == "1") {
               whatsapp = true;
-            }else{
+            } else {
               whatsapp = false;
             }
-            if (nLatitude != "" && nLongitude !="" && nNavigate=="1") {
+            if (nLatitude != "" && nLongitude != "" && nNavigate == "1") {
               navigateRoot = true;
-            }else{
+            } else {
               navigateRoot = false;
             }
 
@@ -1540,23 +1619,28 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappurlAndroid = "whatsapp://send?phone=$whatsapp&text=";
-    var whatappurlIos = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
+    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
-      if (await canLaunch(whatappurlIos)) {
-        await launch(whatappurlIos, forceSafariVC: false);
+      if (await canLaunch(whatappURL_ios)) {
+        await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
-      if (await canLaunch(whatsappurlAndroid)) {
-        await launch(whatsappurlAndroid);
+      if (await canLaunch(whatsappURl_android)) {
+        await launchUrl(
+          Uri.parse(whatsappURl_android),
+          mode: LaunchMode.externalApplication,
+        );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+                "WhatsApp is not installed on the device. Please install whatsapp")));
       }
     }
   }
@@ -1653,7 +1737,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                     // decoration:
                                     // BoxDecoration(
                                     //   border: Border.all(
-                                    //       color: Style.colors.white.withOpacity(0.3), width: 1),
+                                    //       color: MyStyle.colors.white.withOpacity(0.3), width: 1),
                                     //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                                     // ),
                                     child: ClipRRect(
@@ -1714,7 +1798,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                                       .w600,
                                                               color:
                                                                   Colors.black,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .josefinsans),
                                                         ),
                                                       ),
@@ -1722,13 +1806,12 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                         decoration:
                                                             BoxDecoration(
                                                           border: Border.all(
-                                                              color: Style
+                                                              color: MyStyle
                                                                   .colors.white,
                                                               width: 1.5),
                                                           borderRadius:
                                                               const BorderRadius
-                                                                      .all(
-                                                                  Radius
+                                                                  .all(Radius
                                                                       .circular(
                                                                           2.0)),
                                                           color: Colors.yellow,
@@ -1736,7 +1819,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                         child: Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   top: 2.0,
                                                                   bottom: 2.0,
                                                                   right: 5.0,
@@ -1750,10 +1833,10 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w600,
-                                                                color: Style
+                                                                color: MyStyle
                                                                     .colors
                                                                     .white,
-                                                                fontFamily: Style
+                                                                fontFamily: MyStyle
                                                                     .josefinsans),
                                                           ),
                                                         ),
@@ -1778,7 +1861,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                 TextSpan(
                                                     text: "Add: ",
                                                     style: TextStyle(
-                                                        color: Style
+                                                        color: MyStyle
                                                             .colors.logoRed,
                                                         fontSize: 15.0,
                                                         fontWeight:
@@ -1806,7 +1889,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                 TextSpan(
                                                     text: "Tel: ",
                                                     style: TextStyle(
-                                                        color: Style
+                                                        color: MyStyle
                                                             .colors.logoRed,
                                                         fontSize: 15.0,
                                                         fontWeight:
@@ -1823,7 +1906,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                                         " (Must call to validate this coupon)",
                                                     style: TextStyle(
                                                         color:
-                                                            Style.colors.onHold,
+                                                            MyStyle.colors.onHold,
                                                         fontSize: 15.0,
                                                         fontWeight:
                                                             FontWeight.w500)),
@@ -1843,7 +1926,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                 top: 8.0, left: 10.0, right: 10.0, bottom: 5.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                  color: Style.colors.green, width: 3),
+                                  color: MyStyle.colors.green, width: 3),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(2.0)),
                             ),
@@ -1883,7 +1966,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                   TextSpan(
                                       text: "Description:",
                                       style: TextStyle(
-                                          color: Style.colors.logoRed,
+                                          color: MyStyle.colors.logoRed,
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w500)),
                                   TextSpan(
@@ -1906,7 +1989,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                   TextSpan(
                                       text: "T&C:",
                                       style: TextStyle(
-                                          color: Style.colors.logoRed,
+                                          color: MyStyle.colors.logoRed,
                                           fontSize: 15.0,
                                           fontWeight: FontWeight.w500)),
                                   TextSpan(
@@ -1930,11 +2013,11 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                   top: 20.0, left: 10.0, right: 10.0),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Style.colors.white.withOpacity(0.3),
+                                    color: MyStyle.colors.white.withOpacity(0.3),
                                     width: 1),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(8.0)),
-                                color: Style.colors.logoRed,
+                                color: MyStyle.colors.logoRed,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -1958,7 +2041,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                           AppLocalizations.of(context)!
                                               .download!,
                                           style: TextStyle(
-                                              fontFamily: Style.montserrat,
+                                              fontFamily: MyStyle.montserrat,
                                               fontSize: 14.0,
                                               fontWeight: FontWeight.w500,
                                               color: Colors.white)),
@@ -1980,11 +2063,11 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                   bottom: 10.0),
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                    color: Style.colors.white.withOpacity(0.3),
+                                    color: MyStyle.colors.white.withOpacity(0.3),
                                     width: 1),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(8.0)),
-                                color: Style.colors.logoRed,
+                                color: MyStyle.colors.logoRed,
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -2008,7 +2091,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                           AppLocalizations.of(context)!
                                               .call_to_confirm!,
                                           style: TextStyle(
-                                              fontFamily: Style.montserrat,
+                                              fontFamily: MyStyle.montserrat,
                                               fontSize: 14.0,
                                               fontWeight: FontWeight.w500,
                                               color: Colors.white)),

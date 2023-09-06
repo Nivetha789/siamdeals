@@ -12,14 +12,14 @@ class StoreCategoryListScreenState extends State<StoreCategoryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Style.colors.white,
+      backgroundColor: MyStyle.colors.white,
       appBar: AppBar(
         leading: const BackButton(),
         title: const Text(
           'Madras cafe',
           textAlign: TextAlign.start,
         ),
-        iconTheme: IconThemeData(color: Style.colors.logoRed),
+        iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
         backgroundColor: Colors.white,
         //     brightness: Brightness.light,
       ),
@@ -43,7 +43,7 @@ class StoreCategoryListScreenState extends State<StoreCategoryListScreen> {
                         borderRadius: BorderRadius.circular(10.sp),
 //  color: Colors.green,
                         border: Border.all(
-                            color: Style.colors.grey.withOpacity(.2))),
+                            color: MyStyle.colors.grey.withOpacity(.2))),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

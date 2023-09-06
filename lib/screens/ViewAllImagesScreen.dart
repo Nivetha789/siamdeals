@@ -130,8 +130,8 @@ class _ViewAllImagesScreen extends State<ViewAllImagesScreen> {
                         child: CarouselIndicator(
                           count: widget.profileDetailsImages.length,
                           index: pageIndex,
-                          color: Style.colors.grey.withOpacity(0.3),
-                          activeColor: Style.colors.white,
+                          color: MyStyle.colors.grey.withOpacity(0.3),
+                          activeColor: MyStyle.colors.white,
                           width: 10.0,
                         ),
                         margin: EdgeInsets.only(top:5.0),

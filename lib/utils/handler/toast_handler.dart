@@ -10,7 +10,7 @@ class ToastHandler {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         textColor: Colors.white,
-        backgroundColor: Style.colors.green,
+        backgroundColor: MyStyle.colors.green,
         timeInSecForIosWeb: 1);
   }
 }

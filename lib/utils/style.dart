@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Style {
+class MyStyle {
   static final _Colors colors = _Colors();
   static final String brandon="brandon";
   static final  String josefinsans="josefinsans";

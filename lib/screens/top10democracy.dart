@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:easy_load_more/easy_load_more.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:loadmore/loadmore.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+
 // import 'package:getwidget/getwidget.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
@@ -80,18 +81,13 @@ class _Top10DemocracyState extends State<Top10Democracy>
 
   List<Category> categories = [];
 
-  List distancelist = [];
+  String distancelist = "";
   List<Map<String, dynamic>> distancecategoryList = [];
-  List<MultiSelectItem<Object?>> distanceconvertedList = [];
+  List<Map<String, dynamic>> distanceconvertedList = [];
 
   List<Map<String, dynamic>> districtlist = [];
 
   List<Category> categoryList1 = [];
-  List<String> selectedValues = [];
-
-  List multipleSelected = [];
-
-  String selectedDistanceId = "";
 
   String selecteddistrict = "";
   List<dynamic> selectedCategories = [];
@@ -123,15 +119,14 @@ class _Top10DemocracyState extends State<Top10Democracy>
       lat = _currentPosition.latitude.toString();
       //refresh UI on update
     });
-    distancelist.clear();
     selectedsubcategory.clear();
     selectedtowncategory.clear();
     offset = 0;
     limit = 10;
     particulardemocracywithsort("1", "");
-    setState(() {
-      //refresh UI
-    });
+    // setState(() {
+    //   //refresh UI
+    // });
 
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high, //accuracy of the location data
@@ -177,7 +172,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
 
   updateisDemographList(List<SearchVendorJResult> particularDemocracylist1) {
     setState(() {
-      particularDemocracylist.clear();
+      // particularDemocracylist.clear();
       particularDemocracylist.addAll(particularDemocracylist1);
     });
   }
@@ -191,7 +186,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Style.colors.white,
+      backgroundColor: MyStyle.colors.white,
       appBar: AppBar(
         elevation: 0.0,
         leading: const BackButton(),
@@ -200,11 +195,11 @@ class _Top10DemocracyState extends State<Top10Democracy>
           widget.name,
           textAlign: TextAlign.start,
           style: TextStyle(
-              color: Style.colors.logoRed,
+              color: MyStyle.colors.logoRed,
               fontSize: 17.0,
-              fontFamily: Style.montserrat),
+              fontFamily: MyStyle.montserrat),
         ),
-        iconTheme: IconThemeData(color: Style.colors.logoRed),
+        iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
         backgroundColor: Colors.white,
         //   brightness: Brightness.light,
       ),
@@ -222,17 +217,17 @@ class _Top10DemocracyState extends State<Top10Democracy>
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(Icons.location_on_outlined,
-                              size: 20.0, color: Style.colors.logoRed),
+                              size: 20.0, color: MyStyle.colors.logoRed),
                           Flexible(
                             child: Container(
                                 margin: const EdgeInsets.only(left: 5.0),
                                 child: Text(
                                   _currentAddress,
                                   style: TextStyle(
-                                      fontFamily: Style.brandon,
+                                      fontFamily: MyStyle.brandon,
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14.0,
-                                      color: Style.colors.app_black),
+                                      color: MyStyle.colors.app_black),
                                 )),
                           ),
                         ],
@@ -247,7 +242,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
                         child: Container(
                           alignment: Alignment.centerRight,
                           child: Icon(Icons.my_location,
-                              size: 20.0, color: Style.colors.logoRed),
+                              size: 20.0, color: MyStyle.colors.logoRed),
                         ),
                       ),
                     ),
@@ -424,6 +419,8 @@ class _Top10DemocracyState extends State<Top10Democracy>
                     debugPrint(selectedtowncategory.join(', '));
 
                     debugPrint("selectedSubcategories $selectedtowncategory");
+                    offset = 0;
+                    limit = 10;
                     particulardemocracywithsort(1, "");
                     //_selectedAnimals = results;
                   },
@@ -438,77 +435,77 @@ class _Top10DemocracyState extends State<Top10Democracy>
                 ),
               ),
               const SizedBox(width: 10),
-              /* Container(
-              width: 90,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  width: 1.0,
-                  // assign the color to the border color
-                  color: Colors.grey,
-                ),
-              ),
-              // width: 100,
-              height: 35,
-
-              //padding: const EdgeInsets.only(bottom: 10.0, top: 0),
-              child: DropdownButtonFormField(
-                isDense: true,
-                isExpanded: true,
+              Container(
+                width: 90,
                 alignment: Alignment.center,
-                // value: selectedOption,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.only(bottom: 13.0),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.transparent),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    width: 1.0,
+                    // assign the color to the border color
+                    color: Colors.grey,
                   ),
                 ),
-                //elevation: 5,
-                style: const TextStyle(color: Colors.black),
-                icon: const Icon(
-                  Icons.filter_list,
-                  size: 15,
-                ),
-                items: distancelist.map((Map<String, dynamic> option) {
-                  return DropdownMenuItem(
-                    alignment: Alignment.center,
-                    value: option['distance_id'].toString(),
-                    child: Container(
-                        alignment: Alignment.center,
-                        width: 100,
-                        child: Text(
-                          option['distance_val'],
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        )),
-                  );
-                }).toList(),
-                hint: const Text(
-                  "Distance",
-                  style: TextStyle(fontSize: 13),
-                  textAlign: TextAlign.center,
-                ),
-                onChanged: (newValue) {
-                  debugPrint("distancelist $distancelist");
-                  debugPrint("newValue $newValue");
-                  // getLocation(2, newValue.toString());
-                  setState(() {
-                    selectedOption = newValue!;
-                  });
-                  debugPrint("selectedOption $selectedOption");
+                // width: 100,
+                height: 35,
 
-                  particulardemocracywithsort(2);
-                },
+                //padding: const EdgeInsets.only(bottom: 10.0, top: 0),
+                child: DropdownButtonFormField(
+                  isDense: true,
+                  isExpanded: true,
+                  alignment: Alignment.center,
+                  // value: selectedOption,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.only(bottom: 13.0),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  // value: _chosenValue,
+                  //elevation: 5,
+                  style: const TextStyle(color: Colors.black),
+                  icon: const Icon(
+                    Icons.filter_list,
+                    size: 15,
+                  ),
+                  items:
+                      distanceconvertedList.map((Map<String, dynamic> option) {
+                    return DropdownMenuItem(
+                      alignment: Alignment.center,
+                      value: option['distance_id'].toString(),
+                      child: Container(
+                          alignment: Alignment.center,
+                          width: 100,
+                          child: Text(
+                            option['distance_val'],
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          )),
+                    );
+                  }).toList(),
+                  hint: const Text(
+                    "Distance",
+                    style: TextStyle(fontSize: 13,color: Colors.black),
+                    textAlign: TextAlign.center,
+                  ),
+                  onChanged: (newValue) {
+                    setState(() {
+                      distancelist = newValue!;
+                      debugPrint("selectedDistanceId $distancelist");
+                    });
+                    offset = 0;
+                    limit = 10;
+                    particulardemocracywithsort(2, "");
+                  },
+                ),
               ),
-            ),*/
-              SizedBox(
+              /*SizedBox(
                 width: 90,
                 height: 47,
                 child: MultiSelectDialogField(
@@ -553,9 +550,9 @@ class _Top10DemocracyState extends State<Top10Democracy>
                   ),
 
                   onConfirm: (results) {
-                    debugPrint("selectedDistanceId $results");
                     setState(() {
                       distancelist = results;
+                      debugPrint("selectedDistanceId $distancelist");
                     });
                     offset = 0;
                     particulardemocracywithsort(2, "");
@@ -569,7 +566,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
                     //_selectedAnimals = results;
                   },
                 ),
-              ),
+              ),*/
               const SizedBox(
                 width: 10,
               ),
@@ -592,17 +589,17 @@ class _Top10DemocracyState extends State<Top10Democracy>
                       style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.w600,
-                          color: Style.colors.grey),
+                          color: MyStyle.colors.grey),
                     ),
                   ),
                 )
               : Expanded(
-                  child: LoadMore(
-                    isFinish: particularDemocracylist.length >= total,
+                  child: EasyLoadMore(
+                    isFinished: particularDemocracylist.length >= total,
                     onLoadMore: _loadMore,
-                    whenEmptyLoad: false,
-                    delegate: const DefaultLoadMoreDelegate(),
-                    textBuilder: DefaultLoadMoreTextBuilder.english,
+                    runOnEmptyResult: true,
+                    // delegate: const DefaultLoadMoreDelegate(),
+                    // textBuilder: DefaultLoadMoreTextBuilder.english,
                     child: ListView(
                       children: [
                         Container(
@@ -716,7 +713,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                               .cName!,
                                                           style: TextStyle(
                                                               fontSize: 15.0,
-                                                              color: Style
+                                                              color: MyStyle
                                                                   .colors
                                                                   .app_black,
                                                               fontWeight:
@@ -737,7 +734,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                           maxLines: 1,
                                                           style: TextStyle(
                                                               fontSize: 15.0,
-                                                              color: Style
+                                                              color: MyStyle
                                                                   .colors
                                                                   .app_black,
                                                               fontWeight:
@@ -757,9 +754,9 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                         "${AppLocalizations.of(context)!.category!} : ",
                                                         style: TextStyle(
                                                             fontSize: 13.0,
-                                                            color: Style.colors
+                                                            color: MyStyle.colors
                                                                 .app_black,
-                                                            fontFamily: Style
+                                                            fontFamily: MyStyle
                                                                 .montserrat,
                                                             fontWeight:
                                                                 FontWeight
@@ -777,10 +774,10 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                               : " - ",
                                                           style: TextStyle(
                                                               fontSize: 13.0,
-                                                              color: Style
+                                                              color: MyStyle
                                                                   .colors
                                                                   .app_black,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -799,7 +796,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                         Icons.access_time,
                                                         color: checkLeave
                                                             ? Colors.red
-                                                            : Style
+                                                            : MyStyle
                                                                 .colors.green,
                                                         size: 18.0,
                                                       ),
@@ -818,9 +815,9 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                               fontSize: 13.0,
                                                               color: checkLeave
                                                                   ? Colors.red
-                                                                  : Style.colors
+                                                                  : MyStyle.colors
                                                                       .green,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -841,9 +838,9 @@ class _Top10DemocracyState extends State<Top10Democracy>
                                                               fontSize: 13.0,
                                                               color: checkLeave
                                                                   ? Colors.red
-                                                                  : Style.colors
+                                                                  : MyStyle.colors
                                                                       .green,
-                                                              fontFamily: Style
+                                                              fontFamily: MyStyle
                                                                   .montserrat,
                                                               fontWeight:
                                                                   FontWeight
@@ -893,12 +890,12 @@ class _Top10DemocracyState extends State<Top10Democracy>
       'n_latitude': lat,
       'n_longitude': long,
       'n_view': nview.toString(),
-      'n_distance': distancelist.join(', ').toString(),
+      'n_distance': distancelist,
       'n_category': selectedsubcategory.join(', ').toString(),
       'n_district': selectedtowncategory.join(', ').toString(),
       'n_town': "",
     };
-    print("bodyfields " + bodyFields.toString());
+    print("demographiclis " + bodyFields.toString());
     dio.options.contentType = Headers.formUrlEncodedContentType;
     final response = await dio.post(
         "${ApiProvider.BASE_URL}demographic/getDemographicListing",
@@ -942,6 +939,9 @@ class _Top10DemocracyState extends State<Top10Democracy>
         // setState(() {
         //   noDataLoader=false;
         // });
+        if (loadmore == "") {
+          particularDemocracylist.clear();
+        }
         updateisDemographList(searchVendorJResult.jResult!);
       } else {
         ProgressDialog().dismissDialog(context);
@@ -1036,7 +1036,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
         ProgressDialog().dismissDialog(context);
 
         Map<String, dynamic> map = jsonDecode(response.toString());
-        distancelist =
+        distanceconvertedList =
             List<Map<String, dynamic>>.from(map["data"]["distance_list"]);
         // selectedtowncategory = [map["data"]["town_list"][0]["district_id"]];
 
@@ -1045,7 +1045,7 @@ class _Top10DemocracyState extends State<Top10Democracy>
         // debugPrint(
         //     "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
         if (distancelist.isNotEmpty) {
-          for (var distrctt in distancelist) {
+          for (var distrctt in distanceconvertedList) {
             var districtString = distrctt.toString(); // Convert to string
             if (!uniquetownItems.contains(districtString)) {
               distancecategoryList.add(distrctt);
@@ -1056,12 +1056,12 @@ class _Top10DemocracyState extends State<Top10Democracy>
         // debugPrint(
         //     "fdghjhghjdrghjdfghjfgf $selectedOption $selectedtowncategory $selectedsubcategory");
         // setState(() {
-        distanceconvertedList = distancecategoryList.map((town) {
-          return MultiSelectItem<Object?>(
-            town['distance_id'],
-            town['distance_val'],
-          );
-        }).toList();
+        // distanceconvertedList = distancecategoryList.map((town) {
+        //   return MultiSelectItem<List<Map<String, dynamic>>>(
+        //     town['distance_id'],
+        //     town['distance_val'],
+        //   );
+        // }).toList();
         // });
       } else {
         ProgressDialog().dismissDialog(context);
@@ -1285,6 +1285,8 @@ class _Top10DemocracyState extends State<Top10Democracy>
                 ),
                 TextButton(
                   onPressed: () {
+                    offset = 0;
+                    limit = 10;
                     particulardemocracywithsort(1, "");
                     Navigator.of(context).pop();
                   },

@@ -3,12 +3,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:siamdealz/ResponseModule/BannerModel.dart';
@@ -16,12 +14,10 @@ import 'package:siamdealz/ResponseModule/MenuModule/MenuModel.dart';
 import 'package:siamdealz/ResponseModule/ScrollTextModel.dart';
 import 'package:siamdealz/ResponseModule/popupmodel.dart';
 import 'package:siamdealz/screens/DownloadCouponListScreen.dart';
-import 'package:siamdealz/screens/HtmlScreen.dart';
 import 'package:siamdealz/screens/LoginScreen.dart';
 import 'package:siamdealz/screens/ProfileScreen.dart';
 import 'package:siamdealz/screens/SearchStoreListScreen.dart';
 import 'package:siamdealz/screens/SubCategoryListScreen.dart';
-import 'package:siamdealz/screens/categorylist.dart';
 import 'package:siamdealz/screens/top10democracy.dart';
 import 'package:siamdealz/utils/CustomAlertDialog.dart';
 import 'package:sizer/sizer.dart';
@@ -31,7 +27,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../ResponseModule/CategoryModel.dart';
 import '../ResponseModule/CityModel.dart';
 import '../ResponseModule/DemographicModel/DemographicModel.dart';
-import '../Utils/ProgressDialog.dart';
 import '../core/ApiProvider/api_provider.dart';
 import '../helper/AppLanguage.dart';
 import '../helper/AppLocalizations.dart';
@@ -44,6 +39,8 @@ import '../utils/style.dart';
 import 'CategoryScreen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+
+import 'HtmlScreen.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
@@ -218,8 +215,30 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               "2" ||
                               popupJResultList[index].npopuptype == 2
                               ? SingleChildScrollView(
-                            child: HtmlWidget(
-                              popupJResultList[index].cdescription!,
+                            child: Html(
+                              onLinkTap: (url, _, __) async {
+                                print(url);
+                                if (url == "www.siamdealz.com") {
+                                  await launchUrl(
+                                    Uri.parse("http://$url"),
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                } else {
+                                  await launchUrl(
+                                    Uri.parse(url!),
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                }
+                                // if (!url!.startsWith("http://") &&
+                                //     !url.startsWith("https://")) {
+
+                                // } else {
+
+                                // }
+
+                                // debugPrint("Opening $url...");
+                              },
+                              data: popupJResultList[index].cdescription!,
                             ),
                           )
                               : Card(
@@ -283,22 +302,22 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             }),
                       )
                           : Container(),
-                      popupJResultList.isNotEmpty
-                          ? Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.3),
-                            shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                        margin: const EdgeInsets.only(top: 5.0),
-                        child: CarouselIndicator(
-                          count: popupJResultList.length,
-                          index: pageIndex,
-                          color: Style.colors.grey.withOpacity(0.3),
-                          activeColor: Style.colors.logoRed,
-                          width: 10.0,
-                        ),
-                      )
-                          : Container(),
+                      // popupJResultList.isNotEmpty
+                      //     ? Container(
+                      //   decoration: BoxDecoration(
+                      //       color: Colors.grey.withOpacity(0.3),
+                      //       shape: BoxShape.rectangle,
+                      //       borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                      //   margin: const EdgeInsets.only(top: 5.0),
+                      //   child: CarouselIndicator(
+                      //     count: popupJResultList.length,
+                      //     index: pageIndex,
+                      //     color: MyStyle.colors.grey.withOpacity(0.3),
+                      //     activeColor: MyStyle.colors.logoRed,
+                      //     width: 10.0,
+                      //   ),
+                      // )
+                      //     : Container(),
                     ],
                   ),
                 ),
@@ -425,8 +444,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         //                     child: CarouselIndicator(
         //                       count: popupJResultList.length,
         //                       index: pageIndex,
-        //                       color: Style.colors.grey.withOpacity(0.3),
-        //                       activeColor: Style.colors.logoRed,
+        //                       color: MyStyle.colors.grey.withOpacity(0.3),
+        //                       activeColor: MyStyle.colors.logoRed,
         //                       width: 10.0,
         //                     ),
         //                   )
@@ -655,7 +674,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                         color: const Color(0xff495271),
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w500,
-                                        fontFamily: Style.sfproddisplay),
+                                        fontFamily: MyStyle.sfproddisplay),
                                   ),
                                 ),
                                 InkWell(
@@ -714,7 +733,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               ),
                               style: TextStyle(
                                   color: const Color(0xff495271),
-                                  fontFamily: Style.sfproddisplay),
+                                  fontFamily: MyStyle.sfproddisplay),
                               onChanged: (text) {
                                 debugPrint("text $text");
                                 setState(() {
@@ -808,7 +827,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                   fontSize: 14.0,
                                                   fontWeight: FontWeight.w400,
                                                   fontFamily:
-                                                      Style.sfproddisplay),
+                                                      MyStyle.sfproddisplay),
                                             ),
                                           ),
                                         ),
@@ -937,7 +956,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
-      backgroundColor: Style.colors.white,
+      backgroundColor: MyStyle.colors.white,
       appBar: AppBar(
         elevation: 0.0,
         leading: Padding(
@@ -1000,7 +1019,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                   delayBefore: const Duration(milliseconds: 2000),
                   pauseBetween: const Duration(milliseconds: 1000),
                   style: TextStyle(
-                    color: Style.colors.logoOrange,
+                    color: MyStyle.colors.logoOrange,
                     height: 1.5,
                   ),
                   textAlign: TextAlign.right,
@@ -1010,7 +1029,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
             : Container(
                 child: Text(
                   AppLocalizations.of(context)!.appName!,
-                  style: TextStyle(color: Style.colors.logoRed, fontSize: 17.0),
+                  style: TextStyle(color: MyStyle.colors.logoRed, fontSize: 17.0),
                 ),
               ),
         // title: checkBanner
@@ -1019,10 +1038,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         //   child: Container(
         //     width: MediaQuery.of(context).size.width,
         //     decoration: BoxDecoration(
-        //       color: Style.colors.primary.withOpacity(0.2),
+        //       color: MyStyle.colors.primary.withOpacity(0.2),
         //       borderRadius: BorderRadius.circular(8.0),
         //       border: Border.all(
-        //           color: Style.colors.primary.withOpacity(0.5)),
+        //           color: MyStyle.colors.primary.withOpacity(0.5)),
         //     ),
         //     child: Padding(
         //       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
@@ -1034,7 +1053,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         //             Text(
         //               "Find Best Places!",
         //               style: TextStyle(
-        //                   color: Style.colors.primary,
+        //                   color: MyStyle.colors.primary,
         //                   fontSize: 14.0,
         //                   fontWeight: FontWeight.w500),
         //               textAlign: TextAlign.start,
@@ -1042,7 +1061,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         //             Text(
         //               "Near by you!",
         //               style: TextStyle(
-        //                   color: Style.colors.primary,
+        //                   color: MyStyle.colors.primary,
         //                   fontSize: 13.0,
         //                   fontWeight: FontWeight.w400),
         //               textAlign: TextAlign.start,
@@ -1058,10 +1077,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         //     : Container(
         //   child: Text(
         //     AppLocalizations.of(context)!.appName!,
-        //     style: TextStyle(color: Style.colors.logoRed, fontSize: 17.0),
+        //     style: TextStyle(color: MyStyle.colors.logoRed, fontSize: 17.0),
         //   ),
         // ),
-        iconTheme: IconThemeData(color: Style.colors.logoRed),
+        iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
         backgroundColor: Colors.white,
         //  brightness: Brightness.light,
       ),
@@ -1077,8 +1096,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
               openWhatsapp();
             },
             icon: Image.asset("images/whatsapp.png", height: 30, width: 30),
-            color: Style.colors.white,
-            labelColor: Style.colors.white,
+            color: MyStyle.colors.white,
+            labelColor: MyStyle.colors.white,
             labelBackgroundColor: Colors.green,
           ),
           // HawkFabMenuItem(
@@ -1087,8 +1106,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           //     launch(('tel://${"+66810673747"}'));
           //   },
           //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
-          //   color: Style.colors.white,
-          //   labelColor: Style.colors.white,
+          //   color: MyStyle.colors.white,
+          //   labelColor: MyStyle.colors.white,
           //   labelBackgroundColor: Colors.blue,
           // ),
         ],
@@ -1123,7 +1142,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                           child: Icon(
                             Icons.search,
                             size: 20.0,
-                            color: Style.colors.logoRed,
+                            color: MyStyle.colors.logoRed,
                           ),
                         ),
                         Flexible(
@@ -1136,9 +1155,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                               maxLines: 1,
                               softWrap: false,
                               style: TextStyle(
-                                  color: Style.colors.app_black,
+                                  color: MyStyle.colors.app_black,
                                   fontWeight: FontWeight.w400,
-                                  fontFamily: Style.montserrat,
+                                  fontFamily: MyStyle.montserrat,
                                   fontSize: 15.0),
                             ),
                           ),
@@ -1173,7 +1192,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                         child: Text(
                                           location,
                                           style: TextStyle(
-                                              color: Style.colors.app_black,
+                                              color: MyStyle.colors.app_black,
                                               fontSize: 15.0,
                                               fontWeight: FontWeight.w400),
                                         ),
@@ -1192,7 +1211,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             child: Text(
                                               _selectedLanguage!,
                                               style: TextStyle(
-                                                  color: Style.colors.app_black,
+                                                  color: MyStyle.colors.app_black,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w400),
                                               overflow: TextOverflow.ellipsis,
@@ -1203,7 +1222,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             child: Icon(
                                               Icons.language_sharp,
                                               size: 20.0,
-                                              color: Style.colors.logoRed,
+                                              color: MyStyle.colors.logoRed,
                                             ),
                                           ),
                                         ],
@@ -1273,7 +1292,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             child: Text(
                                               cityName,
                                               style: TextStyle(
-                                                  color: Style.colors.app_black,
+                                                  color: MyStyle.colors.app_black,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w400),
                                             ),
@@ -1285,7 +1304,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             child: Icon(
                                               Icons.location_city_sharp,
                                               size: 20.0,
-                                              color: Style.colors.logoRed,
+                                              color: MyStyle.colors.logoRed,
                                             ),
                                           ),
                                         )
@@ -1317,7 +1336,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                         children: [
                                           Icon(Icons.location_on_outlined,
                                               size: 20.0,
-                                              color: Style.colors.logoRed),
+                                              color: MyStyle.colors.logoRed),
                                           Flexible(
                                             child: Container(
                                                 margin: const EdgeInsets.only(
@@ -1325,11 +1344,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                 child: Text(
                                                   _currentAddress,
                                                   style: TextStyle(
-                                                      fontFamily: Style.brandon,
+                                                      fontFamily: MyStyle.brandon,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       fontSize: 14.0,
-                                                      color: Style
+                                                      color: MyStyle
                                                           .colors.app_black),
                                                 )),
                                           ),
@@ -1347,7 +1366,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                         alignment: Alignment.centerRight,
                                         child: Icon(Icons.my_location,
                                             size: 20.0,
-                                            color: Style.colors.logoRed),
+                                            color: MyStyle.colors.logoRed),
                                       ),
                                     ),
                                   ),
@@ -1380,7 +1399,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                     itemBuilder: (context, postion) {
                                       return Card(
                                         elevation: 2,
-                                        color: Style.colors.logoRed,
+                                        color: MyStyle.colors.logoRed,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(5.sp),
@@ -1462,7 +1481,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                             color: Colors.black,
-                                                            fontFamily: Style
+                                                            fontFamily: MyStyle
                                                                 .montserrat)),
                                                   ),
                                                 ),
@@ -1495,7 +1514,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                     fontSize: 16.0,
                                                     fontWeight: FontWeight.w600,
                                                     fontFamily:
-                                                        Style.josefinsans)),
+                                                        MyStyle.josefinsans)),
                                           ),
                                           Expanded(
                                             flex: 1,
@@ -1519,10 +1538,10 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                         fontSize: 15.0,
                                                         fontWeight:
                                                             FontWeight.w600,
-                                                        color: Style
+                                                        color: MyStyle
                                                             .colors.logoRed,
                                                         fontFamily:
-                                                            Style.josefinsans)),
+                                                            MyStyle.josefinsans)),
                                               ),
                                             ),
                                           ),
@@ -1575,7 +1594,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                               7.sp),
                                                       color: Colors.white,
                                                       border: Border.all(
-                                                          color: Style
+                                                          color: MyStyle
                                                               .colors.grey
                                                               .withOpacity(
                                                                   .2))),
@@ -1615,7 +1634,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
-                                                                fontFamily: Style
+                                                                fontFamily: MyStyle
                                                                     .montserrat)),
                                                       ),
                                                     ],
@@ -1649,7 +1668,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
-                                              fontFamily: Style.josefinsans)),
+                                              fontFamily: MyStyle.josefinsans)),
                                     )
                                   : Container(),
                               bannerJResultList.isNotEmpty
@@ -1731,19 +1750,19 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                       ),
                                     )
                                   : Container(),
-                              bannerJResultList.isNotEmpty
-                                  ? Container(
-                                      margin: const EdgeInsets.only(top: 5.0,bottom: 10.0),
-                                      child: CarouselIndicator(
-                                        count: bannerJResultList.length,
-                                        index: pageIndex,
-                                        color:
-                                            Style.colors.grey.withOpacity(0.3),
-                                        activeColor: Style.colors.logoRed,
-                                        width: 10.0,
-                                      ),
-                                    )
-                                  : Container(),
+                              // bannerJResultList.isNotEmpty
+                              //     ? Container(
+                              //         margin: const EdgeInsets.only(top: 5.0,bottom: 10.0),
+                              //         child: CarouselIndicator(
+                              //           count: bannerJResultList.length,
+                              //           index: pageIndex,
+                              //           color:
+                              //               MyStyle.colors.grey.withOpacity(0.3),
+                              //           activeColor: MyStyle.colors.logoRed,
+                              //           width: 10.0,
+                              //         ),
+                              //       )
+                              //     : Container(),
                             ],
                           ),
                         ),
@@ -1792,7 +1811,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                         child: Text(
                           AppLocalizations.of(context)!.description!,
                           style: TextStyle(
-                              color: Style.colors.app_black,
+                              color: MyStyle.colors.app_black,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 1,
                               fontSize: 14.0),
@@ -1805,7 +1824,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                 child: Divider(
                   thickness: 0.5,
                   height: 1.0,
-                  color: Style.colors.logoRed.withOpacity(0.1).withOpacity(0.3),
+                  color: MyStyle.colors.logoRed.withOpacity(0.1).withOpacity(0.3),
                 ),
               ),
               // GestureDetector(
@@ -1837,7 +1856,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
               //                   color: Colors.black87,
               //                   fontSize: 14.0,
               //                   fontWeight: FontWeight.w400,
-              //                   fontFamily: Style.sfproddisplay),
+              //                   fontFamily: MyStyle.sfproddisplay),
               //             ),
               //           ),
               //         ),
@@ -1927,7 +1946,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                         color: Colors.black87,
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w400,
-                                        fontFamily: Style.sfproddisplay),
+                                        fontFamily: MyStyle.sfproddisplay),
                                   ),
                                 ),
                               ),
@@ -1978,9 +1997,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                   margin: const EdgeInsets.only(top: 60, left: 30, right: 30),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Style.colors.white.withOpacity(0.3), width: 1),
+                        color: MyStyle.colors.white.withOpacity(0.3), width: 1),
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                    color: Style.colors.logoRed,
+                    color: MyStyle.colors.logoRed,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -1991,7 +2010,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                       ),
                       child: Text("Logout",
                           style: TextStyle(
-                              fontFamily: Style.montserrat,
+                              fontFamily: MyStyle.montserrat,
                               fontSize: 15.0,
                               fontWeight: FontWeight.w600,
                               color: Colors.white)),
@@ -2011,28 +2030,26 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
-    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
+    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
       if (await canLaunch(whatsappURl_android)) {
-        await launchUrl(Uri.parse(whatsappURl_android));
+        await launch(whatsappURl_android);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("whatsapp no installed")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     }
   }
-
- 
 
   getCityList() async {
     try {

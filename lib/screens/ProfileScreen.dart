@@ -64,13 +64,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "Profile",
           textAlign: TextAlign.center,
           style: TextStyle(
-              color: Style.colors.logoRed,
+              color: MyStyle.colors.logoRed,
               fontSize: 18,
-              fontFamily: Style.montserrat,
+              fontFamily: MyStyle.montserrat,
               fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Style.colors.logoRed),
+        iconTheme: IconThemeData(color: MyStyle.colors.logoRed),
         backgroundColor: Colors.white,
         //   brightness: Brightness.light,
       ),
@@ -264,9 +264,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     margin: EdgeInsets.only(top: 60, left: 30, right: 30),
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: Style.colors.white.withOpacity(0.3), width: 1),
+                          color: MyStyle.colors.white.withOpacity(0.3), width: 1),
                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      color: Style.colors.logoRed,
+                      color: MyStyle.colors.logoRed,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -277,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         child: Text("Logout",
                             style: TextStyle(
-                                fontFamily: Style.montserrat,
+                                fontFamily: MyStyle.montserrat,
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white)),
@@ -333,9 +333,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //                     margin: EdgeInsets.only(top: 60, left: 30, right: 30),
                 //                     decoration: BoxDecoration(
                 //                       border: Border.all(
-                //                           color: Style.colors.white.withOpacity(0.3), width: 1),
+                //                           color: MyStyle.colors.white.withOpacity(0.3), width: 1),
                 //                       borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                //                       color: Style.colors.logoRed,
+                //                       color: MyStyle.colors.logoRed,
                 //                     ),
                 //                     child: Padding(
                 //                       padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
@@ -346,7 +346,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //                         ),
                 //                         child: Text("Logout",
                 //                             style: TextStyle(
-                //                                 fontFamily: Style.montserrat,
+                //                                 fontFamily: MyStyle.montserrat,
                 //                                 fontSize: 15.0,
                 //                                 fontWeight: FontWeight.w600,
                 //                                 color: Colors.white)),
