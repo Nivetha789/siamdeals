@@ -1447,7 +1447,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                           Colors.grey.withOpacity(0.3),
                                       child: Image.asset(
                                         "images/map.png",
-                                        height: 30,
+                                        height: 28,
                                       ),
                                     ),
                                   ),
@@ -1538,7 +1538,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                 ", " +
                 nLongitude.toString() +
                 ", " +
-                nNavigate.toString());
+                nVendorType.toString()+"nnavi $nNavigate");
             if (cMobileNumbers != "" && nVendorType == "1") {
               callUs = true;
             } else {
@@ -1554,7 +1554,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             } else {
               whatsapp = false;
             }
-            if (nLatitude != "" && nLongitude != "" && nNavigate == "1") {
+            if (nLatitude != "" && nLongitude != "" && nVendorType == "1") {
               navigateRoot = true;
             } else {
               navigateRoot = false;
