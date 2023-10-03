@@ -7,6 +7,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:siamdealz/ResponseModule/BannerModel.dart';
@@ -98,6 +99,9 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   @override
   void initState() {
     super.initState();
+    _animationController =
+        new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animationController!.repeat(reverse: true);
 
     _selectedLanguage = languageList.first;
     _animationController =
@@ -170,7 +174,6 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
   Future<void> checkpopupdata(id, name, type, description) async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -193,11 +196,11 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             onPressed: () {
                               name == "City Popup" || name == "City"
                                   ? box.write("popupcityid", id).then(((value) {
-                                Navigator.pop(context);
-                              }))
+                                      Navigator.pop(context);
+                                    }))
                                   : box.write("popuphomeid", id).then(((value) {
-                                Navigator.pop(context);
-                              }));
+                                      Navigator.pop(context);
+                                    }));
                             },
                             icon: const Icon(
                               Icons.close,
@@ -208,99 +211,103 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                       ),
                       popupJResultList.isNotEmpty
                           ? CarouselSlider.builder(
-                        itemCount: popupJResultList.length,
-                        itemBuilder:
-                            (BuildContext context, int index, int realIdx) {
-                          return popupJResultList[index].npopuptype ==
-                              "2" ||
-                              popupJResultList[index].npopuptype == 2
-                              ? SingleChildScrollView(
-                            child: Html(
-                              onLinkTap: (url, _, __) async {
-                                print(url);
-                                if (url == "www.siamdealz.com") {
-                                  await launchUrl(
-                                    Uri.parse("http://$url"),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                } else {
-                                  await launchUrl(
-                                    Uri.parse(url!),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                }
-                                // if (!url!.startsWith("http://") &&
-                                //     !url.startsWith("https://")) {
+                              itemCount: popupJResultList.length,
+                              itemBuilder: (BuildContext context, int index,
+                                  int realIdx) {
+                                return popupJResultList[index].npopuptype ==
+                                            "2" ||
+                                        popupJResultList[index].npopuptype == 2
+                                    ? SingleChildScrollView(
+                                        child: Html(
+                                          onLinkTap: (url, _, __) async {
+                                            print(url);
+                                            if (url == "www.siamdealz.com") {
+                                              await launchUrl(
+                                                Uri.parse("http://$url"),
+                                                mode: LaunchMode
+                                                    .externalApplication,
+                                              );
+                                            } else {
+                                              await launchUrl(
+                                                Uri.parse(url!),
+                                                mode: LaunchMode
+                                                    .externalApplication,
+                                              );
+                                            }
+                                            // if (!url!.startsWith("http://") &&
+                                            //     !url.startsWith("https://")) {
 
-                                // } else {
+                                            // } else {
 
-                                // }
+                                            // }
 
-                                // debugPrint("Opening $url...");
+                                            // debugPrint("Opening $url...");
+                                          },
+                                          data: popupJResultList[index]
+                                              .cdescription!,
+                                        ),
+                                      )
+                                    : Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        clipBehavior: Clip.antiAlias,
+                                        child: SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Image.network(
+                                              popupJResultList[index]
+                                                  .cBannerImage!,
+                                              // fit: BoxFit.fill
+                                              filterQuality: FilterQuality.high,
+                                            )
+                                            // : InkWell(
+                                            //     onTap: () async {
+                                            //       // debugPrint(
+                                            //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+                                            //       // String
+                                            //       //     url =
+                                            //       //     bannerJResultList[index]
+                                            //       //         .cBannerLink;
+                                            //       // var url =
+                                            //       //     bannerJResultList[index]
+                                            //       //         .cBannerLink!;
+                                            //       // if (await canLaunch(
+                                            //       //     url)) {
+                                            //       //   await launch(
+                                            //       //       url);
+                                            //       // } else {
+                                            //       //   throw 'Could not launch $url';
+                                            //       // }
+                                            //       openbannerlaunchurl(
+                                            //           bannerJResultList[index]
+                                            //               .cBannerLink!);
+                                            //     },
+                                            //     child: Image.network(
+                                            //       bannerJResultList[index]
+                                            //           .cBannerImage!,
+                                            //       fit: BoxFit.fitWidth,
+                                            //     ),
+                                            //   ),
+                                            ),
+                                      );
                               },
-                              data: popupJResultList[index].cdescription!,
-                            ),
-                          )
-                              : Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.circular(20)),
-                            clipBehavior: Clip.antiAlias,
-                            child: SizedBox(
-                                width: MediaQuery.of(context)
-                                    .size
-                                    .width,
-                                child: Image.network(
-                                  popupJResultList[index]
-                                      .cBannerImage!,
-                                  // fit: BoxFit.fill
-                                  filterQuality: FilterQuality.high,
-                                )
-                              // : InkWell(
-                              //     onTap: () async {
-                              //       // debugPrint(
-                              //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-                              //       // String
-                              //       //     url =
-                              //       //     bannerJResultList[index]
-                              //       //         .cBannerLink;
-                              //       // var url =
-                              //       //     bannerJResultList[index]
-                              //       //         .cBannerLink!;
-                              //       // if (await canLaunch(
-                              //       //     url)) {
-                              //       //   await launch(
-                              //       //       url);
-                              //       // } else {
-                              //       //   throw 'Could not launch $url';
-                              //       // }
-                              //       openbannerlaunchurl(
-                              //           bannerJResultList[index]
-                              //               .cBannerLink!);
-                              //     },
-                              //     child: Image.network(
-                              //       bannerJResultList[index]
-                              //           .cBannerImage!,
-                              //       fit: BoxFit.fitWidth,
-                              //     ),
-                              //   ),
-                            ),
-                          );
-                        },
-                        options: CarouselOptions(
-                            autoPlay:
-                            popupJResultList.isNotEmpty ? true : false,
-                            viewportFraction: 1.0,
-                            height: type == "2" ? 250 : 150,
-                            enlargeCenterPage: false,
-                            enableInfiniteScroll: false,
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                pageIndex = index;
-                                // _current = index;
-                              });
-                            }),
-                      )
+                              options: CarouselOptions(
+                                  autoPlay: popupJResultList.isNotEmpty
+                                      ? true
+                                      : false,
+                                  viewportFraction: 1.0,
+                                  height: type == "2" ? 250 : 150,
+                                  enlargeCenterPage: false,
+                                  enableInfiniteScroll: false,
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      pageIndex = index;
+                                      // _current = index;
+                                    });
+                                  }),
+                            )
                           : Container(),
                       // popupJResultList.isNotEmpty
                       //     ? Container(
@@ -325,139 +332,139 @@ class _DashBoardScreenState extends State<DashBoardScreen>
             );
           });
 
-        // await showDialog(
-        //   context: context,
-        //   builder: (context) {
-        //     return AlertDialog(
-        //       content: CustomScrollView(
-        //         physics: AlwaysScrollableScrollPhysics(),
-        //         slivers: [
-        //           SliverFillRemaining(
-        //             fillOverscroll: true,
-        //             child: Container(
-        //               height: MediaQuery.of(context).size.height/1.0,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     mainAxisAlignment: MainAxisAlignment.end,
-        //                     children: [
-        //                       IconButton(
-        //                         onPressed: () {
-        //                           name == "City Popup" || name == "City"
-        //                               ? box.write("popupcityid", id).then(((value) {
-        //                             Navigator.pop(context);
-        //                           }))
-        //                               : box.write("popuphomeid", id).then(((value) {
-        //                             Navigator.pop(context);
-        //                           }));
-        //                         },
-        //                         icon: const Icon(
-        //                           Icons.close,
-        //                           color: Colors.grey,
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   popupJResultList.isNotEmpty
-        //                       ? CarouselSlider.builder(
-        //                     itemCount: popupJResultList.length,
-        //                     itemBuilder:
-        //                         (BuildContext context, int index, int realIdx) {
-        //                       return popupJResultList[index].npopuptype ==
-        //                           "2" ||
-        //                           popupJResultList[index].npopuptype == 2
-        //                           ? SingleChildScrollView(
-        //                         child: HtmlWidget(
-        //                           popupJResultList[index].cdescription!,
-        //                         ),
-        //                       )
-        //                           : Card(
-        //                         shape: RoundedRectangleBorder(
-        //                             borderRadius:
-        //                             BorderRadius.circular(20)),
-        //                         clipBehavior: Clip.antiAlias,
-        //                         child: Expanded(
-        //                           flex: 2,
-        //                           // width: 300.0,
-        //                           // height:
-        //                           //     MediaQuery.of(context).size.height /
-        //                           //         3,
-        //                           child: SizedBox(
-        //                               width: MediaQuery.of(context)
-        //                                   .size
-        //                                   .width,
-        //                               child: Image.network(
-        //                                 popupJResultList[index]
-        //                                     .cBannerImage!,
-        //                                 fit: BoxFit.fill,
-        //                               )
-        //                             // : InkWell(
-        //                             //     onTap: () async {
-        //                             //       // debugPrint(
-        //                             //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
-        //                             //       // String
-        //                             //       //     url =
-        //                             //       //     bannerJResultList[index]
-        //                             //       //         .cBannerLink;
-        //                             //       // var url =
-        //                             //       //     bannerJResultList[index]
-        //                             //       //         .cBannerLink!;
-        //                             //       // if (await canLaunch(
-        //                             //       //     url)) {
-        //                             //       //   await launch(
-        //                             //       //       url);
-        //                             //       // } else {
-        //                             //       //   throw 'Could not launch $url';
-        //                             //       // }
-        //                             //       openbannerlaunchurl(
-        //                             //           bannerJResultList[index]
-        //                             //               .cBannerLink!);
-        //                             //     },
-        //                             //     child: Image.network(
-        //                             //       bannerJResultList[index]
-        //                             //           .cBannerImage!,
-        //                             //       fit: BoxFit.fitWidth,
-        //                             //     ),
-        //                             //   ),
-        //                           ),
-        //                         ),
-        //                       );
-        //                     },
-        //                     options: CarouselOptions(
-        //                         autoPlay:
-        //                         popupJResultList.isNotEmpty ? true : false,
-        //                         viewportFraction: 1.0,
-        //                         height: type == "2" ? 250 : 150,
-        //                         enlargeCenterPage: false,
-        //                         enableInfiniteScroll: false,
-        //                         onPageChanged: (index, reason) {
-        //                           setState(() {
-        //                             pageIndex = index;
-        //                             // _current = index;
-        //                           });
-        //                         }),
-        //                   )
-        //                       : Container(),
-        //                   popupJResultList.isNotEmpty
-        //                       ? Container(
-        //                     margin: const EdgeInsets.only(top: 5.0),
-        //                     child: CarouselIndicator(
-        //                       count: popupJResultList.length,
-        //                       index: pageIndex,
-        //                       color: MyStyle.colors.grey.withOpacity(0.3),
-        //                       activeColor: MyStyle.colors.logoRed,
-        //                       width: 10.0,
-        //                     ),
-        //                   )
-        //                       : Container(),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ],
-        //       ),
-        //     );
-        //   });
+      // await showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return AlertDialog(
+      //       content: CustomScrollView(
+      //         physics: AlwaysScrollableScrollPhysics(),
+      //         slivers: [
+      //           SliverFillRemaining(
+      //             fillOverscroll: true,
+      //             child: Container(
+      //               height: MediaQuery.of(context).size.height/1.0,
+      //               child: Column(
+      //                 children: [
+      //                   Row(
+      //                     mainAxisAlignment: MainAxisAlignment.end,
+      //                     children: [
+      //                       IconButton(
+      //                         onPressed: () {
+      //                           name == "City Popup" || name == "City"
+      //                               ? box.write("popupcityid", id).then(((value) {
+      //                             Navigator.pop(context);
+      //                           }))
+      //                               : box.write("popuphomeid", id).then(((value) {
+      //                             Navigator.pop(context);
+      //                           }));
+      //                         },
+      //                         icon: const Icon(
+      //                           Icons.close,
+      //                           color: Colors.grey,
+      //                         ),
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   popupJResultList.isNotEmpty
+      //                       ? CarouselSlider.builder(
+      //                     itemCount: popupJResultList.length,
+      //                     itemBuilder:
+      //                         (BuildContext context, int index, int realIdx) {
+      //                       return popupJResultList[index].npopuptype ==
+      //                           "2" ||
+      //                           popupJResultList[index].npopuptype == 2
+      //                           ? SingleChildScrollView(
+      //                         child: HtmlWidget(
+      //                           popupJResultList[index].cdescription!,
+      //                         ),
+      //                       )
+      //                           : Card(
+      //                         shape: RoundedRectangleBorder(
+      //                             borderRadius:
+      //                             BorderRadius.circular(20)),
+      //                         clipBehavior: Clip.antiAlias,
+      //                         child: Expanded(
+      //                           flex: 2,
+      //                           // width: 300.0,
+      //                           // height:
+      //                           //     MediaQuery.of(context).size.height /
+      //                           //         3,
+      //                           child: SizedBox(
+      //                               width: MediaQuery.of(context)
+      //                                   .size
+      //                                   .width,
+      //                               child: Image.network(
+      //                                 popupJResultList[index]
+      //                                     .cBannerImage!,
+      //                                 fit: BoxFit.fill,
+      //                               )
+      //                             // : InkWell(
+      //                             //     onTap: () async {
+      //                             //       // debugPrint(
+      //                             //       //     "Dfsdjfhsdjkfhsdjfdsf ${bannerJResultList[index].cBannerLink!}");
+      //                             //       // String
+      //                             //       //     url =
+      //                             //       //     bannerJResultList[index]
+      //                             //       //         .cBannerLink;
+      //                             //       // var url =
+      //                             //       //     bannerJResultList[index]
+      //                             //       //         .cBannerLink!;
+      //                             //       // if (await canLaunch(
+      //                             //       //     url)) {
+      //                             //       //   await launch(
+      //                             //       //       url);
+      //                             //       // } else {
+      //                             //       //   throw 'Could not launch $url';
+      //                             //       // }
+      //                             //       openbannerlaunchurl(
+      //                             //           bannerJResultList[index]
+      //                             //               .cBannerLink!);
+      //                             //     },
+      //                             //     child: Image.network(
+      //                             //       bannerJResultList[index]
+      //                             //           .cBannerImage!,
+      //                             //       fit: BoxFit.fitWidth,
+      //                             //     ),
+      //                             //   ),
+      //                           ),
+      //                         ),
+      //                       );
+      //                     },
+      //                     options: CarouselOptions(
+      //                         autoPlay:
+      //                         popupJResultList.isNotEmpty ? true : false,
+      //                         viewportFraction: 1.0,
+      //                         height: type == "2" ? 250 : 150,
+      //                         enlargeCenterPage: false,
+      //                         enableInfiniteScroll: false,
+      //                         onPageChanged: (index, reason) {
+      //                           setState(() {
+      //                             pageIndex = index;
+      //                             // _current = index;
+      //                           });
+      //                         }),
+      //                   )
+      //                       : Container(),
+      //                   popupJResultList.isNotEmpty
+      //                       ? Container(
+      //                     margin: const EdgeInsets.only(top: 5.0),
+      //                     child: CarouselIndicator(
+      //                       count: popupJResultList.length,
+      //                       index: pageIndex,
+      //                       color: MyStyle.colors.grey.withOpacity(0.3),
+      //                       activeColor: MyStyle.colors.logoRed,
+      //                       width: 10.0,
+      //                     ),
+      //                   )
+      //                       : Container(),
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     );
+      //   });
     });
     //   return Text('Hello, World!');
     // })
@@ -1029,7 +1036,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
             : Container(
                 child: Text(
                   AppLocalizations.of(context)!.appName!,
-                  style: TextStyle(color: MyStyle.colors.logoRed, fontSize: 17.0),
+                  style:
+                      TextStyle(color: MyStyle.colors.logoRed, fontSize: 17.0),
                 ),
               ),
         // title: checkBanner
@@ -1121,11 +1129,32 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                 flex: 1,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                SearchStoreListScreen(0, cityId, "", false)));
+                    if (cityId != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SearchStoreListScreen(0, cityId, "", false)));
+                    } else {
+                      WidgetsBinding.instance.addPostFrameCallback((_) async {
+                        return await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content:
+                                    const Text("Please choose your City first"),
+                                actions: [
+                                  InkWell(
+                                    child: const Text("OK"),
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      });
+                    }
                   },
                   child: Container(
                     margin: const EdgeInsets.only(
@@ -1211,7 +1240,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                             child: Text(
                                               _selectedLanguage!,
                                               style: TextStyle(
-                                                  color: MyStyle.colors.app_black,
+                                                  color:
+                                                      MyStyle.colors.app_black,
                                                   fontSize: 15.0,
                                                   fontWeight: FontWeight.w400),
                                               overflow: TextOverflow.ellipsis,
@@ -1278,37 +1308,44 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                     }
                                   },
                                   child: Container(
+                                    alignment: Alignment.center,
                                     margin: const EdgeInsets.only(
                                         top: 20.0, left: 16.0, right: 16.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 5.0),
-                                            alignment: Alignment.centerRight,
-                                            child: Text(
-                                              cityName,
-                                              style: TextStyle(
-                                                  color: MyStyle.colors.app_black,
-                                                  fontSize: 15.0,
-                                                  fontWeight: FontWeight.w400),
+                                    child: FadeTransition(
+                                      opacity: _animationController!,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 5.0, right: 5.0),
+                                              alignment: Alignment.centerRight,
+                                              child: Text(
+                                                cityName,
+                                                style: TextStyle(
+                                                    color: MyStyle
+                                                        .colors.app_black,
+                                                    fontSize: 15.0,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          flex: 0,
-                                          child: Container(
-                                            child: Icon(
-                                              Icons.location_city_sharp,
-                                              size: 20.0,
-                                              color: MyStyle.colors.logoRed,
+                                          Expanded(
+                                            flex: 0,
+                                            child: Container(
+                                              child: Icon(
+                                                Icons.location_city_sharp,
+                                                size: 20.0,
+                                                color: MyStyle.colors.logoRed,
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                      ],
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 )),
@@ -1344,7 +1381,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                 child: Text(
                                                   _currentAddress,
                                                   style: TextStyle(
-                                                      fontFamily: MyStyle.brandon,
+                                                      fontFamily:
+                                                          MyStyle.brandon,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       fontSize: 14.0,
@@ -1540,8 +1578,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                             FontWeight.w600,
                                                         color: MyStyle
                                                             .colors.logoRed,
-                                                        fontFamily:
-                                                            MyStyle.josefinsans)),
+                                                        fontFamily: MyStyle
+                                                            .josefinsans)),
                                               ),
                                             ),
                                           ),
@@ -1606,29 +1644,31 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                       Container(
                                                         height: 5.5.h,
                                                         width: 13.w,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius.all(
-                                                                    Radius.circular(
-                                                                        30.sp)),
-                                                            image: DecorationImage(
-                                                                // fit: BoxFit
-                                                                //     .cover,
-                                                                image: NetworkImage(
-                                                                    categoryJResultList[
-                                                                            index]
-                                                                        .cCategoryImage!))),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            30.sp)),
+                                                                image: DecorationImage(
+                                                                    // fit: BoxFit
+                                                                    //     .cover,
+                                                                    image: NetworkImage(categoryJResultList[index].cCategoryImage!))),
                                                       ),
                                                       SizedBox(
                                                         height: 1.h,
                                                       ),
                                                       Container(
-                                                        padding:EdgeInsets.only(left:5.0,right:5.0),
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 5.0,
+                                                                right: 5.0),
                                                         child: Text(
                                                             categoryJResultList[
                                                                     index]
                                                                 .cCategory!,
-                                                            textAlign: TextAlign.center,
+                                                            textAlign: TextAlign
+                                                                .center,
                                                             style: TextStyle(
                                                                 fontSize: 12.0,
                                                                 fontWeight:
@@ -1660,7 +1700,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                             children: [
                               bannerJResultList.isNotEmpty
                                   ? Container(
-                                      margin: const EdgeInsets.only(left:16.0,top: 10.0),
+                                      margin: const EdgeInsets.only(
+                                          left: 16.0, top: 10.0),
                                       alignment: Alignment.centerLeft,
                                       child: Text(
                                           AppLocalizations.of(context)!
@@ -1673,7 +1714,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                   : Container(),
                               bannerJResultList.isNotEmpty
                                   ? Container(
-                                      margin: const EdgeInsets.only(left:6.0,right:6,top: 15.0),
+                                      margin: const EdgeInsets.only(
+                                          left: 6.0, right: 6, top: 15.0),
                                       child: CarouselSlider.builder(
                                         itemCount: bannerJResultList.length,
                                         itemBuilder: (BuildContext context,
@@ -1716,10 +1758,30 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                           // } else {
                                                           //   throw 'Could not launch $url';
                                                           // }
-                                                          openbannerlaunchurl(
-                                                              bannerJResultList[
-                                                                      index]
-                                                                  .cBannerLink!);
+                                                          if(cityId!=null) {
+                                                            openbannerlaunchurl(
+                                                                bannerJResultList[
+                                                                index]
+                                                                    .cBannerLink!);
+                                                          }else{
+                                                            WidgetsBinding.instance.addPostFrameCallback((_) async {
+                                                              return await showDialog(
+                                                                  context: context,
+                                                                  builder: (context) {
+                                                                    return AlertDialog(
+                                                                      content: const Text("Please choose your City first"),
+                                                                      actions: [
+                                                                        InkWell(
+                                                                          child: const Text("OK"),
+                                                                          onTap: () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ],
+                                                                    );
+                                                                  });
+                                                            });
+                                                          }
                                                         },
                                                         child: Image.network(
                                                           bannerJResultList[
@@ -1824,7 +1886,8 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                 child: Divider(
                   thickness: 0.5,
                   height: 1.0,
-                  color: MyStyle.colors.logoRed.withOpacity(0.1).withOpacity(0.3),
+                  color:
+                      MyStyle.colors.logoRed.withOpacity(0.1).withOpacity(0.3),
                 ),
               ),
               // GestureDetector(
@@ -2031,7 +2094,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   openWhatsapp() async {
     var whatsapp = "+66810673747";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
-    var whatappURL_ios = "https://wa.me/$whatsapp?text=";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
@@ -2042,12 +2105,14 @@ class _DashBoardScreenState extends State<DashBoardScreen>
       }
     } else {
       // android , web
-      if (await canLaunch(whatsappURl_android)) {
-        await launch(whatsappURl_android);
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
-      }
+      // if (await canLaunch(whatsappURl_android)) {
+      //   await launch(whatsappURl_android);
+      // } else {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
+      // }
+      await launch(
+          "https://wa.me/${whatsapp}?text=");
     }
   }
 
@@ -2103,6 +2168,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   var dealzname;
 
   var dealztype;
+
   getDemoGraphicList() async {
     try {
       Dio dio = Dio();
@@ -2128,7 +2194,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
         DemographicModel demographicModel = DemographicModel.fromJson(map);
 
         if (demographicModel.nStatus == 1) {
-            // ProgressDialog().dismissDialog(context);
+          // ProgressDialog().dismissDialog(context);
           // for (var i = 0; i < demographicModel.jResult!.length; i++) {
           //   if (demographicModel.jResult![i].cDemographic ==
           //       "DealZ Near Me     коло меня") {
@@ -2143,7 +2209,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           // }
           updateDemoGraphicList(demographicModel.jResult!);
         } else {
-           // ProgressDialog().dismissDialog(context);
+          // ProgressDialog().dismissDialog(context);
         }
       } else {
         // ProgressDialog().dismissDialog(context);
@@ -2153,7 +2219,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
 
       // debugPrint(response);
     } catch (e) {
-       // ProgressDialog().dismissDialog(context);
+      // ProgressDialog().dismissDialog(context);
       debugPrint("Response22: $e");
     }
   }
@@ -2254,7 +2320,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           options: Options(contentType: Headers.formUrlEncodedContentType),
           data: parameters);
 
-      print("responseBanner "+response.toString());
+      print("responseBanner " + response.toString());
       if (response.statusCode == 200) {
         Map<String, dynamic> map = jsonDecode(response.toString());
         BannerModel bannerModel = BannerModel.fromJson(map);

@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:siamdealz/ResponseModule/DownloadCouponModel.dart';
 import 'package:siamdealz/screens/viewallreviewimages.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../ResponseModule/StoreDetailsModule/StoreDetailsModel.dart';
@@ -272,25 +273,19 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
   }
 
   void launchGoogleMaps(double latitude, double longitude) async {
-    String googleMapsUrl =
-        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-
-    if (await canLaunch(googleMapsUrl)) {
-      await launch(googleMapsUrl);
+    LaunchMode linkLaunchMode = LaunchMode.externalApplication;
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+    if (await canLaunchUrl(Uri.parse(googleUrl))) {
+      await launchUrl(Uri.parse(googleUrl), mode: linkLaunchMode);
     } else {
-      throw 'Could not launch $googleMapsUrl';
+      throw 'Could not open the map.';
     }
   }
 
   void redirectToCall(String phoneNumber) async {
     if (await Permission.phone.request().isGranted) {
       // Permission is granted. Proceed with making the phone call.
-      String url = 'tel:$phoneNumber';
-      if (await canLaunch(url)) {
-        await launch(url);
-      } else {
-        throw 'Could not launch $url';
-      }
+      UrlLauncher.launch('tel:+${phoneNumber}');
     } else {
       // Permission is not granted. Show a dialog or handle it accordingly.
       // You can inform the user that the permission is required to make a phone call.
@@ -301,11 +296,12 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
     // if (await Permission.email.request().isGranted) {
     // Permission is granted. Proceed with making the phone call.
 
-    if (await canLaunch("mailto:$providerUrl")) {
-      await launch("mailto:$providerUrl");
-    } else {
-      throw 'Could not launch $providerUrl';
-    }
+    UrlLauncher.launch('mailto:${providerUrl}');
+    // if (await canLaunch("mailto:$providerUrl")) {
+    //   await launch("mailto:$providerUrl");
+    // } else {
+    //   throw 'Could not launch $providerUrl';
+    // }
     // } else {
     //   // Permission is not granted. Show a dialog or handle it accordingly.
     //   // You can inform the user that the permission is required to make a phone call.
@@ -1619,29 +1615,26 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
+    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                "WhatsApp is not installed on the device. Please install whatsapp")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
-      if (await canLaunch(whatsappURl_android)) {
-        await launchUrl(
-          Uri.parse(whatsappURl_android),
-          mode: LaunchMode.externalApplication,
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-                "WhatsApp is not installed on the device. Please install whatsapp")));
-      }
+      // if (await canLaunch(whatsappURl_android)) {
+      //   await launch(whatsappURl_android);
+      // } else {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
+      // }
+      await launch(
+          "https://wa.me/${whatsapp}?text=");
     }
   }
 
@@ -1649,14 +1642,14 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        var outputDate = "";
-        if (storeDetailsJCoupons[index].till_date != null) {
-          DateTime parseDate = DateFormat("yyyy-MM-dd HH:mm:ss")
-              .parse(storeDetailsJCoupons[index].till_date!);
-          var inputDate = DateTime.parse(parseDate.toString());
-          var outputFormat = DateFormat('dd-MMM-yyyy');
-          outputDate = outputFormat.format(inputDate);
-        }
+        // var outputDate = "";
+        // if (storeDetailsJCoupons[index].till_date != null) {
+        //   DateTime parseDate = DateFormat("yyyy-MM-dd HH:mm:ss")
+        //       .parse(storeDetailsJCoupons[index].till_date!);
+        //   var inputDate = DateTime.parse(parseDate.toString());
+        //   var outputFormat = DateFormat('dd-MM-yyyy');
+        //   outputDate = outputFormat.format(inputDate);
+        // }
 
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -1947,7 +1940,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w600)),
                                     TextSpan(
-                                        text: "Single Use till $outputDate",
+                                        text: "Single Use till "+storeDetailsJCoupons[index].till_date!,
                                         style: const TextStyle(
                                             color: Color(0xff0012f8),
                                             fontSize: 15.0,

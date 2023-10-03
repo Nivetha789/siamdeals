@@ -704,26 +704,26 @@ class _CouponListScreenState extends State<CouponListScreen> {
 
   openWhatsapp() async {
     var whatsapp = "+66810673747";
-    var whatsappURl_android = "whatsapp://send?phone=$whatsapp&text=";
+    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunch(whatappURL_ios)) {
         await launch(whatappURL_ios, forceSafariVC: false);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
       }
     } else {
       // android , web
-      if (await canLaunch(whatsappURl_android)) {
-        await launchUrl(Uri.parse(whatsappURl_android),
-          mode: LaunchMode.externalApplication,
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("WhatsApp is not installed on the device. Please install whatsapp")));
-      }
+      // if (await canLaunch(whatsappURl_android)) {
+      //   await launch(whatsappURl_android);
+      // } else {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
+      // }
+      await launch(
+          "https://wa.me/${whatsapp}?text=");
     }
   }
 
