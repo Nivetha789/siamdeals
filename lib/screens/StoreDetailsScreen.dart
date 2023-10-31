@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -65,6 +64,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
   String? cName = "";
   String? cNameInThai = "";
   String? cMobileNumbers = "";
+  String? cWhatsapp = "";
   String? cEmailids = "";
   String? cAddress = "";
   String? cTerms = "";
@@ -1407,7 +1407,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
                               visible: whatsapp,
                               child: InkWell(
                                 onTap: () {
-                                  openWhatsapp();
+                                  openVendorWhatsapp();
                                 },
                                 child: Tooltip(
                                   message: "Connect with Whatsapp",
@@ -1524,6 +1524,7 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
             cName = storeDetailsModel.jResult!.cName;
             cNameInThai = storeDetailsModel.jResult!.cNameInThai;
             cMobileNumbers = storeDetailsModel.jResult!.cMobileNumbers;
+            cWhatsapp = storeDetailsModel.jResult!.cCWhatsapp;
             cEmailids = storeDetailsModel.jResult!.cEmailids;
             cAddress = storeDetailsModel.jResult!.cAddress;
             cTerms = storeDetailsModel.jResult!.cTerms;
@@ -1614,7 +1615,34 @@ class StoreDetailsScreenState extends State<StoreDetailsScreen> {
   }
 
   openWhatsapp() async {
-    var whatsapp = "+66810673747";
+    var whatsapp = "+66622126408";
+    var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
+    var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunch(whatappURL_ios)) {
+        await launch(whatappURL_ios, forceSafariVC: false);
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
+      }
+    } else {
+      // android , web
+      // if (await canLaunch(whatsappURl_android)) {
+      //   await launch(whatsappURl_android);
+      // } else {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: new Text("WhatsApp is not installed on the device. Please install whatsapp")));
+      // }
+      await launch(
+          "https://wa.me/${whatsapp}?text=");
+    }
+  }
+
+  //vendor
+  openVendorWhatsapp() async {
+    var whatsapp = "+66$cWhatsapp";
+    print("whatsappwhatsapp "+whatsapp);
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {

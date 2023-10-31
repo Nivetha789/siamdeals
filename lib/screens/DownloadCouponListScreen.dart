@@ -103,7 +103,7 @@ class DownloadedCouponListScreenState
             // HawkFabMenuItem(
             //   label: 'Line',
             //   ontap: () {
-            //     launch(('tel://${"+66810673747"}'));
+            //     launch(('tel://${"+66622126408"}'));
             //   },
             //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
             //   color: MyStyle.colors.white,
@@ -746,7 +746,7 @@ class DownloadedCouponListScreenState
   }
 
   openWhatsapp() async {
-    var whatsapp = "+66810673747";
+    var whatsapp = "+66622126408";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {

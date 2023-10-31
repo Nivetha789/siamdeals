@@ -42,6 +42,7 @@ class JResult {
   String? cName;
   String? cNameInThai;
   String? cMobileNumbers;
+  String? cCWhatsapp;
   String? cEmailids;
   String? cAddress;
   String? nNavigate;
@@ -73,6 +74,7 @@ class JResult {
         this.cName,
         this.cNameInThai,
         this.cMobileNumbers,
+        this.cCWhatsapp,
         this.cEmailids,
         this.cAddress,
         this.nNavigate,
@@ -100,6 +102,7 @@ class JResult {
     cName = json['c_name'];
     cNameInThai = json['c_name_in_thai'];
     cMobileNumbers = json['c_mobile_numbers'];
+    cCWhatsapp = json['c_c_whatsapp'];
     cEmailids = json['c_emailids'];
     cAddress = json['c_address'];
     nNavigate = json['n_navigate'];
@@ -154,6 +157,7 @@ class JResult {
     data['c_name'] = this.cName;
     data['c_name_in_thai'] = this.cNameInThai;
     data['c_mobile_numbers'] = this.cMobileNumbers;
+    data['c_c_whatsapp'] = this.cCWhatsapp;
     data['c_emailids'] = this.cEmailids;
     data['c_address'] = this.cAddress;
     data['n_navigate'] = this.nNavigate;

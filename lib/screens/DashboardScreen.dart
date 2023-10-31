@@ -115,7 +115,6 @@ class _DashBoardScreenState extends State<DashBoardScreen>
     check().then((intenet) {
       if (intenet) {
         getDemoGraphicList();
-
         getMenuApi();
         getBannerList("home", "0");
         getpopupList("home", "0");
@@ -1111,7 +1110,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
           // HawkFabMenuItem(
           //   label: 'Line',
           //   ontap: () {
-          //     launch(('tel://${"+66810673747"}'));
+          //     launch(('tel://${"+66622126408"}'));
           //   },
           //   icon: Image.asset("images/phone_call.png", height: 30, width: 30),
           //   color: MyStyle.colors.white,
@@ -1758,30 +1757,30 @@ class _DashBoardScreenState extends State<DashBoardScreen>
                                                           // } else {
                                                           //   throw 'Could not launch $url';
                                                           // }
-                                                          if(cityId!=null) {
+                                                          // if(cityId!=null) {
                                                             openbannerlaunchurl(
                                                                 bannerJResultList[
                                                                 index]
                                                                     .cBannerLink!);
-                                                          }else{
-                                                            WidgetsBinding.instance.addPostFrameCallback((_) async {
-                                                              return await showDialog(
-                                                                  context: context,
-                                                                  builder: (context) {
-                                                                    return AlertDialog(
-                                                                      content: const Text("Please choose your City first"),
-                                                                      actions: [
-                                                                        InkWell(
-                                                                          child: const Text("OK"),
-                                                                          onTap: () {
-                                                                            Navigator.of(context).pop();
-                                                                          },
-                                                                        ),
-                                                                      ],
-                                                                    );
-                                                                  });
-                                                            });
-                                                          }
+                                                          // }else{
+                                                          //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+                                                          //     return await showDialog(
+                                                          //         context: context,
+                                                          //         builder: (context) {
+                                                          //           return AlertDialog(
+                                                          //             content: const Text("Please choose your City first"),
+                                                          //             actions: [
+                                                          //               InkWell(
+                                                          //                 child: const Text("OK"),
+                                                          //                 onTap: () {
+                                                          //                   Navigator.of(context).pop();
+                                                          //                 },
+                                                          //               ),
+                                                          //             ],
+                                                          //           );
+                                                          //         });
+                                                          //   });
+                                                          // }
                                                         },
                                                         child: Image.network(
                                                           bannerJResultList[
@@ -2092,7 +2091,7 @@ class _DashBoardScreenState extends State<DashBoardScreen>
   }
 
   openWhatsapp() async {
-    var whatsapp = "+66810673747";
+    var whatsapp = "+66622126408";
     var whatsappURl_android = "whatsapp://send?phone=" + whatsapp + "&text=";
     var whatappURL_ios = "https://wa.me/$whatsapp?text=${Uri.parse("")}";
     if (Platform.isIOS) {
